@@ -1,2 +1,2 @@
 all:
-	protoc -I=. --go_out=plugins=grpc:. ./srxapi.proto
+	protoc -I=. --go_out=plugins=grpc:. ./srx_grpc.proto

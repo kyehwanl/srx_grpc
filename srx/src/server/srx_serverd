@@ -18,9 +18,9 @@
 # Source function library.
 . /etc/rc.d/init.d/functions
 
-exec=/opt/project/gobgp_test/gowork/src/srx_grpc/srx/srx_install/bin/srx_server
+exec=/opt/project/gobgp_test/gowork/src/srx_grpc/srx-0.5.1.0/test_install/bin/srx_server
 prog="srx_server"
-config="-f /opt/project/gobgp_test/gowork/src/srx_grpc/srx/srx_install/etc/srx_server.conf"
+config="-f /opt/project/gobgp_test/gowork/src/srx_grpc/srx-0.5.1.0/test_install/etc/srx_server.conf"
 pid=0
 
 status() {

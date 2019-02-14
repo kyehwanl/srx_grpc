@@ -982,6 +982,7 @@ void setProxyLogger(ProxyLogger logger)
  */
 bool setLogMode(int logMode)
 {
+    printf(" %s testing : input param: %d\n", __FUNCTION__, logMode);
   switch (logMode)
   {
     case LEVEL_ERROR:

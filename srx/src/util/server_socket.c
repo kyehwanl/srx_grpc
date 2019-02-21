@@ -887,3 +887,122 @@ int closeClientConnection(ServerSocket* self, ServerClient* client)
   return true;
 }
 
+
+
+void runServerLoop_gRPC(ServerSocket* self, ClientMode clMode,
+                   void (*modeCallback)(), ClientStatusChanged statusCallback,
+                   void* user)
+{
+  static void* (*CL_THREAD_ROUTINES[NUM_CLIENT_MODES])(void*) = {
+                               single_handleClient,
+                               multi_handleClient,
+                               custom_handleClient
+  };
+
+  //int cliendFD;
+  struct sockaddr caddr;
+  socklen_t caddrSize;
+  char infoBuffer[MAX_SOCKET_STRING_LEN];
+  ClientThread* cthread;
+  int ret;
+
+  pthread_attr_t attr;
+  pthread_attr_init(&attr);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+
+  // Store the arguments
+  clMode = MODE_CUSTOM_CALLBACK;
+  self->mode = clMode;
+  self->modeCallback = modeCallback;
+  self->statusCallback = statusCallback;
+  self->user = user;
+
+  // No active threads
+  initSList(&self->cthreads);
+
+  LOG(LEVEL_DEBUG, HDR "Server loop, wait for listening grpc client ...", 
+          pthread_self());
+
+  // Prepare socket to accept connections
+  //listen(self->serverFD, MAX_PENDING_CONNECTIONS);
+  
+
+
+  // Spawn a thread for the new connection
+  cthread = (ClientThread*)appendToSList(&self->cthreads,
+          sizeof (ClientThread));
+  if (cthread == NULL)
+  {
+      RAISE_ERROR("Not enough memory for another connection");
+  }
+  else
+  {
+
+      cthread->active          = true;
+      cthread->initialized     = false;
+      cthread->goodByeReceived = false;
+
+      cthread->proxyID  = 0; // will be changed for srx-proxy during handshake
+      cthread->routerID = 0; // Indicates that it is currently not usable, 
+      // must be set during handshake
+      //cthread->clientFD = cliendFD;
+      cthread->svrSock  = self;
+      cthread->caddr	  = caddr;
+
+      // TODO: new thread needed for gRPC running
+      ret = pthread_create(&(cthread->thread), &attr,
+              CL_THREAD_ROUTINES[clMode],
+              (void*)cthread);
+      // TODO: custom_handleClient --> modeCallback --> handlePacket()
+      //
+      //       1. need to call 'handlePacket' here
+      //       2. _handlPacket's parameter filling with the proper values
+      //            (1) ServerSocket
+      //            (2) ServerClient
+      //            (3) srvConHandler
+      
+
+      if (ret != 0)
+      {
+          RAISE_ERROR("Failed to create a client thread");
+      }
+  }
+}
+
+
+static void* thread_ClientHandler_gRPC(void* clientThread)
+{
+  ClientThread* cthread = (ClientThread*)clientThread;
+
+  struct sigaction act;
+  sigset_t errmask;
+  sigemptyset(&errmask);
+  sigaddset(&errmask, SIGPIPE);
+  act.sa_handler = sigusr_pipe_handler;
+  sigaction(SIGPIPE, &act, NULL);
+  pthread_sigmask(SIG_UNBLOCK, &errmask, NULL);
+  g_single_thread_client_fd = cthread->clientFD;
+
+  LOG(LEVEL_DEBUG, "([0x%08X]) > Proxy Client Connection Thread started "
+                   "(ServerSocket::single_handleClient)", pthread_self());
+  LOG(LEVEL_DEBUG, HDR "Inside new client thread, about to start traffic "
+                    "listener.", pthread_self());
+  if (initWriteMutex(cthread))
+  {
+
+    // TODO: procedure to dump data into buffer and then call 
+    //
+    // Start the receiver loop of this client connection.
+    (void)receivePackets(&cthread->clientFD, single_packetHandler, cthread, 
+                         PHT_SERVER);
+  }
+
+  clientThreadCleanup(MODE_SINGLE_CLIENT, cthread);
+  
+  LOG(LEVEL_DEBUG, "([0x%08X]) > Proxy Client Connection Thread stopped "
+                   "(ServerSocket::single_handleClient)", pthread_self());
+  
+  pthread_exit(0);
+}
+
+

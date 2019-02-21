@@ -332,5 +332,9 @@ int closeClientConnection(ServerSocket* self, ServerClient* client);
 // Maybe it can be moved into server_socket.c
 int g_single_thread_client_fd;
 
+void runServerLoop_gRPC(ServerSocket* self, ClientMode clMode,
+                   void (*modeCallback)(),
+                   ClientStatusChanged statusCallback,
+                   void* user);
 #endif // !__SERVER_SOCKET_H__
 

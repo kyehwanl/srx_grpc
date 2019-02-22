@@ -51,7 +51,11 @@ func Run(data []byte) uint32 {
 
 func main() {
 	data := []byte(defaultName)
+	data2 := []byte{0x10, 0x11, 0x40, 0x42}
 	//Run(data)
 	r := Run(data)
+	log.Printf("Transferred: %#v\n", r)
+
+	r = Run(data2)
 	log.Printf("Transferred: %#v\n", r)
 }

@@ -1,11 +1,11 @@
 package main
 
 /*
-#cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/srx_install/include/srx
-#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/srx_install/lib64/srx -lSRxProxy -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/srx_install/lib64/srx
+#cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/include/
+#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/lib64/srx -lSRxProxy -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/lib64/srx
 
 #include <stdio.h>
-#include "srx_api.h"
+#include "srx/srx_api.h"
 
 void PrintInternalCallTest(int i);
 */

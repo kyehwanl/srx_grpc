@@ -3,7 +3,7 @@
 
 syntax = "proto3";
 
-package srxapi;
+package srx_grpc;
 
 
 // Interface exported by the server.

@@ -23,7 +23,7 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 
 #include <stdio.h>
-#include "srx_api.h"
+#include "srx/srx_api.h"
 
 void PrintInternalCallTest(int i);
 

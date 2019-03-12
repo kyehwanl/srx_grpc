@@ -43,6 +43,8 @@ func Run(data []byte) uint32 {
 		log.Fatalf("could not receive: %v", err)
 	}
 
+	fmt.Printf("data : %#v\n", r.Data)
+	fmt.Printf("size : %#v\n", r.Length)
 	fmt.Printf("status: %#v\n", r.ValidationStatus)
 
 	//return r.ValidationStatus, err

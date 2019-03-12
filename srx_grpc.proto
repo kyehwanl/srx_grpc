@@ -19,7 +19,9 @@ message PduRequest {
 }
 
 message PduResponse {
-  uint32 validation_status = 1;
+  bytes data = 1;
+  uint32 length = 2;
+  uint32 validation_status = 3;
 }
 
 

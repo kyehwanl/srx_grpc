@@ -127,6 +127,7 @@ void stopProcessingCommands(CommandHandler* self);
  * @return true if the broadcast could be successfully send.
  */
 bool broadcastResult(CommandHandler* self, SRxValidationResult* valResult);
+bool _isSet(uint32_t bitmask, uint32_t bits);
 
 #endif // !__COMMAND_HANDLER_H__
 

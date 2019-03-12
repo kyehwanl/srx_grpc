@@ -98,6 +98,7 @@
 #include "server/update_cache.h"
 #include "util/directory.h"
 #include "util/log.h"
+#include "server/grpc_service.h"
 
 // Some defines needed for east
 #define SETUP_RPKI_HANDLER         1
@@ -169,6 +170,10 @@ static void doCleanupHandlers(int handler);
 
 /** Holds the SRxCryptoAPI */
 SRxCryptoAPI* g_capi = NULL;
+static void* gRPCService(void* arg);
+void createGRPCService();
+
+GRPC_ServiceHandler     grpcServiceHandler;
 
 ////////////////////
 // Server Call backs
@@ -750,7 +755,9 @@ int main(int argc, const char* argv[])
         exitCode = 5;
       }
       else
-      {
+      {           
+        createGRPCService();
+
         // Ready for requests
         cleanupRequired = true;
         run();
@@ -792,3 +799,47 @@ int main(int argc, const char* argv[])
   }
   return exitCode;
 }
+
+void createGRPCService()
+{
+  pthread_t tid;
+  pthread_attr_t attr;
+  pthread_attr_init(&attr);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+  printf("+ pthread grpc service started...\n");
+
+  /* init service handler */
+  grpcServiceHandler.cmdHandler = &cmdHandler;
+  grpcServiceHandler.updCache = &updCache;
+  grpcServiceHandler.svrConnHandler = &svrConnHandler;
+
+  printf("+ grpcServiceHandler : %p  \n", &grpcServiceHandler );
+  printf("+ grpcServiceHandler.CommandHandler : %p  \n", grpcServiceHandler.cmdHandler );
+  printf("+ grpcServiceHandler.UpdateCache    : %p  \n", grpcServiceHandler.updCache);
+  printf("+ grpcServiceHandler.svrConnHandler : %p  \n", grpcServiceHandler.svrConnHandler);
+
+  int ret = pthread_create(&tid, &attr, gRPCService, &cmdHandler);
+
+  if (ret != 0)
+  {
+    RAISE_ERROR("Failed to create a grpc thread");
+  }
+
+  pthread_join(tid, NULL);
+  LOG(LEVEL_DEBUG, "grpc service thread STOPPED and going to joinable status");
+  printf("+ pthread grpc service thread stopped and going to joinable status\n");
+}
+
+#include "/opt/project/gobgp_test/gowork/src/srx_grpc/server/libsrx_grpc_server.h"
+static void* gRPCService(void* arg)
+{
+  LOG(LEVEL_DEBUG, "([0x%08X]) > gRPC Server Thread started ", pthread_self());
+
+  printf("++ pthread grpc service thread started...\n");
+
+  Serve();
+
+  pthread_exit(0);
+}
+
+

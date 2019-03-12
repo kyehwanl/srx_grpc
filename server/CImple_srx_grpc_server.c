@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "srx_grpc_server.h"
+#include "libsrx_grpc_server.h"
 
 
 int main()

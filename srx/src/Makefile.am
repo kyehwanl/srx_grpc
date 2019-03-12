@@ -117,7 +117,8 @@ srx_server_SOURCES = $(SERVER_DIR)/bgpsec_handler.c \
 		     $(SERVER_DIR)/rpki_packet_printer.c \
 		     $(SERVER_DIR)/server_connection_handler.c \
 		     $(SERVER_DIR)/srx_packet_sender.c \
-		     $(SERVER_DIR)/update_cache.c 
+		     $(SERVER_DIR)/update_cache.c  \
+		     $(SERVER_DIR)/grpc_service.c 
 
 srx_server_LDADD = $(LIB_PATRICIA) $(SCA_LIBS) \
 		   libsrx_shared.la \

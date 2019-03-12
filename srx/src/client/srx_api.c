@@ -997,6 +997,24 @@ bool setLogMode(int logMode)
   }
 }
 
+/*
+bool setLogMode2(int logMode)
+{
+    printf(" %s testing : input param: %d\n", __FUNCTION__, logMode);
+  switch (logMode)
+  {
+    case LEVEL_ERROR:
+    case LEVEL_WARNING:
+    case LEVEL_NOTICE:
+    case LEVEL_INFO:
+    case LEVEL_DEBUG:
+      setLogLevel(logMode);
+      return true;
+    default:
+      return false;
+  }
+}
+*/
 ////////////////////////////////////////////////////////////////////////////////
 // RECEIVE AND HANDLE PACKETS - for HEADER IMPLEMENTATION
 ////////////////////////////////////////////////////////////////////////////////
@@ -1370,3 +1388,155 @@ bool isErrorCode(SRxProxyCommCode code)
   // Error codes are between 0..127
   return (code & 0x7F) == code;
 }
+
+
+
+//#include "/opt/project/gobgp_test/gowork/src/srx_grpc/client/srx_grpc_client.h"
+bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
+                  int handshakeTimeout, bool externalSocketControl)
+{
+#if 0/*{*/
+  // The client connection handler
+  ClientConnectionHandler* connHandler =
+                                   (ClientConnectionHandler*)proxy->connHandler;
+  // Check if the connectionHandler is initialized.
+  if (connHandler->initialized)
+  {
+    if (connHandler->stop)
+    {
+      LOG(LEVEL_WARNING, "Proxy [ID:%u] is already initialized and stopped!",
+                  proxy->proxyID);
+      return false;
+    }
+    else if (connHandler->established)
+    {
+      LOG(LEVEL_INFO, "Proxy [ID:%u] is already connected!");
+      return true;
+    }
+  }
+  else if (!initializeClientConnectionHandler(connHandler, host, port,
+                                             dispatchPackets, handshakeTimeout))
+  {
+    RAISE_ERROR ("Proxy [ID:%u] could not be initialized - Check if server"
+                      " %s:%u is accessible!", proxy->proxyID, host, port);
+    return false;
+  }
+
+  if (connHandler->established)
+  {
+    // Maybe upgrade to RAISE_SYS_ERROR
+    // If it ever reaches here the connection is unexpectedly established.
+    RAISE_ERROR("BUG: Proxy [ID:%u] is unexpectedly connected to SRx, "
+                "disconnect, stop proxy and return connection failed!");
+    disconnectFromSRx(proxy, SRX_DEFAULT_KEEP_WINDOW);
+    return false;
+  }
+#endif/*}*/
+
+  LOG(LEVEL_INFO, "[gRPC] Establish connection with proxy [%u]...", proxy->proxyID);
+  uint32_t noPeers    = 0; //proxy->peerAS.size;
+  uint32_t length     = 20 + (noPeers * 4);
+  uint8_t  pdu[length];
+  SRXPROXY_HELLO* hdr = (SRXPROXY_HELLO*)pdu;
+  uint32_t peerASN    = 0;
+  uint32_t* peerAS    = NULL;
+
+  memset(pdu, 0, length);
+
+  hdr->type            = PDU_SRXPROXY_HELLO;
+  hdr->version         = htons(SRX_PROTOCOL_VER);
+  hdr->length          = htonl(length);
+  hdr->proxyIdentifier = htonl(5 /*proxy->proxyID*/);
+  hdr->asn             = htonl(65005 /*proxy->proxyAS*/);
+  hdr->noPeers         = htonl(noPeers);
+
+#if 0/*{*/
+  peerAS = (uint32_t*)&hdr->peerAS;
+  SListNode* node = getRootNodeOfSList(&proxy->peerAS);
+  while (!(node == NULL))
+  {
+    peerASN = *((uint32_t*)node->data);
+    *peerAS = htonl(peerASN);
+    peerAS++;
+    node = node->next;
+  }
+
+
+  if (handshakeWithServer(proxy->connHandler, hdr))
+  {
+    // connHandler->established is set in processHelloResponse
+    LOG(LEVEL_INFO, "Connection with proxy [%u] established!",proxy->proxyID);
+  }
+  else
+  {
+    if (!connHandler->stop) // No Goodbye received
+    {
+      releaseClientConnectionHandler(connHandler);
+    }
+
+    LOG(LEVEL_ERROR, "Handshake with server (%s:%u) failed!", host, port);
+
+    return false;
+  }
+#endif/*}*/
+  //if (!sendData(&self->clSock, (void*)pdu, ntohl(pdu->length)))
+
+
+#if 0
+  char buff[10];
+  buff[0] = 0xAB;
+  buff[1] = 0xCD;
+  buff[2] = 0xEF;
+  int32_t result;
+
+  int size = length;
+  char buf_data[size];
+  memcpy(buf_data, pdu, 10);
+
+  GoSlice gopdu = {(void*)buf_data, (GoInt)size, (GoInt)size};
+  //GoSlice pdu = {(void*)buff, (GoInt)3, (GoInt)10};
+  result = Run(gopdu);
+#endif
+
+
+
+
+#if 0/*{*/
+  //TODO SVN No business here
+  // 0: initial
+  // 1: use for notifying the recv thread
+  connHandler->bRecvSet = 0;
+
+  if (connHandler->established)
+  {
+    proxy->externalSocketControl = externalSocketControl;
+
+    if (externalSocketControl)
+    {
+      // Make socket non blocking if it isn't already
+      int flags = fcntl(connHandler->clSock.clientFD, F_GETFL, 0);
+      if ((flags & O_NONBLOCK) != O_NONBLOCK)
+      {
+        fcntl (connHandler->clSock.clientFD, F_SETFL, flags | O_NONBLOCK);
+      }
+      connHandler->clSock.canBeClosed = false;
+    }
+  }
+
+  // IF WE GOT HERE ALL WENT WELL !
+  return connHandler->established;
+#endif/*}*/
+  return true;
+}
+
+/*
+//int responseGRPC (int size)
+void responseGRPC(void)
+{
+    printf("[%s] calling - size:  \n", __FUNCTION__);
+    //printf("[%s] calling - size: %d \n", __FUNCTION__, size);
+
+    //return 0;
+}
+
+*/

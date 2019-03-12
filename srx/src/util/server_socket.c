@@ -178,7 +178,7 @@ static bool single_sendResult(ServerClient* client, void* data, size_t size)
     RAISE_ERROR("Trying to send a packet over an inactive connection");
     retVal = false;
   }
-  
+ 
   return retVal;
 }
 
@@ -981,21 +981,14 @@ static void* thread_ClientHandler_gRPC(void* clientThread)
   act.sa_handler = sigusr_pipe_handler;
   sigaction(SIGPIPE, &act, NULL);
   pthread_sigmask(SIG_UNBLOCK, &errmask, NULL);
-  g_single_thread_client_fd = cthread->clientFD;
+  //g_single_thread_client_fd = cthread->clientFD;
 
-  LOG(LEVEL_DEBUG, "([0x%08X]) > Proxy Client Connection Thread started "
-                   "(ServerSocket::single_handleClient)", pthread_self());
+  LOG(LEVEL_DEBUG, "([0x%08X]) > gRPC Server Thread started ", pthread_self());
   LOG(LEVEL_DEBUG, HDR "Inside new client thread, about to start traffic "
                     "listener.", pthread_self());
-  if (initWriteMutex(cthread))
-  {
-
-    // TODO: procedure to dump data into buffer and then call 
-    //
-    // Start the receiver loop of this client connection.
-    (void)receivePackets(&cthread->clientFD, single_packetHandler, cthread, 
+    
+  (void)receivePackets(&cthread->clientFD, single_packetHandler, cthread, 
                          PHT_SERVER);
-  }
 
   clientThreadCleanup(MODE_SINGLE_CLIENT, cthread);
   

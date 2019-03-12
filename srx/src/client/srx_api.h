@@ -545,6 +545,7 @@ void setProxyLogger(ProxyLogger logger);
  * @since 0.3.0
  */
 bool setLogMode(int logMode);
+//bool setLogMode2(int logMode);
 
 
 /** 
@@ -557,6 +558,8 @@ bool setLogMode(int logMode);
  * @since 0.3.0
  */
 bool isErrorCode(SRxProxyCommCode code);
+//int responseGRPC(int size);
+//void responseGRPC(void);
 
 #endif // !__SRX_API_H__
 

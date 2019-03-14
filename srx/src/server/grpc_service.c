@@ -25,6 +25,7 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
 {
   printf("[%s] function called \n", __FUNCTION__);
   printf("++ grpcServiceHandler : %p  \n", &grpcServiceHandler );
+  printf("++ grpcServiceHandler.CommandQueue   : %p  \n", grpcServiceHandler.cmdQueue);
   printf("++ grpcServiceHandler.CommandHandler : %p  \n", grpcServiceHandler.cmdHandler );
   printf("++ grpcServiceHandler.UpdateCache    : %p  \n", grpcServiceHandler.updCache);
   printf("++ grpcServiceHandler.svrConnHandler : %p  \n", grpcServiceHandler.svrConnHandler);
@@ -255,8 +256,24 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt)
     rt->size = length;
     rt->data = (unsigned char*) malloc(length);
     memcpy(rt->data, pdu, length);
-
     free(pdu);
+
+
+    if ((doOriginVal || doPathVal) && ((sendFlags & SRX_FLAG_ROA_AND_BGPSEC) > 0))
+    {
+      // Only keep the validation flags.
+      hdr->flags = sendFlags & SRX_FLAG_ROA_AND_BGPSEC;
+
+      // create the validation command!
+      if (!queueCommand(grpcServiceHandler.cmdQueue, COMMAND_TYPE_SRX_PROXY, NULL, NULL,
+            updateID, ntohl(hdr->length), (uint8_t*)hdr))
+      {
+        RAISE_ERROR("Could not add validation request to command queue!");
+        retVal = false;
+      }
+    }
+
+    LOG(LEVEL_DEBUG, HDR "Exit processValidationRequest", pthread_self());
 
   }
   return retVal;

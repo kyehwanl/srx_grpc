@@ -1,6 +1,0 @@
-gcc -fPIC -shared -o libgrpc_service.so grpc_service.c -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src
-
-gcc -fPIC -shared -o server/libgrpc_service.so server/grpc_service.c \
-        -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src \
-        -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/../extras/local/include \
-        -I/opt/project/srx_test1/srx/../_inst//include

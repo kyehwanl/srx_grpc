@@ -1,12 +1,14 @@
 #ifndef GRPC_SERVICE_H
 #define	GRPC_SERVICE_H
 
+#include "server/command_queue.h"
 #include "server/command_handler.h"
 #include "server/update_cache.h"
 #include "server/server_connection_handler.h"
 
 typedef struct {
   // Arguments (create)
+  CommandQueue*             cmdQueue;
   CommandHandler*           cmdHandler;
   ServerConnectionHandler*  svrConnHandler;
   //BGPSecHandler*            bgpsecHandler;

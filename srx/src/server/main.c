@@ -809,11 +809,13 @@ void createGRPCService()
   printf("+ pthread grpc service started...\n");
 
   /* init service handler */
+  grpcServiceHandler.cmdQueue   = &cmdQueue;
   grpcServiceHandler.cmdHandler = &cmdHandler;
   grpcServiceHandler.updCache = &updCache;
   grpcServiceHandler.svrConnHandler = &svrConnHandler;
 
   printf("+ grpcServiceHandler : %p  \n", &grpcServiceHandler );
+  printf("+ grpcServiceHandler.CommandQueue   : %p  \n", grpcServiceHandler.cmdQueue);
   printf("+ grpcServiceHandler.CommandHandler : %p  \n", grpcServiceHandler.cmdHandler );
   printf("+ grpcServiceHandler.UpdateCache    : %p  \n", grpcServiceHandler.updCache);
   printf("+ grpcServiceHandler.svrConnHandler : %p  \n", grpcServiceHandler.svrConnHandler);

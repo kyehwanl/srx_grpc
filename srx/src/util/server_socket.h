@@ -263,6 +263,7 @@ typedef struct
   ServerSocket* svrSock;
   /* The socket address. */
   struct sockaddr caddr;  
+  bool type_grpc_client; /* between general client and  grpc client */
 } ClientThread;
 
 /**

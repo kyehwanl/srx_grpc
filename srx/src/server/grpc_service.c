@@ -49,6 +49,16 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
     proxyID = ntohl(hdr->proxyIdentifier);
 
 
+
+    // TODO: client registration should be followed
+
+    //  _processHandshake()
+    //  command_handler.c: 233 -
+
+
+
+
+    /* Send Hello Response */
     bool retVal = true;
     uint32_t length = sizeof(SRXPROXY_HELLO_RESPONSE);
     SRXPROXY_HELLO_RESPONSE* pdu = malloc(length);

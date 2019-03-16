@@ -889,6 +889,7 @@ int closeClientConnection(ServerSocket* self, ServerClient* client)
 
 
 
+#if 0
 void runServerLoop_gRPC(ServerSocket* self, ClientMode clMode,
                    void (*modeCallback)(), ClientStatusChanged statusCallback,
                    void* user)
@@ -968,6 +969,7 @@ void runServerLoop_gRPC(ServerSocket* self, ClientMode clMode,
       }
   }
 }
+#endif
 
 
 static void* thread_ClientHandler_gRPC(void* clientThread)

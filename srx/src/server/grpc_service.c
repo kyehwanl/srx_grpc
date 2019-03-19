@@ -33,6 +33,25 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
   SRXPROXY_HELLO* hdr  = (SRXPROXY_HELLO*)data;
   uint32_t proxyID     = 0;
   uint8_t  clientID    = 0;
+  
+  
+  /* 
+   * To make clientID in accordance with porxyID with proxyMap 
+   */
+  ClientThread* cthread;
+  cthread = (ClientThread*)appendToSList(&grpcServiceHandler.svrConnHandler->svrSock.cthreads, sizeof (ClientThread));
+
+  cthread->active          = true;
+  cthread->initialized     = false;
+  cthread->goodByeReceived = false;
+
+  cthread->proxyID  = 0; // will be changed for srx-proxy during handshake
+  cthread->routerID = 0; // Indicates that it is currently not usable, 
+  //cthread->clientFD = cliendFD;
+  cthread->svrSock  = &grpcServiceHandler.svrConnHandler->svrSock;
+  //cthread->caddr	  = caddr;
+
+
 
   if (ntohs(hdr->version) != SRX_PROTOCOL_VER)
   {
@@ -42,16 +61,28 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
     sendError(SRXERR_WRONG_VERSION, NULL, NULL, false);
     //sendGoodbye(item->serverSocket, item->client, false);
   }
-
   else
   {
     // Figure out the proxyID if it can be used or not. If not, answer with a new proxy ID.
     proxyID = ntohl(hdr->proxyIdentifier);
+    clientID = findClientID(grpcServiceHandler.svrConnHandler, proxyID);
 
+    if (clientID > 0)
+    {
+      if (!addMapping(grpcServiceHandler.svrConnHandler, proxyID, clientID, cthread, true))
+      {
+        clientID = 0; // FAIL HANDSHAKE
+      }
+    }
+
+    LOG (LEVEL_INFO, "Handshake: Connection to proxy[0x%08X] accepted. Proxy "
+        "registered as internal client[0x%02X]", proxyID, clientID);
+
+    cthread->proxyID  = proxyID;
+    cthread->routerID = clientID;
 
 
     // TODO: client registration should be followed
-
     //  _processHandshake()
     //  command_handler.c: 233 -
 

@@ -54,6 +54,34 @@ func (s *Server) SendPacketToSRxServer(ctx context.Context, pdu *pb.PduRequest) 
 		ValidationStatus: data}, nil
 }
 
+func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAndWaitProcessServer) error {
+
+	data := uint32(0x09)
+	C.setLogMode(3)
+	fmt.Printf("stream server: %s %#v\n", pdu.Data, pdu)
+	C.setLogMode(7)
+	fmt.Println("calling SRxServer responseGRPC()")
+
+	retData := C.RET_DATA{}
+	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])))
+
+	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
+	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
+
+	resp := pb.PduResponse{
+		Data:             b,
+		Length:           uint32(retData.size),
+		ValidationStatus: data,
+	}
+
+	if err := stream.Send(&resp); err != nil {
+		log.Printf("send error %v", err)
+	}
+	log.Printf("send stream data")
+
+	return nil
+}
+
 func NewServer(g *grpc.Server) *Server {
 	grpc.EnableTracing = false
 	server := &Server{

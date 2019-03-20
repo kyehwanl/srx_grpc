@@ -9,7 +9,7 @@ package srx_grpc;
 // Interface exported by the server.
 service SRxApi {
   rpc SendPacketToSRxServer(PduRequest) returns (PduResponse) {}
-
+  rpc SendAndWaitProcess(PduRequest) returns (stream PduResponse) {}
 }
 
 

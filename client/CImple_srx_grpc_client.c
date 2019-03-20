@@ -7,22 +7,39 @@
 int main ()
 {
     printf(" Running C imple grpc client from C\n");
+    int32_t result;
 
+    /* test 1 */
     char buff[10];
     buff[0] = 0xAB;
     buff[1] = 0xCD;
     buff[2] = 0xEF;
-
-
     GoSlice pdu = {(void*)buff, (GoInt)3, (GoInt)10};
-    //GoSlice emp = {};
-
-    int32_t result;
     result = Run(pdu);
-    //Run(emp);
-    printf(" validation result: %02x\n", result);
 
 
+
+    /* test 2: request HelloRequest */
+
+    /* 
+      hdr->type            = PDU_SRXPROXY_HELLO;
+      hdr->version         = htons(SRX_PROTOCOL_VER);
+      hdr->length          = htonl(length);
+      hdr->proxyIdentifier = htonl(5);   // htonl(proxy->proxyID);
+      hdr->asn             = htonl(65005); 
+      hdr->noPeers         = htonl(noPeers); 
+    */
+    char buff_hello_request[20] = 
+    {0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0};
+
+    GoSlice hello_requiest_pdu = {(void*)buff_hello_request, (GoInt)20, (GoInt)20};
+    result = Run(hello_requiest_pdu);
+    printf(" Hello Request Result: %02x\n", result);
+
+
+
+    /* test 3: request verification */
+    printf(" Validation Result: %02x\n", result);
     printf("[grpc_client] verify update sent\n" );
     /* verify update srxproxy protocol test */
     char verify_buff[169] = {
@@ -38,11 +55,10 @@ int main ()
         0x82, 0x7f, 0x50, 0xe6, 0x5a, 0x5b, 0xd7, 0x8c, 0xd1, 0x81, 0x3d, 0xbc, 0xca, 0xa8, 0x2d, 0x27,
         0x47, 0x60, 0x25, 0xe0, 0x8c, 0xda, 0x49, 0xf9, 0x1e, 0x22, 0xd8, 0xc0, 0x8e
     };
-
     
     GoSlice verify_pdu = {(void*)verify_buff, (GoInt)169, (GoInt)170};
     result = Run(verify_pdu);
-    printf(" validation result: %02x\n", result);
+    printf(" Validation Result: %02x\n", result);
 
     return 0;
 }

@@ -65,7 +65,13 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
   {
     // Figure out the proxyID if it can be used or not. If not, answer with a new proxy ID.
     proxyID = ntohl(hdr->proxyIdentifier);
+
     clientID = findClientID(grpcServiceHandler.svrConnHandler, proxyID);
+    if (clientID == 0)
+    {
+      clientID = createClientID(grpcServiceHandler.svrConnHandler);
+    }
+
 
     if (clientID > 0)
     {
@@ -87,8 +93,6 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
     //  command_handler.c: 233 -
 
 
-
-
     /* Send Hello Response */
     bool retVal = true;
     uint32_t length = sizeof(SRXPROXY_HELLO_RESPONSE);
@@ -105,6 +109,11 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
     rt->data = (unsigned char*) malloc(length);
     memcpy(rt->data, pdu, length);
     free(pdu);
+
+
+
+    // TODO: send goodbye in case there is error 
+    //
 
   }
 

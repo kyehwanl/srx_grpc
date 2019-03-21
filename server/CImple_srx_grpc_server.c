@@ -10,4 +10,6 @@ int main()
 
     Serve();
 
+    printf("Main program terminated\n");
+
 }

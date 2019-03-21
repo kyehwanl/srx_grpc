@@ -27,7 +27,9 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 #include "srx/srx_api.h"
 #include "server/grpc_service.h"
 
-void PrintInternalCallTest(int i);
+
+
+extern void cb_proxy(int f, void* user_data);
 
 #line 1 "cgo-generated-wrapper"
 
@@ -77,6 +79,8 @@ typedef struct { void *data; GoInt len; GoInt cap; } GoSlice;
 extern "C" {
 #endif
 
+
+extern void cb_proxy(int p0, void* p1);
 
 extern void Serve();
 

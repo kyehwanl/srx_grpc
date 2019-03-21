@@ -334,7 +334,7 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt)
 //int responseGRPC (int size, unsigned char* data)
 RET_DATA responseGRPC (int size, unsigned char* data)
 {
-    printf("[%s] calling - size: %d \n", __FUNCTION__, size);
+    printf("+ [SRX][%s] calling - size: %d \n", __FUNCTION__, size);
 
     bool ret = _isSet(0x03, 0x01);
     printf("ret bool: %d \n", ret);
@@ -418,6 +418,9 @@ RET_DATA responseGRPC (int size, unsigned char* data)
             item->client);
             */
     }
+
+    // call callback function in go driver
+    //cb_proxy(16, "0123456789ABCDEF");
 
     return rt;
 }

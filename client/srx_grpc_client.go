@@ -116,10 +116,15 @@ func RunStream(data []byte) uint32 {
 func main() {
 	data := []byte(defaultName)
 	data2 := []byte{0x10, 0x11, 0x40, 0x42}
-	//Run(data)
+	data3 := []byte{0x10, 0x11, 0x40, 0x42, 0xAB, 0xCD, 0xEF}
+
 	r := Run(data)
-	log.Printf("Transferred: %#v\n", r)
+	log.Printf("Transferred: %#v\n\n", r)
 
 	r = Run(data2)
-	log.Printf("Transferred: %#v\n", r)
+	log.Printf("Transferred: %#v\n\n", r)
+
+	r = RunStream(data3)
+	log.Printf("Transferred: %#v\n\n", r)
+
 }

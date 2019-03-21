@@ -9,7 +9,9 @@ package main
 #include "srx/srx_api.h"
 #include "server/grpc_service.h"
 
-void PrintInternalCallTest(int i);
+
+
+extern void cb_proxy(int f, void* user_data);
 */
 import "C"
 
@@ -28,16 +30,45 @@ import (
 )
 
 var port = flag.Int("port", 50000, "The server port")
+var gStream pb.SRxApi_SendAndWaitProcessServer
 
 type Server struct {
 	grpcServer *grpc.Server
+}
+
+//export cb_proxy
+func cb_proxy(f C.int, v unsafe.Pointer) {
+	fmt.Printf("proxy callback function : arg[%d, %#v]\n", f, v)
+
+	b := C.GoBytes(unsafe.Pointer(v), f)
+	// call my callback
+	MyCallback(int(f), b)
+}
+
+func MyCallback(f int, b []byte) {
+
+	fmt.Printf("My callback function - received arg: %d, %#v \n", f, b)
+
+	//b := []byte{0x10, 0x11, 0x40, 0x42, 0xAB, 0xCD, 0xEF}
+	resp := pb.PduResponse{
+		Data:             b,
+		Length:           uint32(len(b)),
+		ValidationStatus: 2,
+	}
+
+	if gStream != nil {
+		if err := gStream.Send(&resp); err != nil {
+			log.Printf("send error %v", err)
+		}
+		log.Printf("sending stream data")
+	}
+
 }
 
 func (s *Server) SendPacketToSRxServer(ctx context.Context, pdu *pb.PduRequest) (*pb.PduResponse, error) {
 	data := uint32(0x07)
 	C.setLogMode(3)
 	fmt.Printf("server: %s %#v\n", pdu.Data, pdu)
-	//C.PrintInternalCallTest(12)
 	C.setLogMode(7)
 	fmt.Println("calling SRxServer responseGRPC()")
 
@@ -55,6 +86,8 @@ func (s *Server) SendPacketToSRxServer(ctx context.Context, pdu *pb.PduRequest) 
 }
 
 func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAndWaitProcessServer) error {
+
+	gStream = stream
 
 	data := uint32(0x09)
 	C.setLogMode(3)
@@ -77,7 +110,7 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 	if err := stream.Send(&resp); err != nil {
 		log.Printf("send error %v", err)
 	}
-	log.Printf("send stream data")
+	log.Printf("sending stream data")
 
 	return nil
 }
@@ -107,6 +140,5 @@ func Serve() {
 }
 
 func main() {
-	//C.PrintInternalCallTest(2)
 	Serve()
 }

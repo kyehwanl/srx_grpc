@@ -683,6 +683,10 @@ bool broadcastResult(CommandHandler* self, SRxValidationResult* valResult)
 
     /* extract a specific client to send packet */
     retVal = false;
+
+    cb_proxy(pduLength, pdu);
+    //cb_proxy(10, "1234567890");
+
     while  (clientCt-- > 0)
     {
       // work the clients array backwards - saves maintaining a counter variable
@@ -701,4 +705,14 @@ bool broadcastResult(CommandHandler* self, SRxValidationResult* valResult)
 
   return retVal;
 }
-
+#if 0
+    typedef struct {
+      uint8_t     type;            // 6
+      uint8_t     resultType;
+      uint8_t     roaResult;
+      uint8_t     bgpsecResult;
+      uint32_t    length;          // 16 Bytes
+      uint32_t    requestToken; // Added with protocol version 1.0
+      SRxUpdateID updateID;
+    } __attribute__((packed)) SRXPROXY_VERIFY_NOTIFICATION;
+#endif

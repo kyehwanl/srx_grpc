@@ -9,6 +9,7 @@ int main ()
     printf(" Running C imple grpc client from C\n");
     int32_t result;
 
+#if 0
     /* test 1 */
     char buff[10];
     buff[0] = 0xAB;
@@ -16,11 +17,11 @@ int main ()
     buff[2] = 0xEF;
     GoSlice pdu = {(void*)buff, (GoInt)3, (GoInt)10};
     result = Run(pdu);
+#endif
 
 
 
     /* test 2: request HelloRequest */
-
     /* 
       hdr->type            = PDU_SRXPROXY_HELLO;
       hdr->version         = htons(SRX_PROTOCOL_VER);
@@ -57,7 +58,7 @@ int main ()
     };
     
     GoSlice verify_pdu = {(void*)verify_buff, (GoInt)169, (GoInt)170};
-    result = Run(verify_pdu);
+    result = RunStream(verify_pdu);
     printf(" Validation Result: %02x\n", result);
 
     return 0;

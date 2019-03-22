@@ -26,6 +26,7 @@ import (
 	"google.golang.org/grpc"
 	//	"github.com/golang/protobuf/proto"
 	_ "bytes"
+	"time"
 	"unsafe"
 )
 
@@ -111,6 +112,8 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 		log.Printf("send error %v", err)
 	}
 	log.Printf("sending stream data")
+
+	time.Sleep(5 * time.Second)
 
 	return nil
 }

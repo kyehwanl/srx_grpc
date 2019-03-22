@@ -26,12 +26,15 @@ import (
 	"google.golang.org/grpc"
 	//	"github.com/golang/protobuf/proto"
 	_ "bytes"
-	"time"
+	_ "io"
+	_ "time"
 	"unsafe"
 )
 
 var port = flag.Int("port", 50000, "The server port")
 var gStream pb.SRxApi_SendAndWaitProcessServer
+
+//var done chan bool
 
 type Server struct {
 	grpcServer *grpc.Server
@@ -62,6 +65,19 @@ func MyCallback(f int, b []byte) {
 			log.Printf("send error %v", err)
 		}
 		log.Printf("sending stream data")
+
+		/*
+			TODO: How to Send EOF from the server side through grpc ??
+
+				if f == -1 {
+					_, err := gStream.Recv()
+					if err == io.EOF {
+						log.Printf("end stream connection")
+						log.Println(err)
+						close(done)
+					}
+				}
+		*/
 	}
 
 }
@@ -89,6 +105,15 @@ func (s *Server) SendPacketToSRxServer(ctx context.Context, pdu *pb.PduRequest) 
 func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAndWaitProcessServer) error {
 
 	gStream = stream
+	ctx := stream.Context()
+	done := make(chan bool)
+	go func() {
+		<-ctx.Done()
+		if err := ctx.Err(); err != nil {
+			log.Println(err)
+		}
+		close(done)
+	}()
 
 	data := uint32(0x09)
 	C.setLogMode(3)
@@ -113,7 +138,10 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 	}
 	log.Printf("sending stream data")
 
-	time.Sleep(5 * time.Second)
+	//time.Sleep(5 * time.Second)
+
+	<-done
+	log.Printf("Finished with RPC send \n")
 
 	return nil
 }

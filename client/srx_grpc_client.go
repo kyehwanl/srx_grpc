@@ -96,6 +96,11 @@ func RunStream(data []byte) uint32 {
 			fmt.Printf("size : %#v\n", resp.Length)
 			fmt.Printf("status: %#v\n", resp.ValidationStatus)
 			r = *resp
+
+			if resp.Data == nil && resp.Length == 0 {
+				log.Fatalf("close stream ")
+				close(done)
+			}
 		}
 
 	}()

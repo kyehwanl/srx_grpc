@@ -435,6 +435,9 @@ static bool _processUpdateValidation(CommandHandler* cmdHandler,
                       updateID);
     }    
   }
+    
+  // [grpc] close send stream from server
+  cb_proxy(0, NULL);
   
   return processed;
 }

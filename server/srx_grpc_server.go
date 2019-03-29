@@ -3,8 +3,10 @@ package main
 /*
 
 #cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/../extras/local/include -I/opt/project/srx_test1/srx/../_inst//include
-#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/server -lgrpc_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/server -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/lib64/srx -lSRxProxy -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/lib64/srx -Wl,--unresolved-symbols=ignore-all
 
+#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/server -lgrpc_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/server -Wl,--unresolved-symbols=ignore-all
+
+//#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/server -lgrpc_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/server -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/lib64/srx -lSRxProxy -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/lib64/srx -Wl,--unresolved-symbols=ignore-all
 #include <stdio.h>
 #include "srx/srx_api.h"
 #include "server/grpc_service.h"
@@ -84,9 +86,9 @@ func MyCallback(f int, b []byte) {
 
 func (s *Server) SendPacketToSRxServer(ctx context.Context, pdu *pb.PduRequest) (*pb.PduResponse, error) {
 	data := uint32(0x07)
-	C.setLogMode(3)
+	//C.setLogMode(3)
 	fmt.Printf("server: %s %#v\n", pdu.Data, pdu)
-	C.setLogMode(7)
+	//C.setLogMode(7)
 	fmt.Println("calling SRxServer responseGRPC()")
 
 	retData := C.RET_DATA{}
@@ -116,9 +118,9 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 	}()
 
 	data := uint32(0x09)
-	C.setLogMode(3)
+	//C.setLogMode(3)
 	fmt.Printf("stream server: %s %#v\n", pdu.Data, pdu)
-	C.setLogMode(7)
+	//C.setLogMode(7)
 	fmt.Println("calling SRxServer responseGRPC()")
 
 	retData := C.RET_DATA{}

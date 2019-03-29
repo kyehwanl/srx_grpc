@@ -96,6 +96,7 @@ static ProxyLogger _pLogger = NULL;
 static void dispatchPackets(SRXPROXY_BasicHeader* packet, void* proxyPtr);
 void callCMgmtHandler(SRxProxy* proxy, SRxProxyCommCode mainCode, int subCode);
 void pLog(LogLevel level, const char* fmt, va_list args);
+inline void printHex(int len, unsigned char* buff);
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1390,8 +1391,7 @@ bool isErrorCode(SRxProxyCommCode code)
 }
 
 
-
-//#include "/opt/project/gobgp_test/gowork/src/srx_grpc/client/srx_grpc_client.h"
+#include "/opt/project/gobgp_test/gowork/src/srx_grpc/client/libsrx_grpc_client.h"
 bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
                   int handshakeTimeout, bool externalSocketControl)
 {
@@ -1450,6 +1450,7 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   hdr->asn             = htonl(65005 /*proxy->proxyAS*/);
   hdr->noPeers         = htonl(noPeers);
 
+  printHex(length, pdu);
 #if 0/*{*/
   peerAS = (uint32_t*)&hdr->peerAS;
   SListNode* node = getRootNodeOfSList(&proxy->peerAS);
@@ -1482,19 +1483,14 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   //if (!sendData(&self->clSock, (void*)pdu, ntohl(pdu->length)))
 
 
-#if 0
-  char buff[10];
-  buff[0] = 0xAB;
-  buff[1] = 0xCD;
-  buff[2] = 0xEF;
+#if 1
   int32_t result;
 
   int size = length;
   char buf_data[size];
-  memcpy(buf_data, pdu, 10);
+  memcpy(buf_data, pdu, size);
 
   GoSlice gopdu = {(void*)buf_data, (GoInt)size, (GoInt)size};
-  //GoSlice pdu = {(void*)buff, (GoInt)3, (GoInt)10};
   result = Run(gopdu);
 #endif
 
@@ -1540,3 +1536,14 @@ void responseGRPC(void)
 }
 
 */
+
+__attribute__((always_inline)) inline void printHex(int len, unsigned char* buff)
+{
+    int i;
+    for(i=0; i < len; i++ )
+    {
+        if(i%16 ==0) printf("\n");
+        printf("%02x ", buff[i]);
+    }
+    printf("\n");
+}

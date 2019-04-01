@@ -1390,8 +1390,8 @@ bool isErrorCode(SRxProxyCommCode code)
   return (code & 0x7F) == code;
 }
 
-
-#include "/opt/project/gobgp_test/gowork/src/srx_grpc/client/libsrx_grpc_client.h"
+#ifdef USE_GRPC
+#include "client/libsrx_grpc_client.h"
 bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
                   int handshakeTimeout, bool externalSocketControl)
 {
@@ -1483,7 +1483,6 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   //if (!sendData(&self->clSock, (void*)pdu, ntohl(pdu->length)))
 
 
-#if 1
   int32_t result;
 
   int size = length;
@@ -1492,7 +1491,6 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
 
   GoSlice gopdu = {(void*)buf_data, (GoInt)size, (GoInt)size};
   result = Run(gopdu);
-#endif
 
 
 
@@ -1524,7 +1522,7 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
 #endif/*}*/
   return true;
 }
-
+#endif
 /*
 //int responseGRPC (int size)
 void responseGRPC(void)

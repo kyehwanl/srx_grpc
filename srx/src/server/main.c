@@ -98,7 +98,10 @@
 #include "server/update_cache.h"
 #include "util/directory.h"
 #include "util/log.h"
+#ifdef USE_GRPC
 #include "server/grpc_service.h"
+#include "server/libsrx_grpc_server.h"
+#endif
 
 // Some defines needed for east
 #define SETUP_RPKI_HANDLER         1
@@ -170,10 +173,12 @@ static void doCleanupHandlers(int handler);
 
 /** Holds the SRxCryptoAPI */
 SRxCryptoAPI* g_capi = NULL;
+
+#ifdef USE_GRPC
 static void* gRPCService(void* arg);
 void createGRPCService();
-
 GRPC_ServiceHandler     grpcServiceHandler;
+#endif
 
 ////////////////////
 // Server Call backs
@@ -756,8 +761,9 @@ int main(int argc, const char* argv[])
       }
       else
       {           
+#ifdef USE_GRPC
         createGRPCService();
-
+#endif
         // Ready for requests
         cleanupRequired = true;
         run();
@@ -800,6 +806,7 @@ int main(int argc, const char* argv[])
   return exitCode;
 }
 
+#ifdef USE_GRPC
 void createGRPCService()
 {
   pthread_t tid;
@@ -832,7 +839,6 @@ void createGRPCService()
   printf("+ pthread grpc service thread stopped and going to joinable status\n");
 }
 
-#include "/opt/project/gobgp_test/gowork/src/srx_grpc/server/libsrx_grpc_server.h"
 static void* gRPCService(void* arg)
 {
   LOG(LEVEL_DEBUG, "([0x%08X]) > gRPC Server Thread started ", pthread_self());
@@ -843,5 +849,6 @@ static void* gRPCService(void* arg)
 
   pthread_exit(0);
 }
+#endif
 
 

@@ -162,7 +162,6 @@ static void clientThreadCleanup(ClientMode mode, ClientThread* ct)
  * @param data   The packet to send
  * @param size   The size of the packet to send.
  */
-#include "/opt/project/gobgp_test/gowork/src/srx_grpc/client/libsrx_grpc_client.h"
 static bool single_sendResult(ServerClient* client, void* data, size_t size)
 {
   ClientThread* clt = (ClientThread*)client;
@@ -180,7 +179,8 @@ static bool single_sendResult(ServerClient* client, void* data, size_t size)
     retVal = false;
   }
 
-#if 1
+#ifdef USE_GRPC
+#include "client/libsrx_grpc_client.h"
   char buff[10];
   buff[0] = 0xAB;
   buff[1] = 0xCD;
@@ -987,7 +987,7 @@ void runServerLoop_gRPC(ServerSocket* self, ClientMode clMode,
 }
 #endif
 
-
+#ifdef USE_GRPC
 static void* thread_ClientHandler_gRPC(void* clientThread)
 {
   ClientThread* cthread = (ClientThread*)clientThread;
@@ -1020,5 +1020,5 @@ static void* thread_ClientHandler_gRPC(void* clientThread)
   
   pthread_exit(0);
 }
-
+#endif
 

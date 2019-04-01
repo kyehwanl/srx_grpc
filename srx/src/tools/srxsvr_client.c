@@ -130,7 +130,9 @@
 #define CMD_HELP       "help"
 #define CMD_CREDITS    "credits"
 #define CMD_CONNECT    "connect"
+#ifdef USE_GRPC
 #define CMD_CONNECT_GRPC "connect_grpc"
+#endif
 #define CMD_DISCONNECT "disconnect"
 #define CMD_RECONNECT  "reconnect"
 #define CMD_ADD_PEER   "addPeer"
@@ -156,7 +158,11 @@
 // since 0.3.0
 static char* cmd_code[] = {
              CMD_QUIT, CMD_EXIT, CMD_HELP, CMD_CREDITS,
+#ifdef USE_GRPC
              CMD_CONNECT, CMD_CONNECT_GRPC, CMD_DISCONNECT, CMD_RECONNECT,
+#else
+             CMD_CONNECT, CMD_DISCONNECT, CMD_RECONNECT,
+#endif
              CMD_ADD_PEER, CMD_DEL_PEER, CMD_VERIFY, CMD_SIGN, CMD_DELETE, 
              CMD_RUN, 
              CMD_STAT_START, CMD_STAT_STOP, CMD_STAT_INIT, 
@@ -1837,7 +1843,9 @@ bool processLine(bool log, char* line)
   else IF_EQ_DO(CMD_HELP, showHelp())
   else IF_EQ_DO(CMD_CREDITS, showCredits())
   else IF_EQ_DO(CMD_CONNECT, doConnect(log, &arg))
+#ifdef USE_GRPC
   else IF_EQ_DO(CMD_CONNECT_GRPC, doConnect_grpc(log, &arg))
+#endif
   else IF_EQ_DO(CMD_DISCONNECT, doDisconnect(log))
   else IF_EQ_DO(CMD_RECONNECT, doReConnect(log))
   else IF_EQ_DO(CMD_ADD_PEER, doMaintainPeer(log, &arg, true))
@@ -1938,7 +1946,7 @@ int main(int argc, char* argv[])
   return 0;
 }
 
-
+#ifdef USE_GRPC
 void doConnect_grpc(bool log, char** argPtr)
 {
   const char* input;
@@ -2050,3 +2058,4 @@ void doConnect_grpc(bool log, char** argPtr)
   }
   freshConnected = connected;
 }
+#endif

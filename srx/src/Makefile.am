@@ -12,6 +12,26 @@ TOOLS_DIR = tools
 UTIL_DIR = util
 TEST_DIR = test
 
+
+if ENABLE_GRPC_COND
+GRPC_SERVER_LIBS = -lsrx_grpc_server 
+GRPC_CLIENT_LIBS = -lsrx_grpc_client
+GRPC_LIBS = $(GRPC_SERVER_LIBS) $(GRPC_CLIENT_LIBS)
+
+#GRPC_DIR = /opt/project/gobgp_test/gowork/src/srx_grpc
+GRPC_DIR = $(grpc_dir)
+GRPC_SERVER_PATH = $(GRPC_DIR)/server
+GRPC_CLIENT_PATH = $(GRPC_DIR)/client
+
+GRPC_SERVER_LDFLAG = -L$(GRPC_SERVER_PATH) #-rpath '$(GRPC_SERVER_PATH)'
+GRPC_CLIENT_LDFLAG = -L$(GRPC_CLIENT_PATH) #-rpath '$(GRPC_CLIENT_PATH)'
+
+GRPC_SERVER_RPATH = -rpath '$(GRPC_SERVER_PATH)'
+GRPC_CLIENT_RPATH = -Wl,-rpath -Wl,$(GRPC_CLIENT_PATH)
+#GRPC_CLIENT_RPATH = -rpath '$(GRPC_CLIENT_PATH)'
+GRPC_CFLAGS = -I$(GRPC_DIR)
+endif
+
 # Read the revision number of the revision file
 # This needs GNU-Make. if this is a problem, replace the 
 # assignment of SRX_REVISION=... with either an empty
@@ -19,7 +39,7 @@ TEST_DIR = test
 SRX_REVISION=$(shell cat $(SRX_REVISION_FILE))
 
 AM_CFLAGS = -DSRX_REVISION=$(SRX_REVISION) \
-            -DSRX_SERVER_PACKAGE=$(PACKAGE_VERSION) $(SCA_CFLAGS)
+            -DSRX_SERVER_PACKAGE=$(PACKAGE_VERSION) $(SCA_CFLAGS) $(GRPC_CFLAGS)
 
 # Used to generate the srx folder for installation - DESTDIR for RPM generation
 INC_OUT = $(DESTDIR)$(includedir)/$(SRX_DIR)
@@ -32,7 +52,7 @@ EXTRA_DIST = $(PACKAGE_TARNAME)-$(PACKAGE_VERSION).spec \
 DEFS = @DEFS@ -DSYSCONFDIR=\"$(sysconfdir)/\"
 
 # Temporary Libraries
-noinst_LTLIBRARIES = libsrx_shared.la libsrx_util.la
+noinst_LTLIBRARIES = libsrx_shared.la libsrx_util.la 
 
 libsrx_shared_la_SOURCES = \
 	             $(SHARED_DIR)/srx_packets.c \
@@ -58,7 +78,16 @@ libsrx_util_la_SOURCES = \
 		     $(UTIL_DIR)/str.c \
 		     $(UTIL_DIR)/timer.c \
 		     $(UTIL_DIR)/xml_out.c
+libsrx_util_la_LIBADD = $(GRPC_CLIENT_LIBS)
+libsrx_util_la_LDFLAGS = $(GRPC_CLIENT_LDFLAG)
 
+if ENABLE_GRPC_COND
+# srx grpc library
+lib_LTLIBRARIES = libgrpc_service.la
+libgrpc_service_la_SOURCES = $(SERVER_DIR)/grpc_service.c 
+#libgrpc_service_la_LIBADD = 
+#libgrpc_service_la_LDFLAGS = 
+endif	
 ################################################################################
 ##  SRX - PROXY - API INSTALL
 ################################################################################
@@ -76,14 +105,17 @@ libSRxProxy_la_SOURCES = $(CLIENT_DIR)/client_connection_handler.c \
 		    $(CLIENT_DIR)/srx_api.c
 
 # General linker flags
-libSRxProxy_la_LIBADD = libsrx_shared.la libsrx_util.la
-libSRxProxy_la_LDFLAGS = -version-info $(LIB_VER)
+libSRxProxy_la_LIBADD = libsrx_shared.la libsrx_util.la $(GRPC_CLIENT_LIBS)
+libSRxProxy_la_LDFLAGS = -version-info $(LIB_VER) $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 libSRxProxy_libconfigdir = $(sysconfdir)/ld.so.conf.d
 dist_libSRxProxy_libconfig_DATA = $(CLIENT_DIR)/srxproxy$(CPU_ARCH).conf
 
 ################################################################################
 ##  END SRX - PROXY - API INSTALL
 ################################################################################
+
+	 
+
 
 
 ################################################################################
@@ -117,13 +149,26 @@ srx_server_SOURCES = $(SERVER_DIR)/bgpsec_handler.c \
 		     $(SERVER_DIR)/rpki_packet_printer.c \
 		     $(SERVER_DIR)/server_connection_handler.c \
 		     $(SERVER_DIR)/srx_packet_sender.c \
-		     $(SERVER_DIR)/update_cache.c  \
-		     $(SERVER_DIR)/grpc_service.c 
+		     $(SERVER_DIR)/update_cache.c  
 
+if ENABLE_GRPC_COND
 srx_server_LDADD = $(LIB_PATRICIA) $(SCA_LIBS) \
 		   libsrx_shared.la \
-		   libsrx_util.la
-srx_server_LDFLAGS = $(SCA_LDFLAGS)
+		   libsrx_util.la \
+		   libgrpc_service.la \
+		   $(GRPC_LIBS)
+else 
+srx_server_LDADD = $(LIB_PATRICIA) $(SCA_LIBS) \
+		   libsrx_shared.la \
+		   libsrx_util.la 
+endif
+
+srx_server_LDFLAGS = $(SCA_LDFLAGS) \
+					 $(GRPC_SERVER_LDFLAG) \
+					 $(GRPC_SERVER_RPATH) \
+					 $(GRPC_CLIENT_LDFLAG) \
+					 $(GRPC_CLIENT_RPATH)
+
 
 # For the revision
 SRX_VENDOR=antd.nist.gov
@@ -147,15 +192,18 @@ rpkirtr_client_SOURCES = $(TOOLS_DIR)/rpkirtr_client.c \
                          $(SERVER_DIR)/rpki_packet_printer.c \
 		                 $(SERVER_DIR)/rpki_router_client.c
 rpkirtr_client_LDADD   = libsrx_util.la
+rpkirtr_client_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 
 # Will be bundled with srx
 rpkirtr_svr_SOURCES = $(TOOLS_DIR)/rpkirtr_svr.c \
                       $(SERVER_DIR)/rpki_packet_printer.h
 rpkirtr_svr_LDADD   = libsrx_util.la
+rpkirtr_svr_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 
 # Will be bundled with srx-proxy
 srxsvr_client_SOURCES = $(TOOLS_DIR)/srxsvr_client.c 
-srxsvr_client_LDADD   = libsrx_util.la libsrx_shared.la libSRxProxy.la
+srxsvr_client_LDADD   = libsrx_util.la libsrx_shared.la libSRxProxy.la $(GRPC_CLIENT_LIBS) 
+srxsvr_client_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 
 
 ################################################################################
@@ -211,6 +259,7 @@ noinst_HEADERS = $(CLIENT_DIR)/client_connection_handler.h \
 		 $(SERVER_DIR)/srx_packet_sender.h \
 		 $(SERVER_DIR)/srx_server.h \
 		 $(SERVER_DIR)/update_cache.h \
+		 $(SERVER_DIR)/grpc_service.h \
 		 \
 		 $(SHARED_DIR)/srx_packets.h \
 		 $(SHARED_DIR)/srx_defs.h \

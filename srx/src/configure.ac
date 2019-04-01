@@ -262,6 +262,26 @@ AC_ARG_WITH([buildtest],
 AC_MSG_RESULT([${withval}])
 AM_CONDITIONAL([BUILD_TEST], [test x$buildtest = xtrue])
 
+# check gRPC support variables
+AC_ARG_ENABLE(grpc,
+              [ --enable-grpc       enable grpc features],
+              [enable_grpc="yes"],[])
+
+AM_CONDITIONAL([ENABLE_GRPC_COND], [test x$enable_grpc = xyes])
+
+AC_MSG_CHECKING(checking to see if grpc is enabled)
+if test "x${enable_grpc}" = "xyes"; then
+    AC_MSG_RESULT(yes)
+    AC_DEFINE([USE_GRPC],[], SRX GRPC)
+    AC_ARG_VAR(grpc_dir, provide grpc driver directory in which grpc server and client installed)
+else
+    AC_MSG_RESULT(no) 
+fi
+
+
+
+
+
 AS_BOX(Processing required headers)
 # Checks for header files.
 #                  winsock.h \

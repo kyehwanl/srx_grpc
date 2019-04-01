@@ -436,8 +436,10 @@ static bool _processUpdateValidation(CommandHandler* cmdHandler,
     }    
   }
     
+#ifdef SRX_GRPC
   // [grpc] close send stream from server
   cb_proxy(0, NULL);
+#endif
   
   return processed;
 }
@@ -686,9 +688,9 @@ bool broadcastResult(CommandHandler* self, SRxValidationResult* valResult)
 
     /* extract a specific client to send packet */
     retVal = false;
-
+#ifdef USE_GRPC
     cb_proxy(pduLength, pdu);
-    //cb_proxy(10, "1234567890");
+#endif
 
     while  (clientCt-- > 0)
     {
@@ -708,14 +710,3 @@ bool broadcastResult(CommandHandler* self, SRxValidationResult* valResult)
 
   return retVal;
 }
-#if 0
-    typedef struct {
-      uint8_t     type;            // 6
-      uint8_t     resultType;
-      uint8_t     roaResult;
-      uint8_t     bgpsecResult;
-      uint32_t    length;          // 16 Bytes
-      uint32_t    requestToken; // Added with protocol version 1.0
-      SRxUpdateID updateID;
-    } __attribute__((packed)) SRXPROXY_VERIFY_NOTIFICATION;
-#endif

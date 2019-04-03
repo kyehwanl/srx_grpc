@@ -436,7 +436,7 @@ static bool _processUpdateValidation(CommandHandler* cmdHandler,
     }    
   }
     
-#ifdef SRX_GRPC
+#ifdef USE_GRPC
   // [grpc] close send stream from server
   cb_proxy(0, NULL);
 #endif

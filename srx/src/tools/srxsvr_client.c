@@ -132,6 +132,7 @@
 #define CMD_CONNECT    "connect"
 #ifdef USE_GRPC
 #define CMD_CONNECT_GRPC "connect_grpc"
+#define CMD_VERIFY_GRPC  "verify_grpc"
 #endif
 #define CMD_DISCONNECT "disconnect"
 #define CMD_RECONNECT  "reconnect"
@@ -160,10 +161,11 @@ static char* cmd_code[] = {
              CMD_QUIT, CMD_EXIT, CMD_HELP, CMD_CREDITS,
 #ifdef USE_GRPC
              CMD_CONNECT, CMD_CONNECT_GRPC, CMD_DISCONNECT, CMD_RECONNECT,
+             CMD_ADD_PEER, CMD_DEL_PEER, CMD_VERIFY, CMD_VERIFY_GRPC, CMD_SIGN, CMD_DELETE, 
 #else
              CMD_CONNECT, CMD_DISCONNECT, CMD_RECONNECT,
-#endif
              CMD_ADD_PEER, CMD_DEL_PEER, CMD_VERIFY, CMD_SIGN, CMD_DELETE, 
+#endif
              CMD_RUN, 
              CMD_STAT_START, CMD_STAT_STOP, CMD_STAT_INIT, 
              CMD_STAT_MARK_NO_RECEIPT, CMD_STAT_MARK_WITH_RECEIPT, 
@@ -179,7 +181,7 @@ static bool isBlocking = true;
 /** See writeLog. */
 static bool keepGoing    = true;
 static SRxProxy* proxy   = NULL;
-static LogLevel logLevel = LEVEL_ERROR;
+static LogLevel logLevel = LEVEL_DEBUG; /*LEVEL_ERROR;*/
 
 // Forward declaration
 void doDisconnect(bool log);
@@ -1364,6 +1366,25 @@ void doVerify(bool log, char** argPtr)
   // @TODO: Generate some test data for input
   bgpsecInput = prompt(argPtr, "(Verify) BGPSEC some string ? ");
 
+
+
+  /* 
+   *  on command line, "verify 1 3 65005 100.1.0.0/24 3 3" without bgpsec string,
+   *  then will fall into this following code
+   */
+  char aspath[] = {
+      0x00, 0x00, 0xfd, 0xf3,
+  };
+  char bgpsec_pattr[] = {
+      0x90, 0x21, 0x00, 0x69, 0x00, 0x08, 0x01, 0x00, 0x00, 0x00, 0xfd, 0xf3, 0x00, 0x61, 0x01, 0xc3,
+      0x04, 0x33, 0xfa, 0x19, 0x75, 0xff, 0x19, 0x31, 0x81, 0x45, 0x8f, 0xb9, 0x02, 0xb5, 0x01, 0xea,
+      0x97, 0x89, 0xdc, 0x00, 0x48, 0x30, 0x46, 0x02, 0x21, 0x00, 0xbd, 0x92, 0x9e, 0x69, 0x35, 0x6e,
+      0x7b, 0x6c, 0xfe, 0x1c, 0xbc, 0x3c, 0xbd, 0x1c, 0x4a, 0x63, 0x8d, 0x64, 0x5f, 0xa0, 0xb7, 0x20,
+      0x7e, 0xf3, 0x2c, 0xcc, 0x4b, 0x3f, 0xd6, 0x1b, 0x5f, 0x46, 0x02, 0x21, 0x00, 0xb6, 0x0a, 0x7c,
+      0x82, 0x7f, 0x50, 0xe6, 0x5a, 0x5b, 0xd7, 0x8c, 0xd1, 0x81, 0x3d, 0xbc, 0xca, 0xa8, 0x2d, 0x27,
+      0x47, 0x60, 0x25, 0xe0, 0x8c, 0xda, 0x49, 0xf9, 0x1e, 0x22, 0xd8, 0xc0, 0x8e
+  };
+
   if (bgpsecInput == '\0')
   {
     bgpsec.numberHops = 0;
@@ -1377,7 +1398,18 @@ void doVerify(bool log, char** argPtr)
     bgpsec.asPath = NULL;
     bgpsec.attr_length = strlen(bgpsecInput)+1;
     bgpsec.bgpsec_path_attr = (uint8_t*)bgpsecInput;
+
+      /*
+    bgpsec.numberHops = 1;
+    bgpsec.asPath = aspath;
+    bgpsec.attr_length = 0x6d;
+    bgpsec.bgpsec_path_attr = (uint8_t*)bgpsec_pattr;
+    bgpsec.afi = htons(1);
+    bgpsec.safi = 1;
+    bgpsec.local_as = htonl(0xedfd0000);
+    */
   }
+
   
   if (log)
   {
@@ -1462,6 +1494,7 @@ void handleSyncRequest()
   memset(buff, '\0', 46);
   sprintf(buff, "verify 0 3 65500 10.10.0.0/16 0 0 MyUpdateNo1");
   processLine(false, buff);
+  /*
   sprintf(buff, "verify 0 3 65501 10.20.0.0/17 0 2 MyUpdateNo2");
   processLine(false, buff);
   sprintf(buff, "verify 0 3 65502 10.30.0.0/18 1 2 MyUpdateNo3");
@@ -1470,14 +1503,17 @@ void handleSyncRequest()
   processLine(false, buff);
   sprintf(buff, "verify 0 1 65504 10.50.0.0/20 3 3 MyUpdateNo5");
   processLine(false, buff);
+  */
   LOG(LEVEL_DEBUG, "This update expects back a notification because SRx assumes"
                   " that the update might be stored using the new default"
                   " value. A notification is necessary to guarantee consistency"
                   " between SRx and ALL proxies!");
+  /*
   sprintf(buff, "verify 0 1 65504 10.50.0.0/20 0 0 MyUpdateNo5");
   processLine(false, buff);
   sprintf(buff, "verify 0 1 65504 10.60.0.0/21 3 3 MyUpdateNo6");
   processLine(false, buff);
+  */
   LOG(LEVEL_DEBUG, "This update expects back a notification because proxy "
                   " requested receipt!");
   sprintf(buff, "verify 0 1 65504 10.60.0.0/21 0 0 MyUpdateNo6");
@@ -1843,9 +1879,6 @@ bool processLine(bool log, char* line)
   else IF_EQ_DO(CMD_HELP, showHelp())
   else IF_EQ_DO(CMD_CREDITS, showCredits())
   else IF_EQ_DO(CMD_CONNECT, doConnect(log, &arg))
-#ifdef USE_GRPC
-  else IF_EQ_DO(CMD_CONNECT_GRPC, doConnect_grpc(log, &arg))
-#endif
   else IF_EQ_DO(CMD_DISCONNECT, doDisconnect(log))
   else IF_EQ_DO(CMD_RECONNECT, doReConnect(log))
   else IF_EQ_DO(CMD_ADD_PEER, doMaintainPeer(log, &arg, true))
@@ -1864,6 +1897,10 @@ bool processLine(bool log, char* line)
   else IF_EQ_DO(CMD_LOG_LEVEL, processLogLevel(&arg))
   else IF_EQ_DO(CMD_RESET_PROXY, resetProxy(&arg))
   else IF_EQ_DO(CMD_USE_NON_BLOCKING_SOCKET_TYPE, setSocketType(&arg))
+#ifdef USE_GRPC
+  else IF_EQ_DO(CMD_CONNECT_GRPC, doConnect_grpc(log, &arg))
+  else IF_EQ_DO(CMD_VERIFY_GRPC, doVerify_grpc(log, &arg))
+#endif
     
   else
   {
@@ -1883,7 +1920,8 @@ int main(int argc, char* argv[])
 
   // Set the target for the logging.
   setLogMethodToFile(stderr);  
-  setLogLevel(logLevel);
+  //setLogLevel(logLevel);
+  setLogLevel(7);
   // initialize the statistics framework
   fstatInitializeStatistics(false);
   uint32_t proxyID = IPtoInt(DEFAULT_PROXY_ID);
@@ -2031,12 +2069,12 @@ void doConnect_grpc(bool log, char** argPtr)
     // Only the first peer is in history
     if (noPeers > 0)
     {
-      addToHistory("connect %s %u %u %u", host == NULL ? DEFAULT_SERVER : host, 
+      addToHistory("connect_grpc %s %u %u %u", host == NULL ? DEFAULT_SERVER : host, 
                                           port, proxyID, peerAS[0]);
     }
     else
     {
-      addToHistory("connect %s %u %u %u 0", host == NULL ? DEFAULT_SERVER 
+      addToHistory("connect_grpc %s %u %u %u 0", host == NULL ? DEFAULT_SERVER 
                                                          : host, 
                                             port, proxyID, peerAS[0]);
     }
@@ -2057,5 +2095,173 @@ void doConnect_grpc(bool log, char** argPtr)
     host=NULL;
   }
   freshConnected = connected;
+}
+
+void doVerify_grpc(bool log, char** argPtr)
+{
+  uint32_t         localID;
+  uint32_t         as32;
+  const char*      prefixInput;
+  const char*      bgpsecInput;
+  IPPrefix         prefix;
+
+  uint8_t          method;
+
+
+  BGPSecData       bgpsec;
+
+  char ipString[255];
+  char* ipStringPtr = ipString;
+  memset(ipString,'\0',255);
+  
+  if (!isConnected(proxy))
+  {
+    printf ("Connect to SRx server prior verification request!\n");
+    return;
+  }
+  
+  ////////////////////////////////////////
+  /// READ PARAMETERS EITHER FROM COMMAND PATAMETER OR COMMAND LINE
+  ///////////////////////////////////////
+  // Receipt
+  localID = (uint32_t)promptU32(argPtr, "(Verify) Local ID: "
+                                        "[0=disable receipt] ? ");
+  // Method
+  method = (uint8_t)promptU32(argPtr, "(Verify) Method: "
+                                   "[0=just store, 1=Origin only, "
+                                   "2=Path only, 3=both] ? ");
+  if (method > 3)
+  {
+    printf ("Invalid Method %u\n", method);
+    return;
+  }
+
+  // Header data
+  as32  = promptU32(argPtr, "(Verify) AS number ? ");
+
+  // Prefix
+  prefixInput = prompt(argPtr, "(Verify) IP Prefix [] ? ");
+  if (!strToIPPrefix(prefixInput, &prefix))
+  {
+    printf("Error: Prefix [%s] is invalid\n", prefixInput);
+    return;
+  }
+  sprintf(ipStringPtr, "%s", prefixInput);
+
+
+  // Default result
+  SRxDefaultResult defResult;
+  defResult.result.roaResult = (uint8_t)promptU32(argPtr,
+                 "(Verify) DefOriginVal: [0=VALID, 1=UNKNOWN, 2=INVALID, "
+                 "3=Not Defined] ? ");
+  if (defResult.result.roaResult > 3)
+  {
+    printf("Error: Default origin validation result [%u] is invalid\n",
+           defResult.result.roaResult);
+    return;
+  }
+
+  defResult.result.bgpsecResult = (uint8_t)promptU32(argPtr,
+                         "(Verify) DefPathVal [0=VALID, 2=INVALID, "
+                         "3=Not Defined] ? ");
+  if (   (defResult.result.bgpsecResult > 3)
+      || (defResult.result.bgpsecResult == 1))
+  {
+    printf("Error: Default path validation result [%u] is invalid\n",
+           defResult.result.bgpsecResult);
+    return;
+  }
+
+  defResult.resSourceROA = SRxRS_UNKNOWN;
+  defResult.resSourceBGPSEC = SRxRS_UNKNOWN;
+
+  // @TODO: Generate some test data for input
+  bgpsecInput = prompt(argPtr, "(Verify) BGPSEC some string ? ");
+
+
+
+  /* 
+   *  on command line, "verify 1 3 65005 100.1.0.0/24 3 3" without bgpsec string,
+   *  then will fall into this following code
+   */
+  char basic_hd[] = {
+      0x03, 0x83, 0x01, 0x01, 0x00, 0x00, 0x00, 0xa9, 0x03, 0x03, 0x00, 0x18, 0x00, 0x00, 0x00, 0x01
+  };
+  char prefix_origin_bslength[] = {
+      0x64, 0x01, 0x00, 0x00, 0x00, 0x00, 0xfd, 0xf3, 0x00, 0x00, 0x00, 0x71
+  };
+  char bgpsec_ValReqData[] = {
+      0x00, 0x01, 0x00, 0x6d, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfd, 0xed
+  };
+  char aspath[] = {
+      0x00, 0x00, 0xfd, 0xf3,
+  };
+  char bgpsec_pattr[] = {
+      0x90, 0x21, 0x00, 0x69, 0x00, 0x08, 0x01, 0x00, 0x00, 0x00, 0xfd, 0xf3, 0x00, 0x61, 0x01, 0xc3,
+      0x04, 0x33, 0xfa, 0x19, 0x75, 0xff, 0x19, 0x31, 0x81, 0x45, 0x8f, 0xb9, 0x02, 0xb5, 0x01, 0xea,
+      0x97, 0x89, 0xdc, 0x00, 0x48, 0x30, 0x46, 0x02, 0x21, 0x00, 0xbd, 0x92, 0x9e, 0x69, 0x35, 0x6e,
+      0x7b, 0x6c, 0xfe, 0x1c, 0xbc, 0x3c, 0xbd, 0x1c, 0x4a, 0x63, 0x8d, 0x64, 0x5f, 0xa0, 0xb7, 0x20,
+      0x7e, 0xf3, 0x2c, 0xcc, 0x4b, 0x3f, 0xd6, 0x1b, 0x5f, 0x46, 0x02, 0x21, 0x00, 0xb6, 0x0a, 0x7c,
+      0x82, 0x7f, 0x50, 0xe6, 0x5a, 0x5b, 0xd7, 0x8c, 0xd1, 0x81, 0x3d, 0xbc, 0xca, 0xa8, 0x2d, 0x27,
+      0x47, 0x60, 0x25, 0xe0, 0x8c, 0xda, 0x49, 0xf9, 0x1e, 0x22, 0xd8, 0xc0, 0x8e
+  };
+
+  if (bgpsecInput == '\0')
+  {
+    bgpsec.numberHops = 0;
+    bgpsec.asPath = NULL;
+    bgpsec.attr_length = 0;
+    bgpsec.bgpsec_path_attr = NULL;
+  }
+  else
+  {
+    bgpsec.numberHops = 1;
+    bgpsec.asPath = aspath;
+    bgpsec.attr_length = 0x6d;
+    bgpsec.bgpsec_path_attr = (uint8_t*)bgpsec_pattr;
+    bgpsec.afi = htons(1);
+    bgpsec.safi = 1;
+    bgpsec.local_as = htonl(0xedfd0000);
+  }
+
+  
+  if (log)
+  {
+    if (bgpsec.attr_length == 0)
+    {
+      addToHistory("verify_grpc %d %u %u %s %u %u %c" ,
+                   localID, method, as32, ipStringPtr,
+                   defResult.result.roaResult, defResult.result.bgpsecResult,
+                   '\0');
+    }
+    else
+    {
+      addToHistory("verify_grpc %u %u %u %s %u %u %s" ,
+                   localID, method, as32, ipStringPtr,
+                   defResult.result.roaResult, defResult.result.bgpsecResult,
+                   bgpsecInput);
+    }
+  }
+
+  //////////////////////////////////////////////////////////
+  //  Now send the message
+  //////////////////////////////////////////////////////////
+
+  if (localID != 0)
+  {
+    method = method | SRX_FLAG_REQUEST_RECEIPT;
+  }
+  
+  if (stat_started)
+  {
+    stat_requests_send++;
+  }
+
+  // The method verifyUpdate will go into wait mode if receipt is requested.
+  verifyUpdate_grpc(proxy, localID,
+               (method & SRX_FLAG_ROA) == SRX_FLAG_ROA,
+               (method & SRX_FLAG_BGPSEC) == SRX_FLAG_BGPSEC,
+               &defResult, &prefix, as32, &bgpsec);
 }
 #endif

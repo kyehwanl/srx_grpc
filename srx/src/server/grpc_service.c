@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include "server/grpc_service.h"
 #include "server/command_handler.h"
-#include "shared/srx_packets.h"
-#include "util/log.h"
 
 #define HDR  "([0x%08X] GRPC_ServiceHandler): "
 
@@ -335,9 +333,12 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt)
 RET_DATA responseGRPC (int size, unsigned char* data)
 {
     printf("+ [SRX][%s] calling - size: %d \n", __FUNCTION__, size);
+    //setLogLevel(LEVEL_DEBUG);
 
+    /*
     bool ret = _isSet(0x03, 0x01);
     printf("ret bool: %d \n", ret);
+    */
 
     printHex(size, data);
 

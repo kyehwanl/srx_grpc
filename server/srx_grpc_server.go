@@ -28,6 +28,7 @@ import (
 	"google.golang.org/grpc"
 	//	"github.com/golang/protobuf/proto"
 	_ "bytes"
+	"encoding/binary"
 	_ "io"
 	_ "time"
 	"unsafe"
@@ -148,6 +149,45 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 	return nil
 }
 
+func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb.ProxyHelloResponse, error) {
+	//data := uint32(0x07)
+	//C.setLogLevel(0x07)
+	fmt.Printf("server: %#v\n", pdu)
+	fmt.Println("calling SRxServer server:ProxyHello()")
+
+	fmt.Printf("input :  %#v\n", pdu.Type)
+	fmt.Println("ProxyHelloRequest", pdu)
+	fmt.Printf("ProxyHelloRequest: %#v", pdu)
+
+	/* serialize */
+	buf := make([]byte, C.sizeof_SRXPROXY_HELLO)
+	buf[0] = byte(pdu.Type)
+	binary.BigEndian.PutUint16(buf[1:3], uint16(pdu.Version))
+	binary.BigEndian.PutUint32(buf[4:8], pdu.Length)
+	binary.BigEndian.PutUint32(buf[8:12], pdu.ProxyIdentifier)
+	binary.BigEndian.PutUint32(buf[12:16], pdu.Asn)
+	binary.BigEndian.PutUint32(buf[16:20], pdu.NoPeerAS)
+
+	retData := C.RET_DATA{}
+	retData = C.responseGRPC(C.int(20), (*C.uchar)(unsafe.Pointer(&buf[0])))
+
+	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
+	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
+
+	return &pb.ProxyHelloResponse{
+		Type:            uint32(b[0]),
+		Version:         uint32(binary.BigEndian.Uint16(b[1:3])),
+		Zero:            uint32(b[3]),
+		Length:          binary.BigEndian.Uint32(b[4:8]),
+		ProxyIdentifier: binary.BigEndian.Uint32(b[8:12]),
+	}, nil
+}
+
+func (s *Server) ProxyVerify(pdu *pb.ProxyVerifyV4Request, stream pb.SRxApi_ProxyVerifyServer) error {
+
+	return nil
+}
+
 func NewServer(g *grpc.Server) *Server {
 	grpc.EnableTracing = false
 	server := &Server{
@@ -173,5 +213,6 @@ func Serve() {
 }
 
 func main() {
+	//fmt.Println("size: ", C.sizeof_SRXPROXY_HELLO)
 	Serve()
 }

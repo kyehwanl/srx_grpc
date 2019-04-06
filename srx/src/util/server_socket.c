@@ -192,7 +192,7 @@ static bool single_sendResult(ServerClient* client, void* data, size_t size)
 
   GoSlice pdu = {(void*)buf_data, (GoInt)size, (GoInt)size};
   //GoSlice pdu = {(void*)buff, (GoInt)3, (GoInt)10};
-  result = Run(pdu);
+  //result = Run(pdu);
 #endif
  
   return retVal;

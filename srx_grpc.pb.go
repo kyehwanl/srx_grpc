@@ -35,7 +35,7 @@ func (m *PduRequest) Reset()         { *m = PduRequest{} }
 func (m *PduRequest) String() string { return proto.CompactTextString(m) }
 func (*PduRequest) ProtoMessage()    {}
 func (*PduRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_srx_grpc_70ccabd431f0bed8, []int{0}
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{0}
 }
 func (m *PduRequest) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PduRequest.Unmarshal(m, b)
@@ -82,7 +82,7 @@ func (m *PduResponse) Reset()         { *m = PduResponse{} }
 func (m *PduResponse) String() string { return proto.CompactTextString(m) }
 func (*PduResponse) ProtoMessage()    {}
 func (*PduResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_srx_grpc_70ccabd431f0bed8, []int{1}
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{1}
 }
 func (m *PduResponse) XXX_Unmarshal(b []byte) error {
 	return xxx_messageInfo_PduResponse.Unmarshal(m, b)
@@ -123,9 +123,935 @@ func (m *PduResponse) GetValidationStatus() uint32 {
 	return 0
 }
 
+type ProxyHelloRequest struct {
+	Type                 uint32   `protobuf:"varint,1,opt,name=type,proto3" json:"type,omitempty"`
+	Version              uint32   `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
+	Zero                 uint32   `protobuf:"varint,3,opt,name=zero,proto3" json:"zero,omitempty"`
+	Length               uint32   `protobuf:"varint,4,opt,name=length,proto3" json:"length,omitempty"`
+	ProxyIdentifier      uint32   `protobuf:"varint,5,opt,name=proxyIdentifier,proto3" json:"proxyIdentifier,omitempty"`
+	Asn                  uint32   `protobuf:"varint,6,opt,name=asn,proto3" json:"asn,omitempty"`
+	NoPeerAS             uint32   `protobuf:"varint,7,opt,name=noPeerAS,proto3" json:"noPeerAS,omitempty"`
+	PeerAS               uint32   `protobuf:"varint,8,opt,name=peerAS,proto3" json:"peerAS,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ProxyHelloRequest) Reset()         { *m = ProxyHelloRequest{} }
+func (m *ProxyHelloRequest) String() string { return proto.CompactTextString(m) }
+func (*ProxyHelloRequest) ProtoMessage()    {}
+func (*ProxyHelloRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{2}
+}
+func (m *ProxyHelloRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProxyHelloRequest.Unmarshal(m, b)
+}
+func (m *ProxyHelloRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProxyHelloRequest.Marshal(b, m, deterministic)
+}
+func (dst *ProxyHelloRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxyHelloRequest.Merge(dst, src)
+}
+func (m *ProxyHelloRequest) XXX_Size() int {
+	return xxx_messageInfo_ProxyHelloRequest.Size(m)
+}
+func (m *ProxyHelloRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxyHelloRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxyHelloRequest proto.InternalMessageInfo
+
+func (m *ProxyHelloRequest) GetType() uint32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+func (m *ProxyHelloRequest) GetVersion() uint32 {
+	if m != nil {
+		return m.Version
+	}
+	return 0
+}
+
+func (m *ProxyHelloRequest) GetZero() uint32 {
+	if m != nil {
+		return m.Zero
+	}
+	return 0
+}
+
+func (m *ProxyHelloRequest) GetLength() uint32 {
+	if m != nil {
+		return m.Length
+	}
+	return 0
+}
+
+func (m *ProxyHelloRequest) GetProxyIdentifier() uint32 {
+	if m != nil {
+		return m.ProxyIdentifier
+	}
+	return 0
+}
+
+func (m *ProxyHelloRequest) GetAsn() uint32 {
+	if m != nil {
+		return m.Asn
+	}
+	return 0
+}
+
+func (m *ProxyHelloRequest) GetNoPeerAS() uint32 {
+	if m != nil {
+		return m.NoPeerAS
+	}
+	return 0
+}
+
+func (m *ProxyHelloRequest) GetPeerAS() uint32 {
+	if m != nil {
+		return m.PeerAS
+	}
+	return 0
+}
+
+type ProxyHelloResponse struct {
+	Type                 uint32   `protobuf:"varint,1,opt,name=type,proto3" json:"type,omitempty"`
+	Version              uint32   `protobuf:"varint,2,opt,name=version,proto3" json:"version,omitempty"`
+	Zero                 uint32   `protobuf:"varint,3,opt,name=zero,proto3" json:"zero,omitempty"`
+	Length               uint32   `protobuf:"varint,4,opt,name=length,proto3" json:"length,omitempty"`
+	ProxyIdentifier      uint32   `protobuf:"varint,5,opt,name=proxyIdentifier,proto3" json:"proxyIdentifier,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ProxyHelloResponse) Reset()         { *m = ProxyHelloResponse{} }
+func (m *ProxyHelloResponse) String() string { return proto.CompactTextString(m) }
+func (*ProxyHelloResponse) ProtoMessage()    {}
+func (*ProxyHelloResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{3}
+}
+func (m *ProxyHelloResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProxyHelloResponse.Unmarshal(m, b)
+}
+func (m *ProxyHelloResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProxyHelloResponse.Marshal(b, m, deterministic)
+}
+func (dst *ProxyHelloResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxyHelloResponse.Merge(dst, src)
+}
+func (m *ProxyHelloResponse) XXX_Size() int {
+	return xxx_messageInfo_ProxyHelloResponse.Size(m)
+}
+func (m *ProxyHelloResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxyHelloResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxyHelloResponse proto.InternalMessageInfo
+
+func (m *ProxyHelloResponse) GetType() uint32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+func (m *ProxyHelloResponse) GetVersion() uint32 {
+	if m != nil {
+		return m.Version
+	}
+	return 0
+}
+
+func (m *ProxyHelloResponse) GetZero() uint32 {
+	if m != nil {
+		return m.Zero
+	}
+	return 0
+}
+
+func (m *ProxyHelloResponse) GetLength() uint32 {
+	if m != nil {
+		return m.Length
+	}
+	return 0
+}
+
+func (m *ProxyHelloResponse) GetProxyIdentifier() uint32 {
+	if m != nil {
+		return m.ProxyIdentifier
+	}
+	return 0
+}
+
+type ProxyGoodbye struct {
+	Type                 uint32   `protobuf:"varint,1,opt,name=type,proto3" json:"type,omitempty"`
+	KeepWindow           uint32   `protobuf:"varint,2,opt,name=keepWindow,proto3" json:"keepWindow,omitempty"`
+	Zero                 uint32   `protobuf:"varint,3,opt,name=zero,proto3" json:"zero,omitempty"`
+	Length               uint32   `protobuf:"varint,4,opt,name=length,proto3" json:"length,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ProxyGoodbye) Reset()         { *m = ProxyGoodbye{} }
+func (m *ProxyGoodbye) String() string { return proto.CompactTextString(m) }
+func (*ProxyGoodbye) ProtoMessage()    {}
+func (*ProxyGoodbye) Descriptor() ([]byte, []int) {
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{4}
+}
+func (m *ProxyGoodbye) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProxyGoodbye.Unmarshal(m, b)
+}
+func (m *ProxyGoodbye) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProxyGoodbye.Marshal(b, m, deterministic)
+}
+func (dst *ProxyGoodbye) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxyGoodbye.Merge(dst, src)
+}
+func (m *ProxyGoodbye) XXX_Size() int {
+	return xxx_messageInfo_ProxyGoodbye.Size(m)
+}
+func (m *ProxyGoodbye) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxyGoodbye.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxyGoodbye proto.InternalMessageInfo
+
+func (m *ProxyGoodbye) GetType() uint32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+func (m *ProxyGoodbye) GetKeepWindow() uint32 {
+	if m != nil {
+		return m.KeepWindow
+	}
+	return 0
+}
+
+func (m *ProxyGoodbye) GetZero() uint32 {
+	if m != nil {
+		return m.Zero
+	}
+	return 0
+}
+
+func (m *ProxyGoodbye) GetLength() uint32 {
+	if m != nil {
+		return m.Length
+	}
+	return 0
+}
+
+type ProxyBasicHeader struct {
+	Type                 uint32   `protobuf:"varint,1,opt,name=type,proto3" json:"type,omitempty"`
+	Flags                uint32   `protobuf:"varint,2,opt,name=flags,proto3" json:"flags,omitempty"`
+	RoaResSrc            uint32   `protobuf:"varint,3,opt,name=roaResSrc,proto3" json:"roaResSrc,omitempty"`
+	BgpsecResSrc         uint32   `protobuf:"varint,4,opt,name=bgpsecResSrc,proto3" json:"bgpsecResSrc,omitempty"`
+	Length               uint32   `protobuf:"varint,5,opt,name=length,proto3" json:"length,omitempty"`
+	RoaDefRes            uint32   `protobuf:"varint,6,opt,name=roaDefRes,proto3" json:"roaDefRes,omitempty"`
+	BgpsecDefRes         uint32   `protobuf:"varint,7,opt,name=bgpsecDefRes,proto3" json:"bgpsecDefRes,omitempty"`
+	Zero                 uint32   `protobuf:"varint,8,opt,name=zero,proto3" json:"zero,omitempty"`
+	PrefixLen            uint32   `protobuf:"varint,9,opt,name=prefixLen,proto3" json:"prefixLen,omitempty"`
+	RequestToken         uint32   `protobuf:"varint,10,opt,name=requestToken,proto3" json:"requestToken,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ProxyBasicHeader) Reset()         { *m = ProxyBasicHeader{} }
+func (m *ProxyBasicHeader) String() string { return proto.CompactTextString(m) }
+func (*ProxyBasicHeader) ProtoMessage()    {}
+func (*ProxyBasicHeader) Descriptor() ([]byte, []int) {
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{5}
+}
+func (m *ProxyBasicHeader) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProxyBasicHeader.Unmarshal(m, b)
+}
+func (m *ProxyBasicHeader) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProxyBasicHeader.Marshal(b, m, deterministic)
+}
+func (dst *ProxyBasicHeader) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxyBasicHeader.Merge(dst, src)
+}
+func (m *ProxyBasicHeader) XXX_Size() int {
+	return xxx_messageInfo_ProxyBasicHeader.Size(m)
+}
+func (m *ProxyBasicHeader) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxyBasicHeader.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxyBasicHeader proto.InternalMessageInfo
+
+func (m *ProxyBasicHeader) GetType() uint32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+func (m *ProxyBasicHeader) GetFlags() uint32 {
+	if m != nil {
+		return m.Flags
+	}
+	return 0
+}
+
+func (m *ProxyBasicHeader) GetRoaResSrc() uint32 {
+	if m != nil {
+		return m.RoaResSrc
+	}
+	return 0
+}
+
+func (m *ProxyBasicHeader) GetBgpsecResSrc() uint32 {
+	if m != nil {
+		return m.BgpsecResSrc
+	}
+	return 0
+}
+
+func (m *ProxyBasicHeader) GetLength() uint32 {
+	if m != nil {
+		return m.Length
+	}
+	return 0
+}
+
+func (m *ProxyBasicHeader) GetRoaDefRes() uint32 {
+	if m != nil {
+		return m.RoaDefRes
+	}
+	return 0
+}
+
+func (m *ProxyBasicHeader) GetBgpsecDefRes() uint32 {
+	if m != nil {
+		return m.BgpsecDefRes
+	}
+	return 0
+}
+
+func (m *ProxyBasicHeader) GetZero() uint32 {
+	if m != nil {
+		return m.Zero
+	}
+	return 0
+}
+
+func (m *ProxyBasicHeader) GetPrefixLen() uint32 {
+	if m != nil {
+		return m.PrefixLen
+	}
+	return 0
+}
+
+func (m *ProxyBasicHeader) GetRequestToken() uint32 {
+	if m != nil {
+		return m.RequestToken
+	}
+	return 0
+}
+
+type IPv4Address struct {
+	// Types that are valid to be assigned to AddressOneof:
+	//	*IPv4Address_U32
+	//	*IPv4Address_U8
+	AddressOneof         isIPv4Address_AddressOneof `protobuf_oneof:"address_oneof"`
+	XXX_NoUnkeyedLiteral struct{}                   `json:"-"`
+	XXX_unrecognized     []byte                     `json:"-"`
+	XXX_sizecache        int32                      `json:"-"`
+}
+
+func (m *IPv4Address) Reset()         { *m = IPv4Address{} }
+func (m *IPv4Address) String() string { return proto.CompactTextString(m) }
+func (*IPv4Address) ProtoMessage()    {}
+func (*IPv4Address) Descriptor() ([]byte, []int) {
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{6}
+}
+func (m *IPv4Address) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_IPv4Address.Unmarshal(m, b)
+}
+func (m *IPv4Address) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_IPv4Address.Marshal(b, m, deterministic)
+}
+func (dst *IPv4Address) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPv4Address.Merge(dst, src)
+}
+func (m *IPv4Address) XXX_Size() int {
+	return xxx_messageInfo_IPv4Address.Size(m)
+}
+func (m *IPv4Address) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPv4Address.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPv4Address proto.InternalMessageInfo
+
+type isIPv4Address_AddressOneof interface {
+	isIPv4Address_AddressOneof()
+}
+
+type IPv4Address_U32 struct {
+	U32 uint32 `protobuf:"varint,1,opt,name=u32,proto3,oneof"`
+}
+
+type IPv4Address_U8 struct {
+	U8 []byte `protobuf:"bytes,2,opt,name=u8,proto3,oneof"`
+}
+
+func (*IPv4Address_U32) isIPv4Address_AddressOneof() {}
+
+func (*IPv4Address_U8) isIPv4Address_AddressOneof() {}
+
+func (m *IPv4Address) GetAddressOneof() isIPv4Address_AddressOneof {
+	if m != nil {
+		return m.AddressOneof
+	}
+	return nil
+}
+
+func (m *IPv4Address) GetU32() uint32 {
+	if x, ok := m.GetAddressOneof().(*IPv4Address_U32); ok {
+		return x.U32
+	}
+	return 0
+}
+
+func (m *IPv4Address) GetU8() []byte {
+	if x, ok := m.GetAddressOneof().(*IPv4Address_U8); ok {
+		return x.U8
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*IPv4Address) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _IPv4Address_OneofMarshaler, _IPv4Address_OneofUnmarshaler, _IPv4Address_OneofSizer, []interface{}{
+		(*IPv4Address_U32)(nil),
+		(*IPv4Address_U8)(nil),
+	}
+}
+
+func _IPv4Address_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*IPv4Address)
+	// address_oneof
+	switch x := m.AddressOneof.(type) {
+	case *IPv4Address_U32:
+		b.EncodeVarint(1<<3 | proto.WireVarint)
+		b.EncodeVarint(uint64(x.U32))
+	case *IPv4Address_U8:
+		b.EncodeVarint(2<<3 | proto.WireBytes)
+		b.EncodeRawBytes(x.U8)
+	case nil:
+	default:
+		return fmt.Errorf("IPv4Address.AddressOneof has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _IPv4Address_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*IPv4Address)
+	switch tag {
+	case 1: // address_oneof.u32
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.AddressOneof = &IPv4Address_U32{uint32(x)}
+		return true, err
+	case 2: // address_oneof.u8
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeRawBytes(true)
+		m.AddressOneof = &IPv4Address_U8{x}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _IPv4Address_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*IPv4Address)
+	// address_oneof
+	switch x := m.AddressOneof.(type) {
+	case *IPv4Address_U32:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(x.U32))
+	case *IPv4Address_U8:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(len(x.U8)))
+		n += len(x.U8)
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+type SCA_Prefix struct {
+	Afi    uint32 `protobuf:"varint,1,opt,name=afi,proto3" json:"afi,omitempty"`
+	Safi   uint32 `protobuf:"varint,2,opt,name=safi,proto3" json:"safi,omitempty"`
+	Length uint32 `protobuf:"varint,3,opt,name=length,proto3" json:"length,omitempty"`
+	// Types that are valid to be assigned to Addr:
+	//	*SCA_Prefix_IpV4
+	//	*SCA_Prefix_IpV6
+	//	*SCA_Prefix_Ip
+	Addr                 isSCA_Prefix_Addr `protobuf_oneof:"addr"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *SCA_Prefix) Reset()         { *m = SCA_Prefix{} }
+func (m *SCA_Prefix) String() string { return proto.CompactTextString(m) }
+func (*SCA_Prefix) ProtoMessage()    {}
+func (*SCA_Prefix) Descriptor() ([]byte, []int) {
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{7}
+}
+func (m *SCA_Prefix) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_SCA_Prefix.Unmarshal(m, b)
+}
+func (m *SCA_Prefix) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_SCA_Prefix.Marshal(b, m, deterministic)
+}
+func (dst *SCA_Prefix) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SCA_Prefix.Merge(dst, src)
+}
+func (m *SCA_Prefix) XXX_Size() int {
+	return xxx_messageInfo_SCA_Prefix.Size(m)
+}
+func (m *SCA_Prefix) XXX_DiscardUnknown() {
+	xxx_messageInfo_SCA_Prefix.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SCA_Prefix proto.InternalMessageInfo
+
+func (m *SCA_Prefix) GetAfi() uint32 {
+	if m != nil {
+		return m.Afi
+	}
+	return 0
+}
+
+func (m *SCA_Prefix) GetSafi() uint32 {
+	if m != nil {
+		return m.Safi
+	}
+	return 0
+}
+
+func (m *SCA_Prefix) GetLength() uint32 {
+	if m != nil {
+		return m.Length
+	}
+	return 0
+}
+
+type isSCA_Prefix_Addr interface {
+	isSCA_Prefix_Addr()
+}
+
+type SCA_Prefix_IpV4 struct {
+	IpV4 uint32 `protobuf:"varint,4,opt,name=ipV4,proto3,oneof"`
+}
+
+type SCA_Prefix_IpV6 struct {
+	IpV6 uint64 `protobuf:"varint,5,opt,name=ipV6,proto3,oneof"`
+}
+
+type SCA_Prefix_Ip struct {
+	Ip []byte `protobuf:"bytes,6,opt,name=ip,proto3,oneof"`
+}
+
+func (*SCA_Prefix_IpV4) isSCA_Prefix_Addr() {}
+
+func (*SCA_Prefix_IpV6) isSCA_Prefix_Addr() {}
+
+func (*SCA_Prefix_Ip) isSCA_Prefix_Addr() {}
+
+func (m *SCA_Prefix) GetAddr() isSCA_Prefix_Addr {
+	if m != nil {
+		return m.Addr
+	}
+	return nil
+}
+
+func (m *SCA_Prefix) GetIpV4() uint32 {
+	if x, ok := m.GetAddr().(*SCA_Prefix_IpV4); ok {
+		return x.IpV4
+	}
+	return 0
+}
+
+func (m *SCA_Prefix) GetIpV6() uint64 {
+	if x, ok := m.GetAddr().(*SCA_Prefix_IpV6); ok {
+		return x.IpV6
+	}
+	return 0
+}
+
+func (m *SCA_Prefix) GetIp() []byte {
+	if x, ok := m.GetAddr().(*SCA_Prefix_Ip); ok {
+		return x.Ip
+	}
+	return nil
+}
+
+// XXX_OneofFuncs is for the internal use of the proto package.
+func (*SCA_Prefix) XXX_OneofFuncs() (func(msg proto.Message, b *proto.Buffer) error, func(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error), func(msg proto.Message) (n int), []interface{}) {
+	return _SCA_Prefix_OneofMarshaler, _SCA_Prefix_OneofUnmarshaler, _SCA_Prefix_OneofSizer, []interface{}{
+		(*SCA_Prefix_IpV4)(nil),
+		(*SCA_Prefix_IpV6)(nil),
+		(*SCA_Prefix_Ip)(nil),
+	}
+}
+
+func _SCA_Prefix_OneofMarshaler(msg proto.Message, b *proto.Buffer) error {
+	m := msg.(*SCA_Prefix)
+	// addr
+	switch x := m.Addr.(type) {
+	case *SCA_Prefix_IpV4:
+		b.EncodeVarint(4<<3 | proto.WireVarint)
+		b.EncodeVarint(uint64(x.IpV4))
+	case *SCA_Prefix_IpV6:
+		b.EncodeVarint(5<<3 | proto.WireVarint)
+		b.EncodeVarint(uint64(x.IpV6))
+	case *SCA_Prefix_Ip:
+		b.EncodeVarint(6<<3 | proto.WireBytes)
+		b.EncodeRawBytes(x.Ip)
+	case nil:
+	default:
+		return fmt.Errorf("SCA_Prefix.Addr has unexpected type %T", x)
+	}
+	return nil
+}
+
+func _SCA_Prefix_OneofUnmarshaler(msg proto.Message, tag, wire int, b *proto.Buffer) (bool, error) {
+	m := msg.(*SCA_Prefix)
+	switch tag {
+	case 4: // addr.ipV4
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.Addr = &SCA_Prefix_IpV4{uint32(x)}
+		return true, err
+	case 5: // addr.ipV6
+		if wire != proto.WireVarint {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeVarint()
+		m.Addr = &SCA_Prefix_IpV6{x}
+		return true, err
+	case 6: // addr.ip
+		if wire != proto.WireBytes {
+			return true, proto.ErrInternalBadWireType
+		}
+		x, err := b.DecodeRawBytes(true)
+		m.Addr = &SCA_Prefix_Ip{x}
+		return true, err
+	default:
+		return false, nil
+	}
+}
+
+func _SCA_Prefix_OneofSizer(msg proto.Message) (n int) {
+	m := msg.(*SCA_Prefix)
+	// addr
+	switch x := m.Addr.(type) {
+	case *SCA_Prefix_IpV4:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(x.IpV4))
+	case *SCA_Prefix_IpV6:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(x.IpV6))
+	case *SCA_Prefix_Ip:
+		n += 1 // tag and wire
+		n += proto.SizeVarint(uint64(len(x.Ip)))
+		n += len(x.Ip)
+	case nil:
+	default:
+		panic(fmt.Sprintf("proto: unexpected type %T in oneof", x))
+	}
+	return n
+}
+
+type BGPSEC_DATA_PTR struct {
+	LocalAs              uint32   `protobuf:"varint,1,opt,name=local_as,json=localAs,proto3" json:"local_as,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *BGPSEC_DATA_PTR) Reset()         { *m = BGPSEC_DATA_PTR{} }
+func (m *BGPSEC_DATA_PTR) String() string { return proto.CompactTextString(m) }
+func (*BGPSEC_DATA_PTR) ProtoMessage()    {}
+func (*BGPSEC_DATA_PTR) Descriptor() ([]byte, []int) {
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{8}
+}
+func (m *BGPSEC_DATA_PTR) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BGPSEC_DATA_PTR.Unmarshal(m, b)
+}
+func (m *BGPSEC_DATA_PTR) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BGPSEC_DATA_PTR.Marshal(b, m, deterministic)
+}
+func (dst *BGPSEC_DATA_PTR) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BGPSEC_DATA_PTR.Merge(dst, src)
+}
+func (m *BGPSEC_DATA_PTR) XXX_Size() int {
+	return xxx_messageInfo_BGPSEC_DATA_PTR.Size(m)
+}
+func (m *BGPSEC_DATA_PTR) XXX_DiscardUnknown() {
+	xxx_messageInfo_BGPSEC_DATA_PTR.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BGPSEC_DATA_PTR proto.InternalMessageInfo
+
+func (m *BGPSEC_DATA_PTR) GetLocalAs() uint32 {
+	if m != nil {
+		return m.LocalAs
+	}
+	return 0
+}
+
+type BGPSECValReqData struct {
+	NumHops              uint32           `protobuf:"varint,1,opt,name=numHops,proto3" json:"numHops,omitempty"`
+	AttrLen              uint32           `protobuf:"varint,2,opt,name=attrLen,proto3" json:"attrLen,omitempty"`
+	ValPrefix            *SCA_Prefix      `protobuf:"bytes,3,opt,name=valPrefix,proto3" json:"valPrefix,omitempty"`
+	ValData              *BGPSEC_DATA_PTR `protobuf:"bytes,4,opt,name=valData,proto3" json:"valData,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
+}
+
+func (m *BGPSECValReqData) Reset()         { *m = BGPSECValReqData{} }
+func (m *BGPSECValReqData) String() string { return proto.CompactTextString(m) }
+func (*BGPSECValReqData) ProtoMessage()    {}
+func (*BGPSECValReqData) Descriptor() ([]byte, []int) {
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{9}
+}
+func (m *BGPSECValReqData) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_BGPSECValReqData.Unmarshal(m, b)
+}
+func (m *BGPSECValReqData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_BGPSECValReqData.Marshal(b, m, deterministic)
+}
+func (dst *BGPSECValReqData) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BGPSECValReqData.Merge(dst, src)
+}
+func (m *BGPSECValReqData) XXX_Size() int {
+	return xxx_messageInfo_BGPSECValReqData.Size(m)
+}
+func (m *BGPSECValReqData) XXX_DiscardUnknown() {
+	xxx_messageInfo_BGPSECValReqData.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BGPSECValReqData proto.InternalMessageInfo
+
+func (m *BGPSECValReqData) GetNumHops() uint32 {
+	if m != nil {
+		return m.NumHops
+	}
+	return 0
+}
+
+func (m *BGPSECValReqData) GetAttrLen() uint32 {
+	if m != nil {
+		return m.AttrLen
+	}
+	return 0
+}
+
+func (m *BGPSECValReqData) GetValPrefix() *SCA_Prefix {
+	if m != nil {
+		return m.ValPrefix
+	}
+	return nil
+}
+
+func (m *BGPSECValReqData) GetValData() *BGPSEC_DATA_PTR {
+	if m != nil {
+		return m.ValData
+	}
+	return nil
+}
+
+type ProxyVerifyV4Request struct {
+	Common               *ProxyBasicHeader `protobuf:"bytes,1,opt,name=common,proto3" json:"common,omitempty"`
+	PrefixAddress        *IPv4Address      `protobuf:"bytes,2,opt,name=prefixAddress,proto3" json:"prefixAddress,omitempty"`
+	OriginAS             uint32            `protobuf:"varint,3,opt,name=originAS,proto3" json:"originAS,omitempty"`
+	BgpsecLength         uint32            `protobuf:"varint,4,opt,name=bgpsecLength,proto3" json:"bgpsecLength,omitempty"`
+	BgpsecValReqData     *BGPSECValReqData `protobuf:"bytes,5,opt,name=bgpsecValReqData,proto3" json:"bgpsecValReqData,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *ProxyVerifyV4Request) Reset()         { *m = ProxyVerifyV4Request{} }
+func (m *ProxyVerifyV4Request) String() string { return proto.CompactTextString(m) }
+func (*ProxyVerifyV4Request) ProtoMessage()    {}
+func (*ProxyVerifyV4Request) Descriptor() ([]byte, []int) {
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{10}
+}
+func (m *ProxyVerifyV4Request) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProxyVerifyV4Request.Unmarshal(m, b)
+}
+func (m *ProxyVerifyV4Request) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProxyVerifyV4Request.Marshal(b, m, deterministic)
+}
+func (dst *ProxyVerifyV4Request) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxyVerifyV4Request.Merge(dst, src)
+}
+func (m *ProxyVerifyV4Request) XXX_Size() int {
+	return xxx_messageInfo_ProxyVerifyV4Request.Size(m)
+}
+func (m *ProxyVerifyV4Request) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxyVerifyV4Request.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxyVerifyV4Request proto.InternalMessageInfo
+
+func (m *ProxyVerifyV4Request) GetCommon() *ProxyBasicHeader {
+	if m != nil {
+		return m.Common
+	}
+	return nil
+}
+
+func (m *ProxyVerifyV4Request) GetPrefixAddress() *IPv4Address {
+	if m != nil {
+		return m.PrefixAddress
+	}
+	return nil
+}
+
+func (m *ProxyVerifyV4Request) GetOriginAS() uint32 {
+	if m != nil {
+		return m.OriginAS
+	}
+	return 0
+}
+
+func (m *ProxyVerifyV4Request) GetBgpsecLength() uint32 {
+	if m != nil {
+		return m.BgpsecLength
+	}
+	return 0
+}
+
+func (m *ProxyVerifyV4Request) GetBgpsecValReqData() *BGPSECValReqData {
+	if m != nil {
+		return m.BgpsecValReqData
+	}
+	return nil
+}
+
+type ProxyVerifyNotify struct {
+	Type                 uint32   `protobuf:"varint,1,opt,name=type,proto3" json:"type,omitempty"`
+	ResultType           uint32   `protobuf:"varint,2,opt,name=resultType,proto3" json:"resultType,omitempty"`
+	RoaResult            uint32   `protobuf:"varint,3,opt,name=roaResult,proto3" json:"roaResult,omitempty"`
+	BgpsecResult         uint32   `protobuf:"varint,4,opt,name=bgpsecResult,proto3" json:"bgpsecResult,omitempty"`
+	Length               uint32   `protobuf:"varint,5,opt,name=length,proto3" json:"length,omitempty"`
+	RequestToken         uint32   `protobuf:"varint,6,opt,name=requestToken,proto3" json:"requestToken,omitempty"`
+	UpdateID             uint32   `protobuf:"varint,7,opt,name=updateID,proto3" json:"updateID,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ProxyVerifyNotify) Reset()         { *m = ProxyVerifyNotify{} }
+func (m *ProxyVerifyNotify) String() string { return proto.CompactTextString(m) }
+func (*ProxyVerifyNotify) ProtoMessage()    {}
+func (*ProxyVerifyNotify) Descriptor() ([]byte, []int) {
+	return fileDescriptor_srx_grpc_07e01f8fd2401804, []int{11}
+}
+func (m *ProxyVerifyNotify) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ProxyVerifyNotify.Unmarshal(m, b)
+}
+func (m *ProxyVerifyNotify) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ProxyVerifyNotify.Marshal(b, m, deterministic)
+}
+func (dst *ProxyVerifyNotify) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ProxyVerifyNotify.Merge(dst, src)
+}
+func (m *ProxyVerifyNotify) XXX_Size() int {
+	return xxx_messageInfo_ProxyVerifyNotify.Size(m)
+}
+func (m *ProxyVerifyNotify) XXX_DiscardUnknown() {
+	xxx_messageInfo_ProxyVerifyNotify.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ProxyVerifyNotify proto.InternalMessageInfo
+
+func (m *ProxyVerifyNotify) GetType() uint32 {
+	if m != nil {
+		return m.Type
+	}
+	return 0
+}
+
+func (m *ProxyVerifyNotify) GetResultType() uint32 {
+	if m != nil {
+		return m.ResultType
+	}
+	return 0
+}
+
+func (m *ProxyVerifyNotify) GetRoaResult() uint32 {
+	if m != nil {
+		return m.RoaResult
+	}
+	return 0
+}
+
+func (m *ProxyVerifyNotify) GetBgpsecResult() uint32 {
+	if m != nil {
+		return m.BgpsecResult
+	}
+	return 0
+}
+
+func (m *ProxyVerifyNotify) GetLength() uint32 {
+	if m != nil {
+		return m.Length
+	}
+	return 0
+}
+
+func (m *ProxyVerifyNotify) GetRequestToken() uint32 {
+	if m != nil {
+		return m.RequestToken
+	}
+	return 0
+}
+
+func (m *ProxyVerifyNotify) GetUpdateID() uint32 {
+	if m != nil {
+		return m.UpdateID
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterType((*PduRequest)(nil), "srx_grpc.PduRequest")
 	proto.RegisterType((*PduResponse)(nil), "srx_grpc.PduResponse")
+	proto.RegisterType((*ProxyHelloRequest)(nil), "srx_grpc.ProxyHelloRequest")
+	proto.RegisterType((*ProxyHelloResponse)(nil), "srx_grpc.ProxyHelloResponse")
+	proto.RegisterType((*ProxyGoodbye)(nil), "srx_grpc.ProxyGoodbye")
+	proto.RegisterType((*ProxyBasicHeader)(nil), "srx_grpc.ProxyBasicHeader")
+	proto.RegisterType((*IPv4Address)(nil), "srx_grpc.IPv4Address")
+	proto.RegisterType((*SCA_Prefix)(nil), "srx_grpc.SCA_Prefix")
+	proto.RegisterType((*BGPSEC_DATA_PTR)(nil), "srx_grpc.BGPSEC_DATA_PTR")
+	proto.RegisterType((*BGPSECValReqData)(nil), "srx_grpc.BGPSECValReqData")
+	proto.RegisterType((*ProxyVerifyV4Request)(nil), "srx_grpc.ProxyVerifyV4Request")
+	proto.RegisterType((*ProxyVerifyNotify)(nil), "srx_grpc.ProxyVerifyNotify")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -142,6 +1068,8 @@ const _ = grpc.SupportPackageIsVersion4
 type SRxApiClient interface {
 	SendPacketToSRxServer(ctx context.Context, in *PduRequest, opts ...grpc.CallOption) (*PduResponse, error)
 	SendAndWaitProcess(ctx context.Context, in *PduRequest, opts ...grpc.CallOption) (SRxApi_SendAndWaitProcessClient, error)
+	ProxyHello(ctx context.Context, in *ProxyHelloRequest, opts ...grpc.CallOption) (*ProxyHelloResponse, error)
+	ProxyVerify(ctx context.Context, in *ProxyVerifyV4Request, opts ...grpc.CallOption) (SRxApi_ProxyVerifyClient, error)
 }
 
 type sRxApiClient struct {
@@ -193,10 +1121,53 @@ func (x *sRxApiSendAndWaitProcessClient) Recv() (*PduResponse, error) {
 	return m, nil
 }
 
+func (c *sRxApiClient) ProxyHello(ctx context.Context, in *ProxyHelloRequest, opts ...grpc.CallOption) (*ProxyHelloResponse, error) {
+	out := new(ProxyHelloResponse)
+	err := c.cc.Invoke(ctx, "/srx_grpc.SRxApi/ProxyHello", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sRxApiClient) ProxyVerify(ctx context.Context, in *ProxyVerifyV4Request, opts ...grpc.CallOption) (SRxApi_ProxyVerifyClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_SRxApi_serviceDesc.Streams[1], "/srx_grpc.SRxApi/ProxyVerify", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &sRxApiProxyVerifyClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type SRxApi_ProxyVerifyClient interface {
+	Recv() (*ProxyVerifyNotify, error)
+	grpc.ClientStream
+}
+
+type sRxApiProxyVerifyClient struct {
+	grpc.ClientStream
+}
+
+func (x *sRxApiProxyVerifyClient) Recv() (*ProxyVerifyNotify, error) {
+	m := new(ProxyVerifyNotify)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // SRxApiServer is the server API for SRxApi service.
 type SRxApiServer interface {
 	SendPacketToSRxServer(context.Context, *PduRequest) (*PduResponse, error)
 	SendAndWaitProcess(*PduRequest, SRxApi_SendAndWaitProcessServer) error
+	ProxyHello(context.Context, *ProxyHelloRequest) (*ProxyHelloResponse, error)
+	ProxyVerify(*ProxyVerifyV4Request, SRxApi_ProxyVerifyServer) error
 }
 
 func RegisterSRxApiServer(s *grpc.Server, srv SRxApiServer) {
@@ -242,6 +1213,45 @@ func (x *sRxApiSendAndWaitProcessServer) Send(m *PduResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _SRxApi_ProxyHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProxyHelloRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SRxApiServer).ProxyHello(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/srx_grpc.SRxApi/ProxyHello",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SRxApiServer).ProxyHello(ctx, req.(*ProxyHelloRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _SRxApi_ProxyVerify_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ProxyVerifyV4Request)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(SRxApiServer).ProxyVerify(m, &sRxApiProxyVerifyServer{stream})
+}
+
+type SRxApi_ProxyVerifyServer interface {
+	Send(*ProxyVerifyNotify) error
+	grpc.ServerStream
+}
+
+type sRxApiProxyVerifyServer struct {
+	grpc.ServerStream
+}
+
+func (x *sRxApiProxyVerifyServer) Send(m *ProxyVerifyNotify) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 var _SRxApi_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "srx_grpc.SRxApi",
 	HandlerType: (*SRxApiServer)(nil),
@@ -250,6 +1260,10 @@ var _SRxApi_serviceDesc = grpc.ServiceDesc{
 			MethodName: "SendPacketToSRxServer",
 			Handler:    _SRxApi_SendPacketToSRxServer_Handler,
 		},
+		{
+			MethodName: "ProxyHello",
+			Handler:    _SRxApi_ProxyHello_Handler,
+		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
@@ -257,26 +1271,73 @@ var _SRxApi_serviceDesc = grpc.ServiceDesc{
 			Handler:       _SRxApi_SendAndWaitProcess_Handler,
 			ServerStreams: true,
 		},
+		{
+			StreamName:    "ProxyVerify",
+			Handler:       _SRxApi_ProxyVerify_Handler,
+			ServerStreams: true,
+		},
 	},
 	Metadata: "srx_grpc.proto",
 }
 
-func init() { proto.RegisterFile("srx_grpc.proto", fileDescriptor_srx_grpc_70ccabd431f0bed8) }
+func init() { proto.RegisterFile("srx_grpc.proto", fileDescriptor_srx_grpc_07e01f8fd2401804) }
 
-var fileDescriptor_srx_grpc_70ccabd431f0bed8 = []byte{
-	// 220 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2b, 0x2e, 0xaa, 0x88,
-	0x4f, 0x2f, 0x2a, 0x48, 0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x80, 0xf1, 0x95, 0x2c,
-	0xb8, 0xb8, 0x02, 0x52, 0x4a, 0x83, 0x52, 0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x84, 0x84, 0xb8, 0x58,
-	0x52, 0x12, 0x4b, 0x12, 0x25, 0x18, 0x15, 0x18, 0x35, 0x78, 0x82, 0xc0, 0x6c, 0x21, 0x31, 0x2e,
-	0xb6, 0x9c, 0xd4, 0xbc, 0xf4, 0x92, 0x0c, 0x09, 0x26, 0x05, 0x46, 0x0d, 0xde, 0x20, 0x28, 0x4f,
-	0x29, 0x8d, 0x8b, 0x1b, 0xac, 0xb3, 0xb8, 0x20, 0x3f, 0xaf, 0x38, 0x95, 0x14, 0xad, 0x42, 0xda,
-	0x5c, 0x82, 0x65, 0x89, 0x39, 0x99, 0x29, 0x89, 0x25, 0x99, 0xf9, 0x79, 0xf1, 0xc5, 0x25, 0x89,
-	0x25, 0xa5, 0xc5, 0x12, 0xcc, 0x60, 0x25, 0x02, 0x08, 0x89, 0x60, 0xb0, 0xb8, 0xd1, 0x74, 0x46,
-	0x2e, 0xb6, 0xe0, 0xa0, 0x0a, 0xc7, 0x82, 0x4c, 0x21, 0x37, 0x2e, 0xd1, 0xe0, 0xd4, 0xbc, 0x94,
-	0x80, 0xc4, 0xe4, 0xec, 0xd4, 0x92, 0x90, 0xfc, 0xe0, 0xa0, 0x8a, 0xe0, 0xd4, 0xa2, 0xb2, 0xd4,
-	0x22, 0x21, 0x11, 0x3d, 0xb8, 0x07, 0x11, 0xbe, 0x91, 0x12, 0x45, 0x13, 0x85, 0xb8, 0x54, 0x89,
-	0x41, 0xc8, 0x95, 0x4b, 0x08, 0x64, 0x8e, 0x63, 0x5e, 0x4a, 0x78, 0x62, 0x66, 0x49, 0x40, 0x51,
-	0x7e, 0x72, 0x6a, 0x71, 0x31, 0x89, 0x86, 0x18, 0x30, 0x26, 0xb1, 0x81, 0x03, 0xd3, 0x18, 0x10,
-	0x00, 0x00, 0xff, 0xff, 0x99, 0x29, 0x7f, 0xe5, 0x5e, 0x01, 0x00, 0x00,
+var fileDescriptor_srx_grpc_07e01f8fd2401804 = []byte{
+	// 894 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x56, 0xcd, 0x6e, 0x1b, 0x37,
+	0x10, 0xb6, 0x64, 0x59, 0x92, 0x47, 0x76, 0xad, 0x10, 0x76, 0xb1, 0x51, 0x8c, 0x20, 0xd8, 0x93,
+	0x81, 0x16, 0x41, 0x21, 0x1b, 0x81, 0x81, 0x9e, 0xe4, 0x28, 0x89, 0x0c, 0x04, 0xc1, 0x82, 0x2b,
+	0x38, 0x47, 0x81, 0xd6, 0x72, 0x55, 0xc2, 0xeb, 0xe5, 0x86, 0xe4, 0xaa, 0x52, 0x5f, 0xa2, 0x3d,
+	0xf6, 0x29, 0x5a, 0xa0, 0xef, 0xd3, 0x43, 0xdf, 0xa4, 0xe0, 0x8f, 0xb4, 0x3f, 0xb1, 0x0f, 0x3e,
+	0xe5, 0xc6, 0x19, 0x7e, 0x9c, 0xf9, 0xf8, 0xcd, 0xec, 0x70, 0xe1, 0x3b, 0x29, 0x56, 0xb3, 0x85,
+	0xc8, 0xe6, 0xaf, 0x33, 0xc1, 0x15, 0x47, 0xdd, 0x8d, 0xed, 0x5f, 0x02, 0x04, 0x51, 0x8e, 0xe9,
+	0x97, 0x9c, 0x4a, 0x85, 0x10, 0xb4, 0x22, 0xa2, 0x88, 0xd7, 0x78, 0xd5, 0x38, 0x3b, 0xc0, 0x66,
+	0x8d, 0xbe, 0x87, 0x76, 0x42, 0xd3, 0x85, 0xfa, 0xc5, 0x6b, 0xbe, 0x6a, 0x9c, 0x1d, 0x62, 0x67,
+	0xf9, 0x31, 0xf4, 0xcc, 0x49, 0x99, 0xf1, 0x54, 0xd2, 0xa7, 0x1c, 0x45, 0x3f, 0xc0, 0xb3, 0x25,
+	0x49, 0x58, 0x44, 0x14, 0xe3, 0xe9, 0x4c, 0x2a, 0xa2, 0x72, 0xe9, 0xed, 0x1a, 0x48, 0xbf, 0xd8,
+	0x08, 0x8d, 0xdf, 0xff, 0xb7, 0x01, 0xcf, 0x02, 0xc1, 0x57, 0xeb, 0x09, 0x4d, 0x12, 0x5e, 0x62,
+	0xaa, 0xd6, 0x19, 0x35, 0xe9, 0x0e, 0xb1, 0x59, 0x23, 0x0f, 0x3a, 0x4b, 0x2a, 0x24, 0xe3, 0xa9,
+	0xcb, 0xb7, 0x31, 0x35, 0xfa, 0x37, 0x2a, 0xb8, 0xcb, 0x61, 0xd6, 0x25, 0x72, 0xad, 0x0a, 0xb9,
+	0x33, 0x38, 0xca, 0x74, 0xba, 0xeb, 0x88, 0xa6, 0x8a, 0xc5, 0x8c, 0x0a, 0x6f, 0xcf, 0x00, 0xea,
+	0x6e, 0xd4, 0x87, 0x5d, 0x22, 0x53, 0xaf, 0x6d, 0x76, 0xf5, 0x12, 0x0d, 0xa0, 0x9b, 0xf2, 0x80,
+	0x52, 0x31, 0x0a, 0xbd, 0x8e, 0x71, 0x6f, 0x6d, 0x9d, 0x2f, 0xb3, 0x3b, 0x5d, 0x9b, 0xcf, 0x5a,
+	0xfe, 0x9f, 0x0d, 0x40, 0xe5, 0xfb, 0x15, 0x7a, 0x7e, 0xeb, 0x0b, 0xfa, 0x29, 0x1c, 0x18, 0x66,
+	0x1f, 0x38, 0x8f, 0x6e, 0xd7, 0x0f, 0x73, 0x7a, 0x09, 0x70, 0x47, 0x69, 0xf6, 0x99, 0xa5, 0x11,
+	0xff, 0xd5, 0xd1, 0x2a, 0x79, 0x9e, 0xc2, 0xcc, 0xff, 0xab, 0x09, 0x7d, 0x93, 0xf0, 0x8a, 0x48,
+	0x36, 0x9f, 0x50, 0x12, 0x51, 0xf1, 0x60, 0xd2, 0x63, 0xd8, 0x8b, 0x13, 0xb2, 0x90, 0x2e, 0x9f,
+	0x35, 0xd0, 0x29, 0xec, 0x0b, 0x4e, 0x30, 0x95, 0xa1, 0x98, 0xbb, 0x7c, 0x85, 0x03, 0xf9, 0x70,
+	0x70, 0xbb, 0xc8, 0x24, 0x9d, 0x3b, 0x80, 0x4d, 0x5d, 0xf1, 0x95, 0x88, 0xed, 0x55, 0x24, 0xb3,
+	0x91, 0xc7, 0x34, 0xc6, 0x54, 0xba, 0x7a, 0x17, 0x8e, 0x22, 0xb2, 0x03, 0x74, 0xca, 0x91, 0x1d,
+	0x66, 0x23, 0x43, 0xb7, 0x24, 0xc3, 0x29, 0xec, 0x67, 0x82, 0xc6, 0x6c, 0xf5, 0x91, 0xa6, 0xde,
+	0xbe, 0x8d, 0xba, 0x75, 0xe8, 0xa8, 0xc2, 0x36, 0xfb, 0x94, 0xdf, 0xd1, 0xd4, 0x03, 0x1b, 0xb5,
+	0xec, 0xf3, 0xc7, 0xd0, 0xbb, 0x0e, 0x96, 0x17, 0xa3, 0x28, 0x12, 0x54, 0xea, 0x24, 0xbb, 0xf9,
+	0xf9, 0xd0, 0x2a, 0x35, 0xd9, 0xc1, 0xda, 0x40, 0x7d, 0x68, 0xe6, 0x97, 0x46, 0xa7, 0x83, 0xc9,
+	0x0e, 0x6e, 0xe6, 0x97, 0x57, 0x47, 0x70, 0x48, 0xec, 0x81, 0x19, 0x4f, 0x29, 0x8f, 0xfd, 0x3f,
+	0x1a, 0x00, 0xe1, 0xdb, 0xd1, 0x2c, 0x30, 0xb9, 0x4d, 0x5b, 0xc7, 0xcc, 0xe9, 0xad, 0x97, 0x9a,
+	0xbc, 0xd4, 0x2e, 0xab, 0xb6, 0x59, 0x97, 0xa4, 0xda, 0xad, 0x48, 0x75, 0x0c, 0x2d, 0x96, 0xdd,
+	0x5c, 0x58, 0x79, 0x27, 0x3b, 0xd8, 0x58, 0xce, 0xfb, 0xc6, 0xc8, 0xda, 0x72, 0xde, 0x37, 0x9a,
+	0x1b, 0xcb, 0x8c, 0x9e, 0x86, 0x1b, 0xcb, 0xae, 0xda, 0xd0, 0xd2, 0xdc, 0xfc, 0x1f, 0xe1, 0xe8,
+	0xea, 0x43, 0x10, 0xbe, 0x7b, 0x3b, 0x1b, 0x8f, 0xa6, 0xa3, 0x59, 0x30, 0xc5, 0xe8, 0x39, 0x74,
+	0x13, 0x3e, 0x27, 0xc9, 0x8c, 0x48, 0xc7, 0xad, 0x63, 0xec, 0x91, 0xf4, 0xff, 0x6e, 0x40, 0xdf,
+	0xc2, 0x6f, 0x48, 0x82, 0xe9, 0x97, 0xb1, 0x1e, 0x3e, 0x1e, 0x74, 0xd2, 0xfc, 0x7e, 0xc2, 0xb3,
+	0x2d, 0xdc, 0x99, 0x7a, 0x87, 0x28, 0x25, 0xb4, 0xea, 0xee, 0x33, 0x72, 0x26, 0x1a, 0xc2, 0xfe,
+	0x92, 0x24, 0x56, 0x07, 0x73, 0xaf, 0xde, 0xf0, 0xf8, 0xf5, 0x76, 0x76, 0x16, 0x1a, 0xe1, 0x02,
+	0x86, 0xce, 0xa1, 0xb3, 0x24, 0x89, 0x4e, 0x69, 0xee, 0xdc, 0x1b, 0x3e, 0x2f, 0x4e, 0xd4, 0xee,
+	0x80, 0x37, 0x48, 0xff, 0xf7, 0x26, 0x1c, 0x9b, 0x4e, 0xbf, 0xa1, 0x82, 0xc5, 0xeb, 0x9b, 0x8b,
+	0xcd, 0x5c, 0x1b, 0x42, 0x7b, 0xce, 0xef, 0xef, 0x79, 0x6a, 0x48, 0xf7, 0x86, 0x83, 0x22, 0x58,
+	0xfd, 0xcb, 0xc0, 0x0e, 0x89, 0x7e, 0x86, 0x43, 0xdb, 0x36, 0xae, 0x0f, 0xcc, 0xad, 0x7a, 0xc3,
+	0x93, 0xe2, 0x68, 0xa9, 0x49, 0x70, 0x15, 0xab, 0x47, 0x16, 0x17, 0x6c, 0xc1, 0xd2, 0x51, 0xe8,
+	0x2a, 0xb9, 0xb5, 0x8b, 0xc6, 0xfe, 0x58, 0xfe, 0x5a, 0x2b, 0x3e, 0xf4, 0x1e, 0xfa, 0xd6, 0x2e,
+	0xa4, 0x37, 0x55, 0xae, 0x50, 0xaf, 0x17, 0x07, 0x7f, 0x75, 0xc6, 0xff, 0x6f, 0x33, 0xe6, 0xad,
+	0x22, 0x9f, 0xb8, 0x62, 0xf1, 0xfa, 0xb1, 0x89, 0x23, 0xa8, 0xcc, 0x13, 0x35, 0xd5, 0x3b, 0x6e,
+	0xe2, 0x14, 0x9e, 0x62, 0x0c, 0xe4, 0x89, 0xaa, 0x8e, 0x81, 0x3c, 0x51, 0x95, 0x31, 0xa0, 0x01,
+	0xf5, 0x31, 0xa0, 0x31, 0x8f, 0x8d, 0x81, 0xfa, 0x27, 0xd9, 0xfe, 0xfa, 0x93, 0xd4, 0x7a, 0xe6,
+	0x59, 0x44, 0x14, 0xbd, 0x1e, 0x6f, 0x9e, 0x80, 0x8d, 0x3d, 0xfc, 0xa7, 0x09, 0xed, 0x10, 0xaf,
+	0x46, 0x19, 0x43, 0xef, 0xe1, 0x24, 0xa4, 0x69, 0x14, 0x90, 0xf9, 0x1d, 0x55, 0x53, 0x1e, 0xe2,
+	0x55, 0x48, 0xc5, 0x92, 0x0a, 0x54, 0xea, 0xb7, 0xe2, 0x61, 0x1e, 0x9c, 0xd4, 0xbc, 0xf6, 0x91,
+	0xf0, 0x77, 0xd0, 0x3b, 0x40, 0x3a, 0xce, 0x28, 0x8d, 0x3e, 0x13, 0xa6, 0x02, 0xc1, 0xe7, 0xba,
+	0xa8, 0x4f, 0x0b, 0xf2, 0x53, 0x03, 0x5d, 0x03, 0x14, 0x6f, 0x10, 0x7a, 0x51, 0x6b, 0xba, 0xf2,
+	0xcb, 0x3b, 0x38, 0x7d, 0x78, 0x73, 0xcb, 0xe8, 0x13, 0xf4, 0x4a, 0x75, 0x44, 0x2f, 0x6b, 0xf0,
+	0x5a, 0xc3, 0x0f, 0x5e, 0x3c, 0xb8, 0x6f, 0xcb, 0xaf, 0xa9, 0xdd, 0xb6, 0xcd, 0x2f, 0xcb, 0xf9,
+	0xff, 0x01, 0x00, 0x00, 0xff, 0xff, 0x2d, 0x27, 0x35, 0x9a, 0xc4, 0x08, 0x00, 0x00,
 }

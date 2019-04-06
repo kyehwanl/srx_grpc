@@ -177,7 +177,7 @@ SRxCryptoAPI* g_capi = NULL;
 #ifdef USE_GRPC
 static void* gRPCService(void* arg);
 void createGRPCService();
-GRPC_ServiceHandler     grpcServiceHandler;
+extern GRPC_ServiceHandler     grpcServiceHandler;
 #endif
 
 ////////////////////

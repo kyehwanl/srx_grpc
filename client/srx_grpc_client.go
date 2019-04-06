@@ -1,14 +1,22 @@
 package main
 
+/*
+#cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/../extras/local/include -I/opt/project/srx_test1/srx/../_inst//include
+
+//#include <stdlib.h>
+#include "shared/srx_packets.h"
+*/
 import "C"
 
 import (
+	"encoding/binary"
 	"fmt"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"io"
 	"log"
 	pb "srx_grpc"
+	"unsafe"
 )
 
 const (
@@ -16,10 +24,22 @@ const (
 	defaultName = "RPKI_DATA"
 )
 
+type Client struct {
+	conn *grpc.ClientConn
+	cli  pb.SRxApiClient
+}
+
+type ProxyVerifyClient struct {
+	stream pb.SRxApi_ProxyVerifyClient
+}
+
+var client *Client
+
 //export Run
 func Run(data []byte) uint32 {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	//client.conn = conn
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
@@ -49,6 +69,84 @@ func Run(data []byte) uint32 {
 
 	//return r.ValidationStatus, err
 	return uint32(r.ValidationStatus)
+}
+
+/* test 2: request HelloRequest */
+/*
+   hdr->type            = PDU_SRXPROXY_HELLO;
+   hdr->version         = htons(SRX_PROTOCOL_VER);
+   hdr->length          = htonl(length);
+   hdr->proxyIdentifier = htonl(5);   // htonl(proxy->proxyID);
+   hdr->asn             = htonl(65005);
+   hdr->noPeers         = htonl(noPeers);
+*/
+
+//export RunProxyHello
+func RunProxyHello(data []byte) *C.uchar {
+
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	cli := pb.NewSRxApiClient(conn)
+
+	fmt.Printf("input data: %#v\n", data)
+	/*
+		client.conn = conn
+		client.cli = cli
+	*/
+
+	/*
+		retData := C.RET_DATA{}
+		hData := C.SRXPROXY_HELLO{}
+		fmt.Println("temp:", retData, hData)
+	*/
+
+	req := pb.ProxyHelloRequest{
+		Type:            uint32(data[0]),
+		Version:         uint32(binary.BigEndian.Uint16(data[1:3])),
+		Zero:            uint32(data[3]),
+		Length:          binary.BigEndian.Uint32(data[4:8]),
+		ProxyIdentifier: binary.BigEndian.Uint32(data[8:12]),
+		Asn:             binary.BigEndian.Uint32(data[12:16]),
+		NoPeerAS:        binary.BigEndian.Uint32(data[16:20]),
+	}
+
+	resp, err := cli.ProxyHello(context.Background(), &req)
+	if err != nil {
+		log.Fatalf("could not receive: %v", err)
+	}
+
+	fmt.Printf("+ HelloRequest	: %#v\n", req)
+	fmt.Printf("+ response		: %#v\n", resp)
+
+	rp := C.SRXPROXY_HELLO_RESPONSE{
+		//version:         C.ushort(resp.Version), // --> TODO: need to pack/unpack for packed struct in C
+		length:          C.uint(resp.Length),
+		proxyIdentifier: C.uint(resp.ProxyIdentifier),
+	}
+	rp._type = C.uchar(resp.Type)
+
+	//fmt.Println("rp:", rp)
+
+	buf := make([]byte, C.sizeof_SRXPROXY_HELLO_RESPONSE)
+	//buf := make([]byte, 12)
+	buf[0] = byte(resp.Type)
+	binary.BigEndian.PutUint16(buf[1:3], uint16(resp.Version))
+	binary.BigEndian.PutUint32(buf[4:8], resp.Length)
+	binary.BigEndian.PutUint32(buf[8:12], resp.ProxyIdentifier)
+
+	cb := (*[C.sizeof_SRXPROXY_HELLO_RESPONSE]C.uchar)(C.malloc(C.sizeof_SRXPROXY_HELLO_RESPONSE))
+	// TODO: defer C.free(unsafe.Pointer(cb)) at caller side --> DONE
+	cstr := (*[C.sizeof_SRXPROXY_HELLO_RESPONSE]C.uchar)(unsafe.Pointer(&buf[0]))
+
+	for i := 0; i < C.sizeof_SRXPROXY_HELLO_RESPONSE; i++ {
+		cb[i] = cstr[i]
+	}
+
+	//return (*C.uchar)(unsafe.Pointer(&buf[0]))
+	return &cb[0]
 }
 
 //export RunStream
@@ -119,6 +217,14 @@ func RunStream(data []byte) uint32 {
 }
 
 func main() {
+	/*
+		buff_hello_request :=
+			[]byte{0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
+		res := RunProxyHello(buff_hello_request)
+		//r := Run(buff_hello_request)
+		log.Printf("Transferred: %#v\n\n", res)
+	*/
+
 	data := []byte(defaultName)
 	data2 := []byte{0x10, 0x11, 0x40, 0x42}
 	data3 := []byte{0x10, 0x11, 0x40, 0x42, 0xAB, 0xCD, 0xEF}

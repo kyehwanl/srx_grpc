@@ -4,6 +4,8 @@
 #include "server/command_queue.h"
 #include "server/command_handler.h"
 #include "server/update_cache.h"
+#include "shared/srx_packets.h"
+#include "util/log.h"
 #include "server/server_connection_handler.h"
 
 typedef struct {
@@ -20,7 +22,7 @@ typedef struct {
 
 } GRPC_ServiceHandler;
 
-extern GRPC_ServiceHandler     grpcServiceHandler;
+GRPC_ServiceHandler     grpcServiceHandler;
 
 
 typedef struct {

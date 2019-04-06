@@ -1028,6 +1028,7 @@ bool setLogMode2(int logMode)
  */
 void processHelloResponse(SRXPROXY_HELLO_RESPONSE* hdr, SRxProxy* proxy)
 {
+    printf("[%s] function called \n", __FUNCTION__);
   // The client connection handler
   ClientConnectionHandler* connHandler =
                                    (ClientConnectionHandler*)proxy->connHandler;
@@ -1450,6 +1451,7 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   hdr->asn             = htonl(65005 /*proxy->proxyAS*/);
   hdr->noPeers         = htonl(noPeers);
 
+  printf("\nRequest Proxy Hello:\n");
   printHex(length, pdu);
 #if 0/*{*/
   peerAS = (uint32_t*)&hdr->peerAS;
@@ -1483,17 +1485,31 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   //if (!sendData(&self->clSock, (void*)pdu, ntohl(pdu->length)))
 
 
-  int32_t result;
+  unsigned char result[sizeof(SRXPROXY_HELLO_RESPONSE)];
+  //unsigned char result[12];
 
   int size = length;
   char buf_data[size];
   memcpy(buf_data, pdu, size);
 
   GoSlice gopdu = {(void*)buf_data, (GoInt)size, (GoInt)size};
-  result = Run(gopdu);
+  //result = Run(gopdu);
+  unsigned char* pRes = RunProxyHello(gopdu);
+  memcpy(result, pRes, sizeof(SRXPROXY_HELLO_RESPONSE));
 
+  printf("\nResponse Proxy Hello Response:\n");
+  printHex(sizeof(SRXPROXY_HELLO_RESPONSE), result);
 
+  ClientConnectionHandler* connHandler =
+                                   (ClientConnectionHandler*)proxy->connHandler;
 
+  connHandler->packetHandler = dispatchPackets;
+  connHandler->stop = false;
+  connHandler->handshake_timeout = SRX_DEFAULT_HANDSHAKE_TIMEOUT;
+  connHandler->initialized = true;
+  connHandler->established = false;
+      
+  connHandler->packetHandler((SRXPROXY_BasicHeader*)result, proxy);
 
 #if 0/*{*/
   //TODO SVN No business here
@@ -1520,9 +1536,12 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   // IF WE GOT HERE ALL WENT WELL !
   return connHandler->established;
 #endif/*}*/
-  return true;
+
+  free(pRes);
+
+  // following return value will be determined by calling (fn_packetHandler --> fn_dispatchPackets)
+  return connHandler->established;
 }
-#endif
 /*
 //int responseGRPC (int size)
 void responseGRPC(void)
@@ -1534,6 +1553,63 @@ void responseGRPC(void)
 }
 
 */
+
+void verifyUpdate_grpc(SRxProxy* proxy, uint32_t localID,
+                  bool usePrefixOriginVal, bool usePathVal,
+                  SRxDefaultResult* defaultResult,
+                  IPPrefix* prefix, uint32_t as32,
+                  BGPSecData* bgpsec)
+{
+  if (!isConnected(proxy))
+  {
+    RAISE_ERROR(HDR "Abort verify, not connected to SRx server!" ,
+                pthread_self());
+    return;
+  }
+
+  // Specify the verify request method.
+  uint8_t method =   (usePrefixOriginVal ? SRX_FLAG_ROA : 0)
+                   | (usePathVal ? SRX_FLAG_BGPSEC : 0)
+                   | (localID != 0 ? SRX_FLAG_REQUEST_RECEIPT : 0);
+
+  bool isV4 = prefix->ip.version == 4;
+  // The client connection handler
+  ClientConnectionHandler* connHandler =
+                                   (ClientConnectionHandler*)proxy->connHandler;
+
+  // create data packet.
+  uint16_t bgpsecLength = 0;
+  if (bgpsec != NULL)
+  {
+    bgpsecLength = (bgpsec->numberHops * 4) + bgpsec->attr_length;
+  }
+  uint32_t length = (isV4 ? sizeof(SRXPROXY_VERIFY_V4_REQUEST)
+                          : sizeof(SRXPROXY_VERIFY_V6_REQUEST)) + bgpsecLength;
+  uint8_t  pdu[length];
+  uint32_t requestToken = localID;
+
+  memset(pdu, 0, length);
+
+  // Generate VERIFY PACKET
+  if (isV4)
+  {
+    createV4Request(pdu, method, requestToken, defaultResult, prefix, as32, bgpsec);
+  }
+  else
+  {
+    createV6Request(pdu, method, requestToken, defaultResult, prefix, as32, bgpsec);
+  }
+
+  // Send Data
+  //sendPacketToServer(connHandler, (SRXPROXY_PDU*)pdu, length);
+
+  GoSlice verify_pdu = {(void*)pdu, (GoInt)length, (GoInt)length};
+  int32_t result = RunStream(verify_pdu);
+  printf(" Validation Result: %02x\n", result);
+
+}
+
+#endif /* USE GRPC */
 
 __attribute__((always_inline)) inline void printHex(int len, unsigned char* buff)
 {

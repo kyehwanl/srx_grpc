@@ -17,6 +17,14 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 /* Start of preamble from import "C" comments.  */
 
 
+#line 3 "/opt/project/gobgp_test/gowork/src/srx_grpc/client/srx_grpc_client.go"
+
+
+
+//#include <stdlib.h>
+#include "shared/srx_packets.h"
+
+#line 1 "cgo-generated-wrapper"
 
 
 /* End of preamble from import "C" comments.  */
@@ -66,6 +74,8 @@ extern "C" {
 
 
 extern GoUint32 Run(GoSlice p0);
+
+extern unsigned char* RunProxyHello(GoSlice p0);
 
 extern GoUint32 RunStream(GoSlice p0);
 

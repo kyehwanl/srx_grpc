@@ -183,7 +183,7 @@ func RunStream(data []byte) uint32 {
 			resp, err := stream.Recv()
 			if err == io.EOF {
 				close(done)
-				return
+				return 0
 			}
 			if err != nil {
 				log.Fatalf("can not receive %v", err)
@@ -197,6 +197,7 @@ func RunStream(data []byte) uint32 {
 
 			if resp.Data == nil && resp.Length == 0 {
 				log.Fatalf("close stream ")
+				//stream.CloseSend()
 				close(done)
 			}
 		}
@@ -216,6 +217,71 @@ func RunStream(data []byte) uint32 {
 	return uint32(r.ValidationStatus)
 }
 
+func RunProxyVerify(data []byte) uint32 {
+
+	// TODO: how to persistently obtain grpc Dial object
+
+	// Set up a connection to the server.
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	c := pb.NewSRxApiClient(conn)
+
+	if data == nil {
+		fmt.Println("#############")
+		data = []byte(defaultName)
+	}
+
+	fmt.Printf("input data for stream response: %#v\n", data)
+
+	stream, err := c.ProxyVerify(context.Background(), &pb.ProxyVerifyV4Request{})
+	if err != nil {
+		log.Fatalf("open stream error %v", err)
+	}
+
+	ctx := stream.Context()
+	done := make(chan bool)
+	var r pb.ProxyVerifyNotify
+
+	go func() {
+		for {
+			resp, err := stream.Recv()
+			if err == io.EOF {
+				close(done)
+				return
+			}
+			if err != nil {
+				log.Fatalf("can not receive %v", err)
+			}
+
+			// TODO: receive process here
+			fmt.Printf("received data: %#v\n", resp)
+			r = *resp
+
+			/*
+				if resp.Data == nil && resp.Length == 0 {
+					log.Fatalf("close stream ")
+					close(done)
+				}
+			*/
+		}
+
+	}()
+
+	go func() {
+		<-ctx.Done()
+		if err := ctx.Err(); err != nil {
+			log.Println(err)
+		}
+		close(done)
+	}()
+
+	<-done
+	return 0
+}
+
 func main() {
 	/*
 		buff_hello_request :=
@@ -224,6 +290,9 @@ func main() {
 		//r := Run(buff_hello_request)
 		log.Printf("Transferred: %#v\n\n", res)
 	*/
+	buff_verify_req := []byte{
+		0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
+	RunProxyVerify(buff_verify_req)
 
 	data := []byte(defaultName)
 	data2 := []byte{0x10, 0x11, 0x40, 0x42}

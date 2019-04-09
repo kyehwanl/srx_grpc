@@ -36,6 +36,7 @@ import (
 
 var port = flag.Int("port", 50000, "The server port")
 var gStream pb.SRxApi_SendAndWaitProcessServer
+var gStream_verify pb.SRxApi_ProxyVerifyServer
 
 //var done chan bool
 
@@ -184,6 +185,42 @@ func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb
 }
 
 func (s *Server) ProxyVerify(pdu *pb.ProxyVerifyV4Request, stream pb.SRxApi_ProxyVerifyServer) error {
+	fmt.Println("calling SRxServer server:ProxyVerify()")
+
+	gStream_verify = stream
+	ctx := stream.Context()
+	done := make(chan bool)
+	go func() {
+		<-ctx.Done()
+		if err := ctx.Err(); err != nil {
+			log.Println(err)
+		}
+		close(done)
+	}()
+
+	fmt.Printf("stream server: %#v\n", pdu)
+
+	retData := C.RET_DATA{}
+	retData = C.responseGRPC(C.int(0), (*C.uchar)(unsafe.Pointer(nil)))
+
+	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
+	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
+
+	resp := pb.ProxyVerifyNotify{
+		Type:       2,
+		ResultType: 3,
+		RoaResult:  3,
+	}
+
+	if err := stream.Send(&resp); err != nil {
+		log.Printf("send error %v", err)
+	}
+	log.Printf("sending stream data")
+
+	//time.Sleep(5 * time.Second)
+
+	<-done
+	log.Printf("Finished with RPC send \n")
 
 	return nil
 }

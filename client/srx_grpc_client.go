@@ -33,18 +33,34 @@ type ProxyVerifyClient struct {
 	stream pb.SRxApi_ProxyVerifyClient
 }
 
-var client *Client
+var client Client
+
+//export Init
+func Init(address string) uint32 {
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("did not connect: %v", err)
+	}
+	defer conn.Close()
+	cli := pb.NewSRxApiClient(conn)
+
+	client.conn = conn
+	client.cli = cli
+
+	return 0
+}
 
 //export Run
 func Run(data []byte) uint32 {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
-	//client.conn = conn
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
 	c := pb.NewSRxApiClient(conn)
+	client.conn = conn
+	client.cli = c
 
 	// Contact the server and print out its response.
 	//ctx, _ := context.WithTimeout(context.Background(), time.Second)
@@ -183,7 +199,7 @@ func RunStream(data []byte) uint32 {
 			resp, err := stream.Recv()
 			if err == io.EOF {
 				close(done)
-				return 0
+				return
 			}
 			if err != nil {
 				log.Fatalf("can not receive %v", err)
@@ -283,16 +299,19 @@ func RunProxyVerify(data []byte) uint32 {
 }
 
 func main() {
-	/*
-		buff_hello_request :=
-			[]byte{0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
-		res := RunProxyHello(buff_hello_request)
-		//r := Run(buff_hello_request)
-		log.Printf("Transferred: %#v\n\n", res)
+	/* FIXME XXX
+	buff_hello_request :=
+		[]byte{0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
+	res := RunProxyHello(buff_hello_request)
+	//r := Run(buff_hello_request)
+	log.Printf("Transferred: %#v\n\n", res)
 	*/
-	buff_verify_req := []byte{
-		0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
-	RunProxyVerify(buff_verify_req)
+
+	/*
+		buff_verify_req := []byte{
+			0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
+		RunProxyVerify(buff_verify_req)
+	*/
 
 	data := []byte(defaultName)
 	data2 := []byte{0x10, 0x11, 0x40, 0x42}
@@ -308,3 +327,12 @@ func main() {
 	log.Printf("Transferred: %#v\n\n", r)
 
 }
+
+/* NOTE
+
+TODO 1: init function - for receiving client (*grpc.ClientConn)
+		--> maybe good to use a global variable for client
+
+TODO 2
+
+*/

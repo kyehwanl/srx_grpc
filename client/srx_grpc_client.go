@@ -15,6 +15,7 @@ import (
 	"google.golang.org/grpc"
 	"io"
 	"log"
+	"runtime"
 	pb "srx_grpc"
 	"unsafe"
 )
@@ -199,6 +200,7 @@ func RunStream(data []byte) uint32 {
 			resp, err := stream.Recv()
 			if err == io.EOF {
 				close(done)
+				log.Fatalf("[client] EOF close ")
 				return
 			}
 			if err != nil {
@@ -212,7 +214,8 @@ func RunStream(data []byte) uint32 {
 			r = *resp
 
 			if resp.Data == nil && resp.Length == 0 {
-				log.Fatalf("close stream ")
+				_, _, line, _ := runtime.Caller(0)
+				log.Fatalf("[client:%d] close stream ", line+1)
 				//stream.CloseSend()
 				close(done)
 			}
@@ -225,11 +228,14 @@ func RunStream(data []byte) uint32 {
 		if err := ctx.Err(); err != nil {
 			log.Println(err)
 		}
+		fmt.Printf("+ client context done\n")
 		close(done)
 	}()
 
 	<-done
 	log.Printf("Finished with Resopnse valie: %d", uint32(r.ValidationStatus))
+	log.Fatalf("Finished with Resopnse valie:")
+	fmt.Printf("Finished with Resopnse valie: %d", uint32(r.ValidationStatus))
 	return uint32(r.ValidationStatus)
 }
 

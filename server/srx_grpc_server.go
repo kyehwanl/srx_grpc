@@ -30,6 +30,7 @@ import (
 	_ "bytes"
 	"encoding/binary"
 	_ "io"
+	"runtime"
 	_ "time"
 	"unsafe"
 )
@@ -38,7 +39,7 @@ var port = flag.Int("port", 50000, "The server port")
 var gStream pb.SRxApi_SendAndWaitProcessServer
 var gStream_verify pb.SRxApi_ProxyVerifyServer
 
-//var done chan bool
+var done chan bool
 
 type Server struct {
 	grpcServer *grpc.Server
@@ -57,6 +58,13 @@ func MyCallback(f int, b []byte) {
 
 	fmt.Printf("My callback function - received arg: %d, %#v \n", f, b)
 
+	if f == 0 && b == nil {
+		_, _, line, _ := runtime.Caller(0)
+		log.Fatalf("[server:%d] close stream ", line)
+		//done <- true
+		//return
+	}
+
 	//b := []byte{0x10, 0x11, 0x40, 0x42, 0xAB, 0xCD, 0xEF}
 	resp := pb.PduResponse{
 		Data:             b,
@@ -65,10 +73,17 @@ func MyCallback(f int, b []byte) {
 	}
 
 	if gStream != nil {
-		if err := gStream.Send(&resp); err != nil {
-			log.Printf("send error %v", err)
+		if resp.Data == nil && resp.Length == 0 {
+			_, _, line, _ := runtime.Caller(0)
+			log.Fatalf("[server:%d] close stream ", line)
+			//close(done)
+		} else {
+			if err := gStream.Send(&resp); err != nil {
+				log.Printf("send error %v", err)
+			}
+			_, _, line, _ := runtime.Caller(0)
+			log.Printf("[%d] sending stream data", line+1)
 		}
-		log.Printf("sending stream data")
 
 		/*
 			TODO: How to Send EOF from the server side through grpc ??
@@ -110,12 +125,13 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 
 	gStream = stream
 	ctx := stream.Context()
-	done := make(chan bool)
+	done = make(chan bool)
 	go func() {
 		<-ctx.Done()
 		if err := ctx.Err(); err != nil {
 			log.Println(err)
 		}
+		fmt.Printf("+ server context done\n")
 		close(done)
 	}()
 

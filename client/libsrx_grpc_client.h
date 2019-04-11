@@ -73,6 +73,8 @@ extern "C" {
 #endif
 
 
+extern GoUint32 Init(GoString p0);
+
 extern GoUint32 Run(GoSlice p0);
 
 extern unsigned char* RunProxyHello(GoSlice p0);

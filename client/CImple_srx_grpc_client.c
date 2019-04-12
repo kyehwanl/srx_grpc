@@ -6,7 +6,7 @@
 
 int main ()
 {
-    printf(" Running C imple grpc client from C\n");
+    printf("[%s] Running C imple grpc client from C\n", __FILE__);
     int32_t result;
 
 #if 0
@@ -30,18 +30,29 @@ int main ()
       hdr->asn             = htonl(65005); 
       hdr->noPeers         = htonl(noPeers); 
     */
+
+    GoString gs_addr = {
+        p : "localhost:50000",
+        n : 16
+    };
+
+    unsigned int res = Init(gs_addr);
+    printf("init result: %d \n", res);
+
+
     char buff_hello_request[20] = 
     {0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0};
 
     GoSlice hello_requiest_pdu = {(void*)buff_hello_request, (GoInt)20, (GoInt)20};
-    result = Run(hello_requiest_pdu);
-    printf(" Hello Request Result: %02x\n", result);
+    //result = Run(hello_requiest_pdu);
+    RunProxyHello(hello_requiest_pdu);
+    //printf("Hello Request Result: %02x\n", result);
 
 
 
     /* test 3: request verification */
-    printf(" Validation Result: %02x\n", result);
-    printf("[grpc_client] verify update sent\n" );
+    printf("[%s] Validation  Request\n", __FILE__ );
+    printf("[%s] verify update sent\n", __FILE__);
     /* verify update srxproxy protocol test */
     char verify_buff[169] = {
         0x03, 0x83, 0x01, 0x01, 0x00, 0x00, 0x00, 0xa9, 0x03, 0x03, 0x00, 0x18,
@@ -59,8 +70,13 @@ int main ()
     
     GoSlice verify_pdu = {(void*)verify_buff, (GoInt)169, (GoInt)170};
     result = RunStream(verify_pdu);
-    printf(" Validation Result: %02x\n", result);
+    printf("[%s] Validation Result: %02x\n", __FILE__, result);
 
+
+    // TODO: figure out why main program is terminated after calling Run-Stream function above
+    //
+    for (;;) {}
+    Sleep(5000);
     return 0;
 }
 

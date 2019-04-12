@@ -161,7 +161,7 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 	//time.Sleep(5 * time.Second)
 
 	<-done
-	log.Printf("Finished with RPC send \n")
+	log.Printf("Finished with RPC send [Send_Wait_Process] \n")
 
 	return nil
 }

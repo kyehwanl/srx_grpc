@@ -37,31 +37,45 @@ type ProxyVerifyClient struct {
 var client Client
 
 //export Init
-func Init(address string) uint32 {
+func Init(addr string) uint32 {
+
+	// TODO: convert addr into go_string
+	log.Printf("gRPC Init Address: %s\n", addr)
+
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
+		return 1
 	}
-	defer conn.Close()
+	//defer conn.Close()
 	cli := pb.NewSRxApiClient(conn)
 
 	client.conn = conn
 	client.cli = cli
 
+	fmt.Printf("cli : %#v\n", cli)
+	fmt.Printf("client.cli : %#v\n", client.cli)
+	fmt.Println()
 	return 0
 }
 
 //export Run
 func Run(data []byte) uint32 {
 	// Set up a connection to the server.
+	///*
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("did not connect: %v", err)
 	}
 	defer conn.Close()
-	c := pb.NewSRxApiClient(conn)
-	client.conn = conn
-	client.cli = c
+	local_cli := pb.NewSRxApiClient(conn)
+	//*/
+
+	cli := client.cli
+	fmt.Printf("client : %#v\n", client)
+	fmt.Printf("client.cli data: %#v\n", client.cli)
+	fmt.Printf("local client: %#v \n", local_cli)
+	fmt.Println()
 
 	// Contact the server and print out its response.
 	//ctx, _ := context.WithTimeout(context.Background(), time.Second)
@@ -75,7 +89,7 @@ func Run(data []byte) uint32 {
 
 	fmt.Printf("input data: %#v\n", data)
 
-	r, err := c.SendPacketToSRxServer(context.Background(), &pb.PduRequest{Data: data, Length: uint32(len(data))})
+	r, err := cli.SendPacketToSRxServer(context.Background(), &pb.PduRequest{Data: data, Length: uint32(len(data))})
 	if err != nil {
 		log.Fatalf("could not receive: %v", err)
 	}
@@ -83,6 +97,7 @@ func Run(data []byte) uint32 {
 	fmt.Printf("data : %#v\n", r.Data)
 	fmt.Printf("size : %#v\n", r.Length)
 	fmt.Printf("status: %#v\n", r.ValidationStatus)
+	fmt.Println()
 
 	//return r.ValidationStatus, err
 	return uint32(r.ValidationStatus)
@@ -101,19 +116,20 @@ func Run(data []byte) uint32 {
 //export RunProxyHello
 func RunProxyHello(data []byte) *C.uchar {
 
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	defer conn.Close()
-	cli := pb.NewSRxApiClient(conn)
-
-	fmt.Printf("input data: %#v\n", data)
 	/*
-		client.conn = conn
-		client.cli = cli
+		conn, err := grpc.Dial(address, grpc.WithInsecure())
+		if err != nil {
+			log.Fatalf("did not connect: %v", err)
+		}
+		defer conn.Close()
+		cli := pb.NewSRxApiClient(conn)
 	*/
-
+	cli := client.cli
+	fmt.Println()
+	fmt.Printf("client : %#v\n", client)
+	fmt.Printf("client.cli : %#v\n", client.cli)
+	fmt.Println(cli)
+	fmt.Printf("input data: %#v\n", data)
 	/*
 		retData := C.RET_DATA{}
 		hData := C.SRXPROXY_HELLO{}
@@ -172,12 +188,20 @@ func RunStream(data []byte) uint32 {
 	// TODO: how to persistently obtain grpc Dial object
 
 	// Set up a connection to the server.
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	defer conn.Close()
-	c := pb.NewSRxApiClient(conn)
+	/*
+		conn, err := grpc.Dial(address, grpc.WithInsecure())
+		if err != nil {
+			log.Fatalf("did not connect: %v", err)
+		}
+		defer conn.Close()
+		cli := pb.NewSRxApiClient(conn)
+	*/
+
+	///*
+	//cli := pb.NewSRxApiClient(client.conn)
+	cli := client.cli
+	//*/
+	fmt.Printf("client data: %#v\n", client)
 
 	if data == nil {
 		fmt.Println("#############")
@@ -186,14 +210,14 @@ func RunStream(data []byte) uint32 {
 
 	fmt.Printf("input data for stream response: %#v\n", data)
 
-	stream, err := c.SendAndWaitProcess(context.Background(), &pb.PduRequest{Data: data, Length: uint32(len(data))})
+	stream, err := cli.SendAndWaitProcess(context.Background(), &pb.PduRequest{Data: data, Length: uint32(len(data))})
 	if err != nil {
 		log.Fatalf("open stream error %v", err)
 	}
 
 	ctx := stream.Context()
 	done := make(chan bool)
-	var r pb.PduResponse
+	//var r pb.PduResponse
 
 	go func() {
 		for {
@@ -208,23 +232,27 @@ func RunStream(data []byte) uint32 {
 			}
 
 			// TODO: receive process here
-			fmt.Printf("data : %#v\n", resp.Data)
-			fmt.Printf("size : %#v\n", resp.Length)
-			fmt.Printf("status: %#v\n", resp.ValidationStatus)
-			r = *resp
+			fmt.Printf("+ data : %#v\n", resp.Data)
+			fmt.Printf("+ size : %#v\n", resp.Length)
+			fmt.Printf("+ status: %#v\n", resp.ValidationStatus)
+			//r = resp
 
 			if resp.Data == nil && resp.Length == 0 {
 				_, _, line, _ := runtime.Caller(0)
 				log.Fatalf("[client:%d] close stream ", line+1)
+				//done <- true
 				//stream.CloseSend()
 				close(done)
 			}
+			fmt.Println()
 		}
 
 	}()
 
 	go func() {
 		<-ctx.Done()
+		log.Fatalf("+ Client Context Done")
+		fmt.Printf("+ Client Context Done")
 		if err := ctx.Err(); err != nil {
 			log.Println(err)
 		}
@@ -233,10 +261,12 @@ func RunStream(data []byte) uint32 {
 	}()
 
 	<-done
-	log.Printf("Finished with Resopnse valie: %d", uint32(r.ValidationStatus))
+	//log.Printf("Finished with Resopnse valie: %d", uint32(resp.ValidationStatus))
 	log.Fatalf("Finished with Resopnse valie:")
-	fmt.Printf("Finished with Resopnse valie: %d", uint32(r.ValidationStatus))
-	return uint32(r.ValidationStatus)
+	//fmt.Printf("Finished with Resopnse valie: %d", uint32(resp.ValidationStatus))
+
+	return 0
+	//return uint32(resp.ValidationStatus)
 }
 
 func RunProxyVerify(data []byte) uint32 {
@@ -305,20 +335,40 @@ func RunProxyVerify(data []byte) uint32 {
 }
 
 func main() {
-	/* FIXME XXX
+	///* FIXME XXX
+
+	log.Printf("main start Init(%s)\n", address)
+	rv := Init(address)
+	if rv != 0 {
+		log.Fatalf(" Init Error ")
+		return
+	}
+	//defer client.conn.Close()
+
+	log.Printf("Hello Request\n")
 	buff_hello_request :=
 		[]byte{0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
 	res := RunProxyHello(buff_hello_request)
 	//r := Run(buff_hello_request)
 	log.Printf("Transferred: %#v\n\n", res)
-	*/
+	//*/
 
-	/*
-		buff_verify_req := []byte{
-			0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
-		RunProxyVerify(buff_verify_req)
-	*/
+	log.Printf("Verify Request\n")
+	buff_verify_req := []byte{0x03, 0x83, 0x01, 0x01, 0x00, 0x00, 0x00, 0xa9, 0x03, 0x03, 0x00, 0x18,
+		0x00, 0x00, 0x00, 0x01, 0x64, 0x01, 0x00, 0x00, 0x00, 0x00, 0xfd, 0xf3, 0x00, 0x00, 0x00, 0x71,
+		0x00, 0x01, 0x00, 0x6d, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xfd, 0xed, 0x00, 0x00, 0xfd, 0xf3,
+		0x90, 0x21, 0x00, 0x69, 0x00, 0x08, 0x01, 0x00, 0x00, 0x00, 0xfd, 0xf3, 0x00, 0x61, 0x01, 0xc3,
+		0x04, 0x33, 0xfa, 0x19, 0x75, 0xff, 0x19, 0x31, 0x81, 0x45, 0x8f, 0xb9, 0x02, 0xb5, 0x01, 0xea,
+		0x97, 0x89, 0xdc, 0x00, 0x48, 0x30, 0x46, 0x02, 0x21, 0x00, 0xbd, 0x92, 0x9e, 0x69, 0x35, 0x6e,
+		0x7b, 0x6c, 0xfe, 0x1c, 0xbc, 0x3c, 0xbd, 0x1c, 0x4a, 0x63, 0x8d, 0x64, 0x5f, 0xa0, 0xb7, 0x20,
+		0x7e, 0xf3, 0x2c, 0xcc, 0x4b, 0x3f, 0xd6, 0x1b, 0x5f, 0x46, 0x02, 0x21, 0x00, 0xb6, 0x0a, 0x7c,
+		0x82, 0x7f, 0x50, 0xe6, 0x5a, 0x5b, 0xd7, 0x8c, 0xd1, 0x81, 0x3d, 0xbc, 0xca, 0xa8, 0x2d, 0x27,
+		0x47, 0x60, 0x25, 0xe0, 0x8c, 0xda, 0x49, 0xf9, 0x1e, 0x22, 0xd8, 0xc0, 0x8e}
+	//r := RunProxyVerify(buff_verify_req)
+	RunStream(buff_verify_req)
 
+	/* FIXME
 	data := []byte(defaultName)
 	data2 := []byte{0x10, 0x11, 0x40, 0x42}
 	data3 := []byte{0x10, 0x11, 0x40, 0x42, 0xAB, 0xCD, 0xEF}
@@ -331,7 +381,13 @@ func main() {
 
 	r = RunStream(data3)
 	log.Printf("Transferred: %#v\n\n", r)
+	*/
 
+	for {
+
+	}
+	main_done := make(chan bool)
+	<-main_done
 }
 
 /* NOTE

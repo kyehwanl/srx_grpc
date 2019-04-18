@@ -1932,6 +1932,9 @@ int main(int argc, char* argv[])
                          50, // ProxyAS
                          NULL);
 
+#ifdef USE_GRPC
+  callSRxGRPC_Init("localhost:50000");
+#endif
   if (proxy == NULL)
   {
     RAISE_ERROR("Proxy could not be created. Abort program!\n");

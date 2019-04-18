@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "libsrx_grpc_client.h"
 #include <stdlib.h>
-
+#include <string.h>
 
 int main ()
 {
@@ -33,10 +33,12 @@ int main ()
 
     GoString gs_addr = {
         p : "localhost:50000",
-        n : 16
+        n : 15
     };
+    gs_addr.n = strlen((const char*)gs_addr.p);
+    printf("size: %d \n", gs_addr.n);
 
-    unsigned int res = Init(gs_addr);
+    unsigned int res = InitSRxGrpc(gs_addr);
     printf("init result: %d \n", res);
 
 
@@ -73,10 +75,7 @@ int main ()
     printf("[%s] Validation Result: %02x\n", __FILE__, result);
 
 
-    // TODO: figure out why main program is terminated after calling Run-Stream function above
-    //
-    for (;;) {}
-    Sleep(5000);
+    printf("main program terminated\n");
     return 0;
 }
 

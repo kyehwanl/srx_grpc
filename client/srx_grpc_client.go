@@ -36,45 +36,32 @@ type ProxyVerifyClient struct {
 
 var client Client
 
-//export Init
-func Init(addr string) uint32 {
-
-	// TODO: convert addr into go_string
-	log.Printf("gRPC Init Address: %s\n", addr)
-
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+//export InitSRxGrpc
+func InitSRxGrpc(addr string) uint32 {
+	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		log.Printf("did not connect: %v", err)
 		return 1
 	}
+	log.Printf("gRPC Client Initiated and Connected Server Address: %s\n", addr)
 	//defer conn.Close()
 	cli := pb.NewSRxApiClient(conn)
 
 	client.conn = conn
 	client.cli = cli
 
-	fmt.Printf("cli : %#v\n", cli)
-	fmt.Printf("client.cli : %#v\n", client.cli)
-	fmt.Println()
+	//fmt.Printf("cli : %#v\n", cli)
+	//fmt.Printf("client.cli : %#v\n", client.cli)
+	//fmt.Println()
 	return 0
 }
 
 //export Run
 func Run(data []byte) uint32 {
 	// Set up a connection to the server.
-	///*
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
-	if err != nil {
-		log.Fatalf("did not connect: %v", err)
-	}
-	defer conn.Close()
-	local_cli := pb.NewSRxApiClient(conn)
-	//*/
-
 	cli := client.cli
 	fmt.Printf("client : %#v\n", client)
 	fmt.Printf("client.cli data: %#v\n", client.cli)
-	fmt.Printf("local client: %#v \n", local_cli)
 	fmt.Println()
 
 	// Contact the server and print out its response.
@@ -91,7 +78,7 @@ func Run(data []byte) uint32 {
 
 	r, err := cli.SendPacketToSRxServer(context.Background(), &pb.PduRequest{Data: data, Length: uint32(len(data))})
 	if err != nil {
-		log.Fatalf("could not receive: %v", err)
+		log.Printf("could not receive: %v", err)
 	}
 
 	fmt.Printf("data : %#v\n", r.Data)
@@ -119,7 +106,7 @@ func RunProxyHello(data []byte) *C.uchar {
 	/*
 		conn, err := grpc.Dial(address, grpc.WithInsecure())
 		if err != nil {
-			log.Fatalf("did not connect: %v", err)
+			log.Printf("did not connect: %v", err)
 		}
 		defer conn.Close()
 		cli := pb.NewSRxApiClient(conn)
@@ -148,7 +135,7 @@ func RunProxyHello(data []byte) *C.uchar {
 
 	resp, err := cli.ProxyHello(context.Background(), &req)
 	if err != nil {
-		log.Fatalf("could not receive: %v", err)
+		log.Printf("could not receive: %v", err)
 	}
 
 	fmt.Printf("+ HelloRequest	: %#v\n", req)
@@ -191,7 +178,7 @@ func RunStream(data []byte) uint32 {
 	/*
 		conn, err := grpc.Dial(address, grpc.WithInsecure())
 		if err != nil {
-			log.Fatalf("did not connect: %v", err)
+			log.Printf("did not connect: %v", err)
 		}
 		defer conn.Close()
 		cli := pb.NewSRxApiClient(conn)
@@ -212,7 +199,7 @@ func RunStream(data []byte) uint32 {
 
 	stream, err := cli.SendAndWaitProcess(context.Background(), &pb.PduRequest{Data: data, Length: uint32(len(data))})
 	if err != nil {
-		log.Fatalf("open stream error %v", err)
+		log.Printf("open stream error %v", err)
 	}
 
 	ctx := stream.Context()
@@ -224,11 +211,11 @@ func RunStream(data []byte) uint32 {
 			resp, err := stream.Recv()
 			if err == io.EOF {
 				close(done)
-				log.Fatalf("[client] EOF close ")
+				log.Printf("[client] EOF close ")
 				return
 			}
 			if err != nil {
-				log.Fatalf("can not receive %v", err)
+				log.Printf("can not receive %v", err)
 			}
 
 			// TODO: receive process here
@@ -239,7 +226,7 @@ func RunStream(data []byte) uint32 {
 
 			if resp.Data == nil && resp.Length == 0 {
 				_, _, line, _ := runtime.Caller(0)
-				log.Fatalf("[client:%d] close stream ", line+1)
+				log.Printf("[client:%d] close stream ", line+1)
 				//done <- true
 				//stream.CloseSend()
 				close(done)
@@ -251,8 +238,7 @@ func RunStream(data []byte) uint32 {
 
 	go func() {
 		<-ctx.Done()
-		log.Fatalf("+ Client Context Done")
-		fmt.Printf("+ Client Context Done")
+		log.Printf("+ Client Context Done")
 		if err := ctx.Err(); err != nil {
 			log.Println(err)
 		}
@@ -262,7 +248,7 @@ func RunStream(data []byte) uint32 {
 
 	<-done
 	//log.Printf("Finished with Resopnse valie: %d", uint32(resp.ValidationStatus))
-	log.Fatalf("Finished with Resopnse valie:")
+	log.Printf("Finished with Resopnse valie:")
 	//fmt.Printf("Finished with Resopnse valie: %d", uint32(resp.ValidationStatus))
 
 	return 0
@@ -276,7 +262,7 @@ func RunProxyVerify(data []byte) uint32 {
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("did not connect: %v", err)
+		log.Printf("did not connect: %v", err)
 	}
 	defer conn.Close()
 	c := pb.NewSRxApiClient(conn)
@@ -290,7 +276,7 @@ func RunProxyVerify(data []byte) uint32 {
 
 	stream, err := c.ProxyVerify(context.Background(), &pb.ProxyVerifyV4Request{})
 	if err != nil {
-		log.Fatalf("open stream error %v", err)
+		log.Printf("open stream error %v", err)
 	}
 
 	ctx := stream.Context()
@@ -305,7 +291,7 @@ func RunProxyVerify(data []byte) uint32 {
 				return
 			}
 			if err != nil {
-				log.Fatalf("can not receive %v", err)
+				log.Printf("can not receive %v", err)
 			}
 
 			// TODO: receive process here
@@ -314,7 +300,7 @@ func RunProxyVerify(data []byte) uint32 {
 
 			/*
 				if resp.Data == nil && resp.Length == 0 {
-					log.Fatalf("close stream ")
+					log.Printf("close stream ")
 					close(done)
 				}
 			*/
@@ -338,12 +324,20 @@ func main() {
 	///* FIXME XXX
 
 	log.Printf("main start Init(%s)\n", address)
-	rv := Init(address)
+	rv := InitSRxGrpc(address)
 	if rv != 0 {
-		log.Fatalf(" Init Error ")
+		log.Printf(" Init Error ")
 		return
 	}
 	//defer client.conn.Close()
+
+	/*
+		// TODO: construct Proxy Verify Request data structure and nested structures too
+		req := pb.ProxyVerifyV4Request{}
+		req.Common = pb.ProxyBasicHeader{}
+		fmt.Printf(" request: %#v\n", req)
+		log.Fatalf("terminate here")
+	*/
 
 	log.Printf("Hello Request\n")
 	buff_hello_request :=
@@ -382,12 +376,6 @@ func main() {
 	r = RunStream(data3)
 	log.Printf("Transferred: %#v\n\n", r)
 	*/
-
-	for {
-
-	}
-	main_done := make(chan bool)
-	<-main_done
 }
 
 /* NOTE

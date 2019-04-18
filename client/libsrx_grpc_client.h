@@ -73,7 +73,7 @@ extern "C" {
 #endif
 
 
-extern GoUint32 Init(GoString p0);
+extern GoUint32 InitSRxGrpc(GoString p0);
 
 extern GoUint32 Run(GoSlice p0);
 

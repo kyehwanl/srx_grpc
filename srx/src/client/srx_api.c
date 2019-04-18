@@ -1083,6 +1083,7 @@ static int ct = 0;
  */
 void processVerifyNotify(SRXPROXY_VERIFY_NOTIFICATION* hdr, SRxProxy* proxy)
 {
+    printf("+++ [%s] called \n", __FUNCTION__);
   if (proxy->resCallback != NULL)
   {
     bool hasReceipt = (hdr->resultType & SRX_FLAG_REQUEST_RECEIPT)
@@ -1274,6 +1275,7 @@ void processError(SRXPROXY_ERROR* hdr, SRxProxy* proxy)
  */
 static void dispatchPackets(SRXPROXY_BasicHeader* packet, void* proxyPtr)
 {
+    printf("+++ [%s] called \n", __FUNCTION__);
   SRxProxy* proxy = (SRxProxy*)proxyPtr;
 
   switch (packet->type)
@@ -1607,6 +1609,20 @@ void verifyUpdate_grpc(SRxProxy* proxy, uint32_t localID,
   int32_t result = RunStream(verify_pdu);
   printf(" Validation Result: %02x\n", result);
 
+}
+
+unsigned int callSRxGRPC_Init(const char* addr)
+{
+    GoString gs_addr = {
+        p : addr, // "localhost:50000",
+        n : 0
+    };
+    gs_addr.n = strlen((const char*)addr);
+
+    unsigned int res = InitSRxGrpc(gs_addr);
+    LOG(LEVEL_DEBUG, HDR  "Init SRx GRPC result: %d \n", res);
+
+    return res;
 }
 
 #endif /* USE GRPC */

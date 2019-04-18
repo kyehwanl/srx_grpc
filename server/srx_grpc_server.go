@@ -60,7 +60,7 @@ func MyCallback(f int, b []byte) {
 
 	if f == 0 && b == nil {
 		_, _, line, _ := runtime.Caller(0)
-		log.Fatalf("[server:%d] close stream ", line)
+		log.Printf("[server:%d] close stream ", line)
 		//done <- true
 		//return
 	}
@@ -75,7 +75,7 @@ func MyCallback(f int, b []byte) {
 	if gStream != nil {
 		if resp.Data == nil && resp.Length == 0 {
 			_, _, line, _ := runtime.Caller(0)
-			log.Fatalf("[server:%d] close stream ", line)
+			log.Printf("[server:%d] close stream ", line)
 			//close(done)
 		} else {
 			if err := gStream.Send(&resp); err != nil {
@@ -256,12 +256,12 @@ func Serve() {
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		log.Printf("failed to listen: %v", err)
 	}
 
 	server := NewServer(grpc.NewServer())
 	if err := server.grpcServer.Serve(lis); err != nil {
-		log.Fatalf("failed to serve: %v", err)
+		log.Printf("failed to serve: %v", err)
 	}
 }
 

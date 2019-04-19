@@ -334,7 +334,20 @@ func main() {
 	/*
 		// TODO: construct Proxy Verify Request data structure and nested structures too
 		req := pb.ProxyVerifyV4Request{}
-		req.Common = pb.ProxyBasicHeader{}
+		req.Common = pb.ProxyBasicHeader{
+			Type:         0x03,
+			Flags:        0x83,
+			RoaResSrc:    0x01,
+			BgpsecResSrc: 0x01,
+			Length:       0xa9,
+			RoaDefRes:    0x03,
+			BgpsecDefRes: 0x03,
+			PrefixLen:    0x18,
+			RequestToken: 0x01,
+		}
+		req.PrefixAddress = pb.IPv4Address{}
+		req.BgpsecValReqData = pb.BGPSECValReqData{}
+
 		fmt.Printf(" request: %#v\n", req)
 		log.Fatalf("terminate here")
 	*/

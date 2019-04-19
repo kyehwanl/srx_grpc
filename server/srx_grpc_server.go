@@ -131,8 +131,26 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 		if err := ctx.Err(); err != nil {
 			log.Println(err)
 		}
-		fmt.Printf("+ server context done\n")
-		close(done)
+
+		_, _, line, _ := runtime.Caller(0)
+		fmt.Printf("+ [%d] server context done\n", line+1)
+
+		// FIXME : channel panic: close of closed channel
+		///*
+		_, ok := <-done
+		if ok == true {
+			fmt.Printf("+ server close the channel done here\n")
+			close(done)
+		}
+		//*/
+		/*
+			fmt.Printf("+ done: %#v\n", done)
+			if done != nil {
+				_, _, line, _ := runtime.Caller(0)
+				fmt.Printf("+ [%d] server close the channel done here\n", line+1)
+				close(done)
+			}
+		*/
 	}()
 
 	data := uint32(0x09)

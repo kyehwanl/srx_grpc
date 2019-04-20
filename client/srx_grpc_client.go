@@ -218,10 +218,11 @@ func RunStream(data []byte) uint32 {
 				log.Printf("can not receive %v", err)
 			}
 
-			// TODO: receive process here
+			// NOTE : receive process here
 			fmt.Printf("+ data : %#v\n", resp.Data)
 			fmt.Printf("+ size : %#v\n", resp.Length)
 			fmt.Printf("+ status: %#v\n", resp.ValidationStatus)
+			fmt.Println()
 			//r = resp
 
 			if resp.Data == nil && resp.Length == 0 {
@@ -231,9 +232,7 @@ func RunStream(data []byte) uint32 {
 				//stream.CloseSend()
 				close(done)
 			}
-			fmt.Println()
 		}
-
 	}()
 
 	go func() {
@@ -248,24 +247,18 @@ func RunStream(data []byte) uint32 {
 
 	<-done
 	//log.Printf("Finished with Resopnse valie: %d", uint32(resp.ValidationStatus))
-	log.Printf("Finished with Resopnse valie:")
+	log.Printf("Finished with Resopnse valie")
 	//fmt.Printf("Finished with Resopnse valie: %d", uint32(resp.ValidationStatus))
 
 	return 0
 	//return uint32(resp.ValidationStatus)
 }
 
+//export RunProxyVerify
 func RunProxyVerify(data []byte) uint32 {
 
-	// TODO: how to persistently obtain grpc Dial object
-
-	// Set up a connection to the server.
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
-	if err != nil {
-		log.Printf("did not connect: %v", err)
-	}
-	defer conn.Close()
-	c := pb.NewSRxApiClient(conn)
+	cli := client.cli
+	fmt.Printf("client data: %#v\n", client)
 
 	if data == nil {
 		fmt.Println("#############")
@@ -274,49 +267,57 @@ func RunProxyVerify(data []byte) uint32 {
 
 	fmt.Printf("input data for stream response: %#v\n", data)
 
-	stream, err := c.ProxyVerify(context.Background(), &pb.ProxyVerifyV4Request{})
+	stream, err := cli.ProxyVerifyStream(context.Background(),
+		&pb.ProxyVerifyRequest{
+			Data:   data,
+			Length: uint32(len(data)),
+		},
+	)
 	if err != nil {
 		log.Printf("open stream error %v", err)
 	}
 
 	ctx := stream.Context()
 	done := make(chan bool)
-	var r pb.ProxyVerifyNotify
+	//var r pb.ProxyVerifyNotify
 
 	go func() {
 		for {
 			resp, err := stream.Recv()
 			if err == io.EOF {
 				close(done)
+				log.Printf("[client] EOF close ")
 				return
 			}
 			if err != nil {
 				log.Printf("can not receive %v", err)
 			}
 
-			// TODO: receive process here
-			fmt.Printf("received data: %#v\n", resp)
-			r = *resp
+			// TODO : receive process here
+			fmt.Printf("+ data : %#v\n", resp)
+			fmt.Printf("+ size : %#v\n", resp.Length)
+			fmt.Println()
 
-			/*
-				if resp.Data == nil && resp.Length == 0 {
-					log.Printf("close stream ")
-					close(done)
-				}
-			*/
+			if resp.Type == 0 && resp.Length == 0 {
+				_, _, line, _ := runtime.Caller(0)
+				log.Printf("[client:%d] close stream \n", line+1)
+				close(done)
+			}
 		}
-
 	}()
 
 	go func() {
 		<-ctx.Done()
+		log.Printf("+ Client Context Done")
 		if err := ctx.Err(); err != nil {
 			log.Println(err)
 		}
+		fmt.Printf("+ client context done\n")
 		close(done)
 	}()
 
 	<-done
+	log.Printf("Finished with Resopnse value")
 	return 0
 }
 
@@ -334,7 +335,7 @@ func main() {
 	/*
 		// TODO: construct Proxy Verify Request data structure and nested structures too
 		req := pb.ProxyVerifyV4Request{}
-		req.Common = pb.ProxyBasicHeader{
+		req.Common = &pb.ProxyBasicHeader{
 			Type:         0x03,
 			Flags:        0x83,
 			RoaResSrc:    0x01,
@@ -343,11 +344,27 @@ func main() {
 			RoaDefRes:    0x03,
 			BgpsecDefRes: 0x03,
 			PrefixLen:    0x18,
-			RequestToken: 0x01,
+			RequestToken: binary.BigEndian.Uint32([]byte{0x01, 0x00, 0x00, 0x00}),
 		}
-		req.PrefixAddress = pb.IPv4Address{}
-		req.BgpsecValReqData = pb.BGPSECValReqData{}
+		req.PrefixAddress = &pb.IPv4Address{
+			AddressOneof: &pb.IPv4Address_U8{
+				U8: []byte{0x064, 0x01, 0x00, 0x00},
+			},
+		}
+		req.OriginAS = binary.BigEndian.Uint32([]byte{0x00, 0x00, 0xfd, 0xf3})
+		req.BgpsecLength = binary.BigEndian.Uint32([]byte{0x00, 0x00, 0x00, 0x71})
 
+		req.BgpsecValReqData = &pb.BGPSECValReqData{
+			NumHops: binary.BigEndian.Uint32([]byte{0x00, 0x00, 0x00, 0x01}),
+			AttrLen: binary.BigEndian.Uint32([]byte{0x00, 0x00, 0x00, 0x6d}),
+			ValPrefix: &pb.SCA_Prefix{
+				Afi:  binary.BigEndian.Uint32([]byte{0x00, 0x00, 0x00, 0x6d}),
+				Safi: binary.BigEndian.Uint32([]byte{0x00, 0x00, 0x00, 0x6d}),
+			},
+			ValData: &pb.BGPSEC_DATA_PTR{
+				LocalAs: binary.BigEndian.Uint32([]byte{0x00, 0x00, 0xfd, 0xed}),
+			},
+		}
 		fmt.Printf(" request: %#v\n", req)
 		log.Fatalf("terminate here")
 	*/
@@ -372,8 +389,8 @@ func main() {
 		0x7e, 0xf3, 0x2c, 0xcc, 0x4b, 0x3f, 0xd6, 0x1b, 0x5f, 0x46, 0x02, 0x21, 0x00, 0xb6, 0x0a, 0x7c,
 		0x82, 0x7f, 0x50, 0xe6, 0x5a, 0x5b, 0xd7, 0x8c, 0xd1, 0x81, 0x3d, 0xbc, 0xca, 0xa8, 0x2d, 0x27,
 		0x47, 0x60, 0x25, 0xe0, 0x8c, 0xda, 0x49, 0xf9, 0x1e, 0x22, 0xd8, 0xc0, 0x8e}
-	//r := RunProxyVerify(buff_verify_req)
-	RunStream(buff_verify_req)
+	RunProxyVerify(buff_verify_req)
+	//RunStream(buff_verify_req)
 
 	/* FIXME
 	data := []byte(defaultName)

@@ -71,7 +71,8 @@ int main ()
     };
     
     GoSlice verify_pdu = {(void*)verify_buff, (GoInt)169, (GoInt)170};
-    result = RunStream(verify_pdu);
+    //result = RunStream(verify_pdu);
+    result = RunProxyVerify(verify_pdu);
     printf("[%s] Validation Result: %02x\n", __FILE__, result);
 
 

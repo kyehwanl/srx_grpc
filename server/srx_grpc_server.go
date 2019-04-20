@@ -37,9 +37,9 @@ import (
 
 var port = flag.Int("port", 50000, "The server port")
 var gStream pb.SRxApi_SendAndWaitProcessServer
-var gStream_verify pb.SRxApi_ProxyVerifyServer
+var gStream_verify pb.SRxApi_ProxyVerifyStreamServer
 
-var done chan bool
+//var done chan bool
 
 type Server struct {
 	grpcServer *grpc.Server
@@ -50,8 +50,12 @@ func cb_proxy(f C.int, v unsafe.Pointer) {
 	fmt.Printf("proxy callback function : arg[%d, %#v]\n", f, v)
 
 	b := C.GoBytes(unsafe.Pointer(v), f)
+
 	// call my callback
-	MyCallback(int(f), b)
+	//TODO: distinguish two callback function
+
+	//MyCallback(int(f), b)
+	cbVerifyNotify(int(f), b)
 }
 
 func MyCallback(f int, b []byte) {
@@ -85,18 +89,46 @@ func MyCallback(f int, b []byte) {
 			log.Printf("[%d] sending stream data", line+1)
 		}
 
-		/*
-			TODO: How to Send EOF from the server side through grpc ??
+	}
 
-				if f == -1 {
-					_, err := gStream.Recv()
-					if err == io.EOF {
-						log.Printf("end stream connection")
-						log.Println(err)
-						close(done)
-					}
-				}
-		*/
+}
+
+func cbVerifyNotify(f int, b []byte) {
+
+	fmt.Printf("[cbVerifyNotify] function - received arg: %d, %#v \n", f, b)
+	var resp pb.ProxyVerifyNotify
+
+	if gStream_verify != nil {
+
+		//if f == 0 && b[0] == 0 {
+		if f == 0 && len(b) == 0 {
+			_, _, line, _ := runtime.Caller(0)
+			log.Printf("[server:%d] End of Notify", line)
+			//close(done)
+			resp = pb.ProxyVerifyNotify{
+				Type:   0,
+				Length: 0,
+			}
+		} else {
+
+			//TODO: length checking - if less than 16
+			resp = pb.ProxyVerifyNotify{
+				Type:         uint32(b[0]),
+				ResultType:   uint32(b[1]),
+				RoaResult:    uint32(b[2]),
+				BgpsecResult: uint32(b[3]),
+				Length:       binary.BigEndian.Uint32(b[4:8]),
+				RequestToken: binary.BigEndian.Uint32(b[8:12]),
+				UpdateID:     binary.BigEndian.Uint32(b[12:16]),
+			}
+		}
+
+		if err := gStream_verify.Send(&resp); err != nil {
+			log.Printf("send error %v", err)
+		}
+		_, _, line, _ := runtime.Caller(0)
+		log.Printf("[server:%d] sending stream data", line+1)
+
 	}
 
 }
@@ -125,7 +157,7 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 
 	gStream = stream
 	ctx := stream.Context()
-	done = make(chan bool)
+	done := make(chan bool)
 	go func() {
 		<-ctx.Done()
 		if err := ctx.Err(); err != nil {
@@ -135,19 +167,12 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 		_, _, line, _ := runtime.Caller(0)
 		fmt.Printf("+ [%d] server context done\n", line+1)
 
-		// FIXME : channel panic: close of closed channel
-		///*
-		_, ok := <-done
-		if ok == true {
-			fmt.Printf("+ server close the channel done here\n")
-			close(done)
-		}
-		//*/
+		close(done)
+		// BUG NOTE : channel panic: close of closed channel
 		/*
-			fmt.Printf("+ done: %#v\n", done)
-			if done != nil {
-				_, _, line, _ := runtime.Caller(0)
-				fmt.Printf("+ [%d] server close the channel done here\n", line+1)
+			_, ok := <-done
+			if ok == true {
+				fmt.Printf("+ server close the channel done here\n")
 				close(done)
 			}
 		*/
@@ -257,6 +282,53 @@ func (s *Server) ProxyVerify(pdu *pb.ProxyVerifyV4Request, stream pb.SRxApi_Prox
 	log.Printf("Finished with RPC send \n")
 
 	return nil
+}
+
+func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_ProxyVerifyStreamServer) error {
+	fmt.Println("calling SRxServer server:ProxyVerifyStream()")
+
+	gStream_verify = stream
+	ctx := stream.Context()
+	done := make(chan bool)
+	go func() {
+		<-ctx.Done()
+		if err := ctx.Err(); err != nil {
+			log.Println(err)
+		}
+		_, _, line, _ := runtime.Caller(0)
+		fmt.Printf("+ [%d] server context done\n", line+1)
+		close(done)
+	}()
+
+	fmt.Printf("stream server: %s %#v\n", pdu.Data, pdu)
+
+	fmt.Println("calling SRxServer responseGRPC()")
+	retData := C.RET_DATA{}
+	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])))
+
+	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
+	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
+
+	resp := pb.ProxyVerifyNotify{
+		Type:         uint32(b[0]),
+		ResultType:   uint32(b[1]),
+		RoaResult:    uint32(b[2]),
+		BgpsecResult: uint32(b[3]),
+		Length:       binary.BigEndian.Uint32(b[4:8]),
+		RequestToken: binary.BigEndian.Uint32(b[8:12]),
+		UpdateID:     binary.BigEndian.Uint32(b[12:16]),
+	}
+
+	if err := stream.Send(&resp); err != nil {
+		log.Printf("send error %v", err)
+	}
+	log.Printf("sending stream data")
+
+	<-done
+	log.Printf("[ProxyVerifyStream] Finished with RPC send \n")
+
+	return nil
+
 }
 
 func NewServer(g *grpc.Server) *Server {

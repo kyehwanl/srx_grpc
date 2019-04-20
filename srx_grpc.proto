@@ -12,6 +12,7 @@ service SRxApi {
   rpc SendAndWaitProcess(PduRequest) returns (stream PduResponse) {}
   rpc ProxyHello (ProxyHelloRequest) returns (ProxyHelloResponse) {}
   rpc ProxyVerify (ProxyVerifyV4Request) returns (stream ProxyVerifyNotify) {}
+  rpc ProxyVerifyStream (ProxyVerifyRequest) returns (stream ProxyVerifyNotify) {}
 }
 
 
@@ -112,6 +113,13 @@ message ProxyVerifyNotify {
     uint32  requestToken = 6;
     uint32  updateID = 7;
 }
+
+message ProxyVerifyRequest {
+  bytes data = 1;
+  uint32 length = 2;
+}
+
+
 
 /*
 typedef struct {                                       

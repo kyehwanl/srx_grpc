@@ -81,6 +81,8 @@ extern unsigned char* RunProxyHello(GoSlice p0);
 
 extern GoUint32 RunStream(GoSlice p0);
 
+extern GoUint32 RunProxyVerify(GoSlice p0);
+
 #ifdef __cplusplus
 }
 #endif

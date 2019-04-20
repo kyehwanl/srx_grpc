@@ -1606,7 +1606,8 @@ void verifyUpdate_grpc(SRxProxy* proxy, uint32_t localID,
   //sendPacketToServer(connHandler, (SRXPROXY_PDU*)pdu, length);
 
   GoSlice verify_pdu = {(void*)pdu, (GoInt)length, (GoInt)length};
-  int32_t result = RunStream(verify_pdu);
+  //int32_t result = RunStream(verify_pdu);
+  int32_t result = RunProxyVerify(verify_pdu);
   printf(" Validation Result: %02x\n", result);
 
 }

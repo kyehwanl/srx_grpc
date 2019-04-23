@@ -76,6 +76,19 @@ int main ()
     printf("[%s] Validation Result: %02x\n", __FILE__, result);
 
 
+    uint32_t length = sizeof(SRXPROXY_GOODBYE);     
+    uint8_t pdu[length];                            
+    SRXPROXY_GOODBYE* hdr = (SRXPROXY_GOODBYE*)pdu; 
+    memset(pdu, 0, length);                         
+
+    printf("\n\nsend Goodbye! called\n\n"); 
+    hdr->type       = PDU_SRXPROXY_GOODBYE;        
+    hdr->keepWindow = htons(SRX_DEFAULT_KEEP_WINDOW);           
+    hdr->length     = htonl(length);               
+
+    RunProxyGoodBye(*hdr);
+
+
     printf("main program terminated\n");
     return 0;
 }

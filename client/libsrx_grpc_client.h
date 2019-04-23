@@ -79,6 +79,8 @@ extern GoUint32 Run(GoSlice p0);
 
 extern unsigned char* RunProxyHello(GoSlice p0);
 
+extern void RunProxyGoodBye(SRXPROXY_GOODBYE p0);
+
 extern GoUint32 RunStream(GoSlice p0);
 
 extern GoUint32 RunProxyVerify(GoSlice p0);

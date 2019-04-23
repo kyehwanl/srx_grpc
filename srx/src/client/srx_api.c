@@ -1398,43 +1398,6 @@ bool isErrorCode(SRxProxyCommCode code)
 bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
                   int handshakeTimeout, bool externalSocketControl)
 {
-#if 0/*{*/
-  // The client connection handler
-  ClientConnectionHandler* connHandler =
-                                   (ClientConnectionHandler*)proxy->connHandler;
-  // Check if the connectionHandler is initialized.
-  if (connHandler->initialized)
-  {
-    if (connHandler->stop)
-    {
-      LOG(LEVEL_WARNING, "Proxy [ID:%u] is already initialized and stopped!",
-                  proxy->proxyID);
-      return false;
-    }
-    else if (connHandler->established)
-    {
-      LOG(LEVEL_INFO, "Proxy [ID:%u] is already connected!");
-      return true;
-    }
-  }
-  else if (!initializeClientConnectionHandler(connHandler, host, port,
-                                             dispatchPackets, handshakeTimeout))
-  {
-    RAISE_ERROR ("Proxy [ID:%u] could not be initialized - Check if server"
-                      " %s:%u is accessible!", proxy->proxyID, host, port);
-    return false;
-  }
-
-  if (connHandler->established)
-  {
-    // Maybe upgrade to RAISE_SYS_ERROR
-    // If it ever reaches here the connection is unexpectedly established.
-    RAISE_ERROR("BUG: Proxy [ID:%u] is unexpectedly connected to SRx, "
-                "disconnect, stop proxy and return connection failed!");
-    disconnectFromSRx(proxy, SRX_DEFAULT_KEEP_WINDOW);
-    return false;
-  }
-#endif/*}*/
 
   LOG(LEVEL_INFO, "[gRPC] Establish connection with proxy [%u]...", proxy->proxyID);
   uint32_t noPeers    = 0; //proxy->peerAS.size;
@@ -1455,36 +1418,6 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
 
   printf("\nRequest Proxy Hello:\n");
   printHex(length, pdu);
-#if 0/*{*/
-  peerAS = (uint32_t*)&hdr->peerAS;
-  SListNode* node = getRootNodeOfSList(&proxy->peerAS);
-  while (!(node == NULL))
-  {
-    peerASN = *((uint32_t*)node->data);
-    *peerAS = htonl(peerASN);
-    peerAS++;
-    node = node->next;
-  }
-
-
-  if (handshakeWithServer(proxy->connHandler, hdr))
-  {
-    // connHandler->established is set in processHelloResponse
-    LOG(LEVEL_INFO, "Connection with proxy [%u] established!",proxy->proxyID);
-  }
-  else
-  {
-    if (!connHandler->stop) // No Goodbye received
-    {
-      releaseClientConnectionHandler(connHandler);
-    }
-
-    LOG(LEVEL_ERROR, "Handshake with server (%s:%u) failed!", host, port);
-
-    return false;
-  }
-#endif/*}*/
-  //if (!sendData(&self->clSock, (void*)pdu, ntohl(pdu->length)))
 
 
   unsigned char result[sizeof(SRXPROXY_HELLO_RESPONSE)];
@@ -1511,35 +1444,16 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   connHandler->initialized = true;
   connHandler->established = false;
       
+  // XXX NOTE: packet Handler set a flag,'established' with true or false
   connHandler->packetHandler((SRXPROXY_BasicHeader*)result, proxy);
 
-#if 0/*{*/
-  //TODO SVN No business here
-  // 0: initial
-  // 1: use for notifying the recv thread
-  connHandler->bRecvSet = 0;
-
+  free(pRes);
+  
   if (connHandler->established)
   {
-    proxy->externalSocketControl = externalSocketControl;
-
-    if (externalSocketControl)
-    {
-      // Make socket non blocking if it isn't already
-      int flags = fcntl(connHandler->clSock.clientFD, F_GETFL, 0);
-      if ((flags & O_NONBLOCK) != O_NONBLOCK)
-      {
-        fcntl (connHandler->clSock.clientFD, F_SETFL, flags | O_NONBLOCK);
-      }
-      connHandler->clSock.canBeClosed = false;
-    }
+      connHandler->grpc_client_id = ntohl(((SRXPROXY_HELLO_RESPONSE*)result)->proxyIdentifier);
+      printf("grpc client id: %08x\n", connHandler->grpc_client_id);
   }
-
-  // IF WE GOT HERE ALL WENT WELL !
-  return connHandler->established;
-#endif/*}*/
-
-  free(pRes);
 
   // following return value will be determined by calling (fn_packetHandler --> fn_dispatchPackets)
   return connHandler->established;
@@ -1625,6 +1539,24 @@ unsigned int callSRxGRPC_Init(const char* addr)
 
     return res;
 }
+
+bool disconnectFromSRx_grpc(SRxProxy* proxy, uint16_t keepWindow)
+{
+  // The client connection handler
+  ClientConnectionHandler* connHandler =
+                                   (ClientConnectionHandler*)proxy->connHandler;
+  // Macro for type casting back to the proxy.
+  if (isConnected(proxy))
+  {
+    sendGoodbye(connHandler, keepWindow);
+    connHandler->established = false;
+    releaseClientConnectionHandler(connHandler);
+    callCMgmtHandler(proxy, COM_PROXY_DISCONNECT, COM_PROXY_NO_SUBCODE);
+  }
+
+  return true;
+}
+
 
 #endif /* USE GRPC */
 

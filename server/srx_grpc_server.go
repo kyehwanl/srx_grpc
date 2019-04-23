@@ -229,7 +229,7 @@ func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb
 	binary.BigEndian.PutUint32(buf[16:20], pdu.NoPeerAS)
 
 	retData := C.RET_DATA{}
-	retData = C.responseGRPC(C.int(20), (*C.uchar)(unsafe.Pointer(&buf[0])))
+	retData = C.responseGRPC(C.int(C.sizeof_SRXPROXY_HELLO), (*C.uchar)(unsafe.Pointer(&buf[0])))
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
 	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
@@ -243,6 +243,31 @@ func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb
 	}, nil
 }
 
+func (s *Server) ProxyGoodBye(ctx context.Context, pdu *pb.ProxyGoodByeRequest) (*pb.ProxyGoodByeResponse, error) {
+
+	fmt.Println("calling SRxServer server:ProxyGoodBye()")
+	fmt.Printf("input :  %#v\n", pdu.Type)
+	fmt.Printf("ProxyGoodBye Request: %#v", pdu)
+
+	/* serialize */
+	buf := make([]byte, C.sizeof_SRXPROXY_GOODBYE)
+	buf[0] = byte(pdu.Type)
+	binary.BigEndian.PutUint16(buf[1:3], uint16(pdu.KeepWindow))
+	buf[3] = byte(pdu.Zero)
+	binary.BigEndian.PutUint32(buf[4:8], pdu.Length)
+
+	retData := C.RET_DATA{}
+	retData = C.responseGRPC(C.int(C.sizeof_SRXPROXY_GOODBYE), (*C.uchar)(unsafe.Pointer(&buf[0])))
+
+	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
+	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
+
+	return &pb.ProxyGoodByeResponse{
+		Status: true,
+	}, nil
+}
+
+// stale function -- depricated
 func (s *Server) ProxyVerify(pdu *pb.ProxyVerifyV4Request, stream pb.SRxApi_ProxyVerifyServer) error {
 	fmt.Println("calling SRxServer server:ProxyVerify()")
 
@@ -266,9 +291,9 @@ func (s *Server) ProxyVerify(pdu *pb.ProxyVerifyV4Request, stream pb.SRxApi_Prox
 	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
 
 	resp := pb.ProxyVerifyNotify{
-		Type:       2,
-		ResultType: 3,
-		RoaResult:  3,
+		Type:       0,
+		ResultType: 0,
+		RoaResult:  0,
 	}
 
 	if err := stream.Send(&resp); err != nil {

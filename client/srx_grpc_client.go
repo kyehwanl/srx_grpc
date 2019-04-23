@@ -9,6 +9,7 @@ package main
 import "C"
 
 import (
+	"bytes"
 	"encoding/binary"
 	"fmt"
 	"golang.org/x/net/context"
@@ -165,8 +166,66 @@ func RunProxyHello(data []byte) *C.uchar {
 		cb[i] = cstr[i]
 	}
 
+	fmt.Printf("+ cb: %#v\n", cb)
 	//return (*C.uchar)(unsafe.Pointer(&buf[0]))
 	return &cb[0]
+}
+
+type Go_ProxyGoodBye struct {
+	_type       uint8
+	_keepWindow uint16
+	_zero       uint8
+	_length     uint32
+}
+
+func (g *Go_ProxyGoodBye) Pack(out unsafe.Pointer) {
+
+	buf := &bytes.Buffer{}
+	binary.Write(buf, binary.LittleEndian, g)
+	l := buf.Len()
+	o := (*[1 << 20]C.uchar)(out)
+
+	for i := 0; i < l; i++ {
+		b, _ := buf.ReadByte()
+		o[i] = C.uchar(b)
+	}
+}
+
+func (g *Go_ProxyGoodBye) Unpack(i *C.SRXPROXY_GOODBYE) {
+
+	cdata := C.GoBytes(unsafe.Pointer(i), C.sizeof_SRXPROXY_GOODBYE)
+	buf := bytes.NewBuffer(cdata)
+	binary.Read(buf, binary.BigEndian, &g._type)
+	binary.Read(buf, binary.BigEndian, &g._keepWindow)
+	binary.Read(buf, binary.BigEndian, &g._zero)
+	binary.Read(buf, binary.BigEndian, &g._length)
+}
+
+//export RunProxyGoodBye
+func RunProxyGoodBye(in C.SRXPROXY_GOODBYE) {
+	cli := client.cli
+
+	fmt.Printf("Goobye function: input parameter: %#v \n", in)
+	fmt.Printf("Goobye function: size: %d \n", C.sizeof_SRXPROXY_GOODBYE)
+
+	goGB := Go_ProxyGoodBye{}
+	goGB.Unpack(&in)
+	//out := (*[C.sizeof_SRXPROXY_GOODBYE]C.uchar)(C.malloc(C.sizeof_SRXPROXY_GOODBYE))
+	fmt.Printf("+ Goodbyte out bytes: %#v\n", goGB)
+
+	req := pb.ProxyGoodByeRequest{
+		Type:       uint32(goGB._type),
+		KeepWindow: uint32(goGB._keepWindow),
+		Zero:       uint32(goGB._zero),
+		Length:     uint32(goGB._length),
+	}
+	resp, err := cli.ProxyGoodBye(context.Background(), &req)
+	if err != nil {
+		log.Printf("could not receive: %v", err)
+	}
+
+	log.Printf("+ GoodByeRequest	: %#v\n", req)
+	log.Printf("+ response		: %#v\n", resp)
 }
 
 //export RunStream
@@ -369,6 +428,7 @@ func main() {
 		log.Fatalf("terminate here")
 	*/
 
+	// NOTE: SRx Proxy Hello
 	log.Printf("Hello Request\n")
 	buff_hello_request :=
 		[]byte{0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
@@ -377,6 +437,7 @@ func main() {
 	log.Printf("Transferred: %#v\n\n", res)
 	//*/
 
+	// NOTE: SRx Proxy Verify
 	log.Printf("Verify Request\n")
 	buff_verify_req := []byte{0x03, 0x83, 0x01, 0x01, 0x00, 0x00, 0x00, 0xa9, 0x03, 0x03, 0x00, 0x18,
 		0x00, 0x00, 0x00, 0x01, 0x64, 0x01, 0x00, 0x00, 0x00, 0x00, 0xfd, 0xf3, 0x00, 0x00, 0x00, 0x71,
@@ -391,6 +452,15 @@ func main() {
 		0x47, 0x60, 0x25, 0xe0, 0x8c, 0xda, 0x49, 0xf9, 0x1e, 0x22, 0xd8, 0xc0, 0x8e}
 	RunProxyVerify(buff_verify_req)
 	//RunStream(buff_verify_req)
+
+	// TODO: SRx PROY GOODBYE
+	gb := C.SRXPROXY_GOODBYE{
+		_type: 0x02,
+		//:      [2]uint8{0x01, 0x02}, C.SRX_DEFAULT_KEEP_WINDOW = 900
+		length: 8,
+	}
+	log.Printf(" gb: %#v\n", gb)
+	//RunProxyGoodBye(gb)
 
 	/* FIXME
 	data := []byte(defaultName)

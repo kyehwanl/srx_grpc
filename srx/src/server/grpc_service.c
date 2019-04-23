@@ -376,8 +376,8 @@ RET_DATA responseGRPC (int size, unsigned char* data)
         //_processUpdateSigning(cmdHandler, item);
         break;
       case PDU_SRXPROXY_GOODBYE:
+        printf(" Received GOOD BYE \n");
         /*
-        gbhdr = (SRXPROXY_GOODBYE*)item->data;
         closeClientConnection(&cmdHandler->svrConnHandler->svrSock,
             item->client);
         clientID = ((ClientThread*)item->client)->routerID;

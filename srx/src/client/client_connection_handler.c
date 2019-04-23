@@ -572,10 +572,13 @@ bool sendGoodbye(ClientConnectionHandler* self, uint16_t keepWindow)
   hdr->keepWindow = htons(keepWindow);
   hdr->length     = htonl(length);
 
+  printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
   if (isConnectedToServer(&self->clSock))
   {
+      printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
     if (sendData(&self->clSock, &pdu, length))
     {
+      printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
       self->established = false;
       return true;
     }
@@ -584,6 +587,44 @@ bool sendGoodbye(ClientConnectionHandler* self, uint16_t keepWindow)
   return false;
 }
 
+#ifdef USE_GRPC
+#include "client/libsrx_grpc_client.h"
+bool sendGoodbye_grpc(ClientConnectionHandler* self, uint16_t keepWindow)
+{
+  uint32_t length = sizeof(SRXPROXY_GOODBYE);
+  uint8_t pdu[length];
+  SRXPROXY_GOODBYE* hdr = (SRXPROXY_GOODBYE*)pdu;
+  memset(pdu, 0, length);
+
+  LOG(LEVEL_DEBUG, HDR" send Goodbye! called" );
+  hdr->type       = PDU_SRXPROXY_GOODBYE;
+  hdr->keepWindow = htons(keepWindow);
+  hdr->length     = htonl(length);
+
+  printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
+  if (isConnectedToServer(&self->clSock))
+  {
+      printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
+    if (sendData(&self->clSock, &pdu, length))
+    {
+      printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
+      self->established = false;
+      return true;
+    }
+  }
+
+  /* test  
+  int size = 10;
+  char buf_data[size];
+  GoSlice gopdu = {(void*)buf_data, (GoInt)size, (GoInt)size};
+  //result = Run(gopdu);
+  unsigned char* pRes = RunProxyHello(gopdu);
+  */
+
+
+  return false;
+}
+#endif
 ////////////////////////////////////////////////////////////////////////////////
 // Local helper functions
 ////////////////////////////////////////////////////////////////////////////////

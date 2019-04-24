@@ -50,6 +50,8 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
   //cthread->caddr	  = caddr;
 
 
+  printf("[SRx server] Obtained cthread: %p \n", cthread);
+
 
   if (ntohs(hdr->version) != SRX_PROTOCOL_VER)
   {
@@ -77,6 +79,9 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
       {
         clientID = 0; // FAIL HANDSHAKE
       }
+
+      printf("[SRx server] proxyID: %d --> mapping[clientID:%d] cthread: %p\n", 
+          proxyID,  clientID, grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket);
     }
 
     LOG (LEVEL_INFO, "Handshake: Connection to proxy[0x%08X] accepted. Proxy "
@@ -118,9 +123,9 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
   return (rt->size == 0) ? false : true;
 }
 
-static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt)
+static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt, unsigned int grpcClientID)
 {
-  printf("[%s] function called \n", __FUNCTION__);
+  printf("[%s] function called, grpc clientID: %d \n", __FUNCTION__, grpcClientID);
   LOG(LEVEL_DEBUG, HDR "Enter processValidationRequest", pthread_self());
     
   bool retVal = true;
@@ -153,7 +158,7 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt)
   bool doStoreUpdate = false;
   IPPrefix* prefix = NULL;
   // Specify the client id as a receiver only when validation is requested.
-  uint8_t clientID = 100; //(doOriginVal || doPathVal) ? client->routerID : 0;
+  uint8_t clientID = (uint8_t)grpcClientID; //(doOriginVal || doPathVal) ? client->routerID : 0;
 
   // 1. Prepare for and generate the ID of the update
   prefix = malloc(sizeof(IPPrefix));
@@ -208,6 +213,7 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt)
 
   // 2. Generate the CRC based updateID
   updateID = generateIdentifier(originAS, prefix, &bgpData);
+  printf("\n[SRx server] Generated Update ID: %08X, client ID:%d \n\n", updateID, clientID);
 
 
   //  3. Try to find the update, if it does not exist yet, store it.
@@ -217,6 +223,9 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt)
   // register the client as listener (only if the update already exists)
   ProxyClientMapping* clientMapping = clientID > 0 ? &grpcServiceHandler.svrConnHandler->proxyMap[clientID]
                                                    : NULL;
+
+  printf("[SRx Server] proxyMap[clientID:%d]: %p\n", clientID, clientMapping);
+
   doStoreUpdate = !getUpdateResult (grpcServiceHandler.svrConnHandler->updateCache, &updateID,
                                     clientID, clientMapping,
                                     &srxRes, &defResInfo);
@@ -330,9 +339,9 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt)
 
 
 //int responseGRPC (int size, unsigned char* data)
-RET_DATA responseGRPC (int size, unsigned char* data)
+RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
 {
-    printf("+ [SRX][%s] calling - size: %d \n", __FUNCTION__, size);
+    printf("[SRx server] [%s] calling - size: %d, grpcClient ID: %02x  \n", __FUNCTION__, size, grpcClientID);
     //setLogLevel(LEVEL_DEBUG);
 
     /*
@@ -362,36 +371,36 @@ RET_DATA responseGRPC (int size, unsigned char* data)
 
     {                   
       case PDU_SRXPROXY_HELLO:
-        // The mapping information will be maintained during the handshake
         processHandshake_grpc(data, &rt);
         break;
 
       case PDU_SRXPROXY_VERIFY_V4_REQUEST:
       case PDU_SRXPROXY_VERIFY_V6_REQUEST:
-        processValidationRequest_grpc(data, &rt);
-        //processUpdateValidation_grpc(data, &rt);
+        processValidationRequest_grpc(data, &rt, grpcClientID);
         break;
 
       case PDU_SRXPROXY_SIGN_REQUEST:
         //_processUpdateSigning(cmdHandler, item);
         break;
       case PDU_SRXPROXY_GOODBYE:
-        printf(" Received GOOD BYE \n");
-        /*
-        closeClientConnection(&cmdHandler->svrConnHandler->svrSock,
-            item->client);
-        clientID = ((ClientThread*)item->client)->routerID;
-        //cmdHandler->svrConnHandler->proxyMap[clientID].isActive = false;
-        // The deaktivation will also delete because it did not crash
-        deactivateConnectionMapping(cmdHandler->svrConnHandler, clientID,
-            false, htons(gbhdr->keepWindow));
-        //delMapping(cmdHandler->svrConnHandler, clientID);
+        printf("[SRx Server] Received GOOD BYE from proxyID: %d\n", grpcClientID);
+        uint8_t clientID = findClientID(grpcServiceHandler.svrConnHandler, grpcClientID);
+      
+        printf("[SRx server] proxyID: %d --> mapping[clientID:%d] cthread: %p\n", 
+          grpcClientID,  clientID, grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket);
 
-        deleteFromSList(&cmdHandler->svrConnHandler->clients,
-            item->client);
+        ClientThread* cthread = (ClientThread*)grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket;
+        // in order to skip over terminating a client pthread which was not generated if grpc enabled
+        cthread->active  = false;
+
+        closeClientConnection(&grpcServiceHandler.cmdHandler->svrConnHandler->svrSock, cthread);
+
+        //clientID = ((ClientThread*)item->client)->routerID;
+        deactivateConnectionMapping(grpcServiceHandler.svrConnHandler, clientID, false, 0);
+        deleteFromSList(&grpcServiceHandler.cmdHandler->svrConnHandler->clients, cthread);
         LOG(LEVEL_DEBUG, HDR "GoodBye!", pthread_self());
-        */
         break;
+
       case PDU_SRXPROXY_DELTE_UPDATE:
         //_processDeleteUpdate(cmdHandler, item);
         break;
@@ -401,6 +410,8 @@ RET_DATA responseGRPC (int size, unsigned char* data)
       default:
         RAISE_ERROR("Unknown/unsupported pdu type: %d", bhdr->type);
         /*
+         * TODO: do the same way in GoodBye above
+         *
         sendError(SRXERR_INVALID_PACKET, item->serverSocket,
             item->client, false);
         sendGoodbye(item->serverSocket, item->client, false);
@@ -419,9 +430,6 @@ RET_DATA responseGRPC (int size, unsigned char* data)
             item->client);
             */
     }
-
-    // call callback function in go driver
-    //cb_proxy(16, "0123456789ABCDEF");
 
     return rt;
 }

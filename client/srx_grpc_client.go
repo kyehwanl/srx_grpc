@@ -3,7 +3,7 @@ package main
 /*
 #cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/../extras/local/include -I/opt/project/srx_test1/srx/../_inst//include
 
-//#include <stdlib.h>
+#include <stdlib.h>
 #include "shared/srx_packets.h"
 */
 import "C"
@@ -38,11 +38,11 @@ type ProxyVerifyClient struct {
 var client Client
 
 //export InitSRxGrpc
-func InitSRxGrpc(addr string) uint32 {
+func InitSRxGrpc(addr string) bool {
 	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
 		log.Printf("did not connect: %v", err)
-		return 1
+		return false
 	}
 	log.Printf("gRPC Client Initiated and Connected Server Address: %s\n", addr)
 	//defer conn.Close()
@@ -54,7 +54,7 @@ func InitSRxGrpc(addr string) uint32 {
 	//fmt.Printf("cli : %#v\n", cli)
 	//fmt.Printf("client.cli : %#v\n", client.cli)
 	//fmt.Println()
-	return 0
+	return true
 }
 
 //export Run
@@ -102,7 +102,7 @@ func Run(data []byte) uint32 {
 */
 
 //export RunProxyHello
-func RunProxyHello(data []byte) *C.uchar {
+func RunProxyHello(data []byte) (*C.uchar, uint32) {
 
 	/*
 		conn, err := grpc.Dial(address, grpc.WithInsecure())
@@ -168,7 +168,7 @@ func RunProxyHello(data []byte) *C.uchar {
 
 	fmt.Printf("+ cb: %#v\n", cb)
 	//return (*C.uchar)(unsafe.Pointer(&buf[0]))
-	return &cb[0]
+	return &cb[0], resp.ProxyIdentifier
 }
 
 type Go_ProxyGoodBye struct {
@@ -202,30 +202,34 @@ func (g *Go_ProxyGoodBye) Unpack(i *C.SRXPROXY_GOODBYE) {
 }
 
 //export RunProxyGoodBye
-func RunProxyGoodBye(in C.SRXPROXY_GOODBYE) {
+func RunProxyGoodBye(in C.SRXPROXY_GOODBYE, grpcClientID uint32) bool {
 	cli := client.cli
 
-	fmt.Printf("Goobye function: input parameter: %#v \n", in)
-	fmt.Printf("Goobye function: size: %d \n", C.sizeof_SRXPROXY_GOODBYE)
+	fmt.Printf("+ [grpc client] Goobye function: input parameter: %#v \n", in)
+	fmt.Printf("+ [grpc client] Goobye function: size: %d \n", C.sizeof_SRXPROXY_GOODBYE)
 
 	goGB := Go_ProxyGoodBye{}
 	goGB.Unpack(&in)
 	//out := (*[C.sizeof_SRXPROXY_GOODBYE]C.uchar)(C.malloc(C.sizeof_SRXPROXY_GOODBYE))
-	fmt.Printf("+ Goodbyte out bytes: %#v\n", goGB)
+	fmt.Printf("+ [grpc client] Goodbye out bytes: %#v\n", goGB)
 
 	req := pb.ProxyGoodByeRequest{
-		Type:       uint32(goGB._type),
-		KeepWindow: uint32(goGB._keepWindow),
-		Zero:       uint32(goGB._zero),
-		Length:     uint32(goGB._length),
+		Type:         uint32(goGB._type),
+		KeepWindow:   uint32(goGB._keepWindow),
+		Zero:         uint32(goGB._zero),
+		Length:       uint32(goGB._length),
+		GrpcClientID: grpcClientID,
 	}
 	resp, err := cli.ProxyGoodBye(context.Background(), &req)
 	if err != nil {
 		log.Printf("could not receive: %v", err)
+		return false
 	}
 
-	log.Printf("+ GoodByeRequest	: %#v\n", req)
-	log.Printf("+ response		: %#v\n", resp)
+	log.Printf("+ [grpc client] GoodByeRequest	: %#v\n", req)
+	log.Printf("+ [grpc client] response		: %#v\n", resp)
+
+	return resp.Status
 }
 
 //export RunStream
@@ -314,7 +318,7 @@ func RunStream(data []byte) uint32 {
 }
 
 //export RunProxyVerify
-func RunProxyVerify(data []byte) uint32 {
+func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 
 	cli := client.cli
 	fmt.Printf("client data: %#v\n", client)
@@ -328,8 +332,9 @@ func RunProxyVerify(data []byte) uint32 {
 
 	stream, err := cli.ProxyVerifyStream(context.Background(),
 		&pb.ProxyVerifyRequest{
-			Data:   data,
-			Length: uint32(len(data)),
+			Data:         data,
+			Length:       uint32(len(data)),
+			GrpcClientID: grpcClientID,
 		},
 	)
 	if err != nil {
@@ -385,7 +390,7 @@ func main() {
 
 	log.Printf("main start Init(%s)\n", address)
 	rv := InitSRxGrpc(address)
-	if rv != 0 {
+	if rv != true {
 		log.Printf(" Init Error ")
 		return
 	}
@@ -432,9 +437,9 @@ func main() {
 	log.Printf("Hello Request\n")
 	buff_hello_request :=
 		[]byte{0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
-	res := RunProxyHello(buff_hello_request)
+	res, grpcClientID := RunProxyHello(buff_hello_request)
 	//r := Run(buff_hello_request)
-	log.Printf("Transferred: %#v\n\n", res)
+	log.Printf("Transferred: %#v, proxyID: %d\n\n", res, grpcClientID)
 	//*/
 
 	// NOTE: SRx Proxy Verify
@@ -450,17 +455,26 @@ func main() {
 		0x7e, 0xf3, 0x2c, 0xcc, 0x4b, 0x3f, 0xd6, 0x1b, 0x5f, 0x46, 0x02, 0x21, 0x00, 0xb6, 0x0a, 0x7c,
 		0x82, 0x7f, 0x50, 0xe6, 0x5a, 0x5b, 0xd7, 0x8c, 0xd1, 0x81, 0x3d, 0xbc, 0xca, 0xa8, 0x2d, 0x27,
 		0x47, 0x60, 0x25, 0xe0, 0x8c, 0xda, 0x49, 0xf9, 0x1e, 0x22, 0xd8, 0xc0, 0x8e}
-	RunProxyVerify(buff_verify_req)
+	RunProxyVerify(buff_verify_req, grpcClientID)
 	//RunStream(buff_verify_req)
 
-	// TODO: SRx PROY GOODBYE
-	gb := C.SRXPROXY_GOODBYE{
-		_type: 0x02,
-		//:      [2]uint8{0x01, 0x02}, C.SRX_DEFAULT_KEEP_WINDOW = 900
-		length: 8,
+	// NOTE: SRx PROY GOODBYE
+	goGB := &Go_ProxyGoodBye{
+		_type:       0x02,
+		_keepWindow: binary.BigEndian.Uint16([]byte{0x83, 0x03}), // 0x03 0x84 : 900
+		_zero:       0,
+		_length:     binary.BigEndian.Uint32([]byte{0x8, 0x00, 0x00, 0x00}),
 	}
+
+	gb := (*C.SRXPROXY_GOODBYE)(C.malloc(C.sizeof_SRXPROXY_GOODBYE))
+	defer C.free(unsafe.Pointer(gb))
+
+	goGB.Pack(unsafe.Pointer(gb))
+
+	//	_type: 0x02, //:      [2]uint8{0x01, 0x02}, C.SRX_DEFAULT_KEEP_WINDOW = 900 //	length: 8,
 	log.Printf(" gb: %#v\n", gb)
-	//RunProxyGoodBye(gb)
+	status := RunProxyGoodBye(*gb, uint32(grpcClientID))
+	log.Printf(" GoodBye response status: %#v\n", status)
 
 	/* FIXME
 	data := []byte(defaultName)

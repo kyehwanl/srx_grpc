@@ -572,13 +572,13 @@ bool sendGoodbye(ClientConnectionHandler* self, uint16_t keepWindow)
   hdr->keepWindow = htons(keepWindow);
   hdr->length     = htonl(length);
 
-  printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
+  printf("+ [%s] line:%d \n", __FUNCTION__, __LINE__);
   if (isConnectedToServer(&self->clSock))
   {
-      printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
+      printf("+ [%s] line:%d \n", __FUNCTION__, __LINE__);
     if (sendData(&self->clSock, &pdu, length))
     {
-      printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
+      printf("+ [%s] line:%d \n", __FUNCTION__, __LINE__);
       self->established = false;
       return true;
     }
@@ -601,28 +601,16 @@ bool sendGoodbye_grpc(ClientConnectionHandler* self, uint16_t keepWindow)
   hdr->keepWindow = htons(keepWindow);
   hdr->length     = htonl(length);
 
+  printf("\n\nsend Goodbye! called\n\n");
   printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
-  if (isConnectedToServer(&self->clSock))
-  {
-      printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
-    if (sendData(&self->clSock, &pdu, length))
-    {
-      printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
-      self->established = false;
-      return true;
-    }
-  }
 
-  /* test  
-  int size = 10;
-  char buf_data[size];
-  GoSlice gopdu = {(void*)buf_data, (GoInt)size, (GoInt)size};
-  //result = Run(gopdu);
-  unsigned char* pRes = RunProxyHello(gopdu);
-  */
+  RunProxyGoodBye(*hdr, self->grpcClientID);
+  self->established = false;
+
+  return true;
 
 
-  return false;
+
 }
 #endif
 ////////////////////////////////////////////////////////////////////////////////

@@ -210,6 +210,10 @@ static bool     stat_exit_on_mark = false;
 static struct timespec stat_startTime;
 static struct timespec stat_stopTime;
 
+#ifdef USE_GRPC
+void doConnect_grpc(bool log, char** argPtr);
+void doVerify_grpc(bool log, char** argPtr);
+#endif
 /**
  * Increments the notification counter. This number contains the notifications
  * of type receipt.
@@ -1933,7 +1937,9 @@ int main(int argc, char* argv[])
                          NULL);
 
 #ifdef USE_GRPC
-  callSRxGRPC_Init("localhost:50000");
+  bool initResult = callSRxGRPC_Init("localhost:50000");
+  proxy->grpcClientEnable = initResult;
+  printf(" proxy ID [defaul]: %08x, grpcEnabled[%b]\n", proxyID, initResult);
 #endif
   if (proxy == NULL)
   {
@@ -2219,8 +2225,12 @@ void doVerify_grpc(bool log, char** argPtr)
   }
   else
   {
+      /* TODO: here, bgpsec struct variables are for the test purposes
+       *            Later should reflect from the user variables
+       *            for example, local_as need to be from a user input
+       */
     bgpsec.numberHops = 1;
-    bgpsec.asPath = aspath;
+    bgpsec.asPath = (uint32_t*) aspath;
     bgpsec.attr_length = 0x6d;
     bgpsec.bgpsec_path_attr = (uint8_t*)bgpsec_pattr;
     bgpsec.afi = htons(1);

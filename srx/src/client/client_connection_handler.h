@@ -100,7 +100,7 @@ typedef struct {
                                   // Will be set using the method
                                   // initializeClientConnectionHandler.
 #ifdef USE_GRPC
-  unsigned int    grpc_client_id;
+  unsigned int    grpcClientID;
 #endif
 } ClientConnectionHandler;
 

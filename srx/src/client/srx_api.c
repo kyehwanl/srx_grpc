@@ -503,7 +503,12 @@ bool disconnectFromSRx(SRxProxy* proxy, uint16_t keepWindow)
   // Macro for type casting back to the proxy.
   if (isConnected(proxy))
   {
-    sendGoodbye(connHandler, keepWindow);
+#ifdef USE_GRPC
+      if(proxy->grpcClientEnable)
+          sendGoodbye_grpc(connHandler, keepWindow);
+      else
+          sendGoodbye(connHandler, keepWindow);
+#endif
     connHandler->established = false;
     releaseClientConnectionHandler(connHandler);
     callCMgmtHandler(proxy, COM_PROXY_DISCONNECT, COM_PROXY_NO_SUBCODE);
@@ -1399,7 +1404,7 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
                   int handshakeTimeout, bool externalSocketControl)
 {
 
-  LOG(LEVEL_INFO, "[gRPC] Establish connection with proxy [%u]...", proxy->proxyID);
+  LOG(LEVEL_INFO, "[SRx Client] Establish connection with proxy [%u]...", proxy->proxyID);
   uint32_t noPeers    = 0; //proxy->peerAS.size;
   uint32_t length     = 20 + (noPeers * 4);
   uint8_t  pdu[length];
@@ -1412,8 +1417,8 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   hdr->type            = PDU_SRXPROXY_HELLO;
   hdr->version         = htons(SRX_PROTOCOL_VER);
   hdr->length          = htonl(length);
-  hdr->proxyIdentifier = htonl(5 /*proxy->proxyID*/);
-  hdr->asn             = htonl(65005 /*proxy->proxyAS*/);
+  hdr->proxyIdentifier = htonl(proxy->proxyID);
+  hdr->asn             = htonl(proxy->proxyAS);
   hdr->noPeers         = htonl(noPeers);
 
   printf("\nRequest Proxy Hello:\n");
@@ -1429,10 +1434,11 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
 
   GoSlice gopdu = {(void*)buf_data, (GoInt)size, (GoInt)size};
   //result = Run(gopdu);
-  unsigned char* pRes = RunProxyHello(gopdu);
+  struct RunProxyHello_return tResp = RunProxyHello(gopdu);
+  unsigned char* pRes = tResp.r0;
   memcpy(result, pRes, sizeof(SRXPROXY_HELLO_RESPONSE));
 
-  printf("\nResponse Proxy Hello Response:\n");
+  printf("\nResponse Proxy[ID:%d] Hello Response: \n", tResp.r1);
   printHex(sizeof(SRXPROXY_HELLO_RESPONSE), result);
 
   ClientConnectionHandler* connHandler =
@@ -1451,8 +1457,8 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   
   if (connHandler->established)
   {
-      connHandler->grpc_client_id = ntohl(((SRXPROXY_HELLO_RESPONSE*)result)->proxyIdentifier);
-      printf("grpc client id: %08x\n", connHandler->grpc_client_id);
+      connHandler->grpcClientID = ntohl(((SRXPROXY_HELLO_RESPONSE*)result)->proxyIdentifier);
+      printf("[SRx Client] grpc client id: %08x\n", connHandler->grpcClientID);
   }
 
   // following return value will be determined by calling (fn_packetHandler --> fn_dispatchPackets)
@@ -1521,12 +1527,12 @@ void verifyUpdate_grpc(SRxProxy* proxy, uint32_t localID,
 
   GoSlice verify_pdu = {(void*)pdu, (GoInt)length, (GoInt)length};
   //int32_t result = RunStream(verify_pdu);
-  int32_t result = RunProxyVerify(verify_pdu);
-  printf(" Validation Result: %02x\n", result);
+  int32_t result = RunProxyVerify(verify_pdu, connHandler->grpcClientID);
+  printf("[SRx Client] Validation Result: %02x\n", result);
 
 }
 
-unsigned int callSRxGRPC_Init(const char* addr)
+bool callSRxGRPC_Init(const char* addr)
 {
     GoString gs_addr = {
         p : addr, // "localhost:50000",
@@ -1534,27 +1540,10 @@ unsigned int callSRxGRPC_Init(const char* addr)
     };
     gs_addr.n = strlen((const char*)addr);
 
-    unsigned int res = InitSRxGrpc(gs_addr);
+    bool res = InitSRxGrpc(gs_addr);
     LOG(LEVEL_DEBUG, HDR  "Init SRx GRPC result: %d \n", res);
 
     return res;
-}
-
-bool disconnectFromSRx_grpc(SRxProxy* proxy, uint16_t keepWindow)
-{
-  // The client connection handler
-  ClientConnectionHandler* connHandler =
-                                   (ClientConnectionHandler*)proxy->connHandler;
-  // Macro for type casting back to the proxy.
-  if (isConnected(proxy))
-  {
-    sendGoodbye(connHandler, keepWindow);
-    connHandler->established = false;
-    releaseClientConnectionHandler(connHandler);
-    callCMgmtHandler(proxy, COM_PROXY_DISCONNECT, COM_PROXY_NO_SUBCODE);
-  }
-
-  return true;
 }
 
 

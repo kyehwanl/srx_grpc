@@ -32,7 +32,7 @@ typedef struct {
 
 //int responseGRPC (int size);
 //int responseGRPC (int size, unsigned char* data);
-RET_DATA responseGRPC (int size, unsigned char* data);
+RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID);
 
 
 

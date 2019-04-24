@@ -53,6 +53,7 @@ message ProxyGoodByeRequest {
     uint32  keepWindow = 2;
     uint32  zero = 3;
     uint32  length = 4;
+    uint32  grpcClientID = 5;
 }
 
 message ProxyGoodByeResponse {
@@ -122,6 +123,7 @@ message ProxyVerifyNotify {
 message ProxyVerifyRequest {
   bytes data = 1;
   uint32 length = 2;
+  uint32 grpcClientID = 3;
 }
 
 

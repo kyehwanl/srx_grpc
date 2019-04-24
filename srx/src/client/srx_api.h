@@ -279,6 +279,7 @@ typedef struct {
     
   // Experimental
   ProxySocketConfig socketConfig;
+  bool  grpcClientEnable; 
 } SRxProxy;
 
 

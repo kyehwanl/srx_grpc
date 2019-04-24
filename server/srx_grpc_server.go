@@ -47,7 +47,7 @@ type Server struct {
 
 //export cb_proxy
 func cb_proxy(f C.int, v unsafe.Pointer) {
-	fmt.Printf("proxy callback function : arg[%d, %#v]\n", f, v)
+	fmt.Printf("++ [grpc server] proxy callback function : arg[%d, %#v]\n", f, v)
 
 	b := C.GoBytes(unsafe.Pointer(v), f)
 
@@ -60,11 +60,11 @@ func cb_proxy(f C.int, v unsafe.Pointer) {
 
 func MyCallback(f int, b []byte) {
 
-	fmt.Printf("My callback function - received arg: %d, %#v \n", f, b)
+	fmt.Printf("++ [grpc server] My callback function - received arg: %d, %#v \n", f, b)
 
 	if f == 0 && b == nil {
 		_, _, line, _ := runtime.Caller(0)
-		log.Printf("[server:%d] close stream ", line)
+		log.Printf("++ [grpc server][:%d] close stream ", line)
 		//done <- true
 		//return
 	}
@@ -79,14 +79,14 @@ func MyCallback(f int, b []byte) {
 	if gStream != nil {
 		if resp.Data == nil && resp.Length == 0 {
 			_, _, line, _ := runtime.Caller(0)
-			log.Printf("[server:%d] close stream ", line)
+			log.Printf("++ [grpc server][:%d] close stream ", line)
 			//close(done)
 		} else {
 			if err := gStream.Send(&resp); err != nil {
 				log.Printf("send error %v", err)
 			}
 			_, _, line, _ := runtime.Caller(0)
-			log.Printf("[%d] sending stream data", line+1)
+			log.Printf("++ [grpc server][:%d] sending stream data", line+1)
 		}
 
 	}
@@ -95,7 +95,7 @@ func MyCallback(f int, b []byte) {
 
 func cbVerifyNotify(f int, b []byte) {
 
-	fmt.Printf("[cbVerifyNotify] function - received arg: %d, %#v \n", f, b)
+	fmt.Printf("++ [grpc server] [cbVerifyNotify] function - received arg: %d, %#v \n", f, b)
 	var resp pb.ProxyVerifyNotify
 
 	if gStream_verify != nil {
@@ -141,7 +141,7 @@ func (s *Server) SendPacketToSRxServer(ctx context.Context, pdu *pb.PduRequest) 
 	fmt.Println("calling SRxServer responseGRPC()")
 
 	retData := C.RET_DATA{}
-	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])))
+	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])), 0)
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
 	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
@@ -185,7 +185,7 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 	fmt.Println("calling SRxServer responseGRPC()")
 
 	retData := C.RET_DATA{}
-	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])))
+	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])), 0)
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
 	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
@@ -212,12 +212,12 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb.ProxyHelloResponse, error) {
 	//data := uint32(0x07)
 	//C.setLogLevel(0x07)
-	fmt.Printf("server: %#v\n", pdu)
-	fmt.Println("calling SRxServer server:ProxyHello()")
+	fmt.Printf("++ [grpc server] server: %#v\n", pdu)
+	fmt.Println("++ [grpc server] calling SRxServer server:ProxyHello()")
 
-	fmt.Printf("input :  %#v\n", pdu.Type)
-	fmt.Println("ProxyHelloRequest", pdu)
-	fmt.Printf("ProxyHelloRequest: %#v", pdu)
+	fmt.Printf("++ [grpc server] input :  %#v\n", pdu.Type)
+	fmt.Println("++ [grpc server] ProxyHelloRequest", pdu)
+	fmt.Printf("++ [grpc server] ProxyHelloRequest: %#v", pdu)
 
 	/* serialize */
 	buf := make([]byte, C.sizeof_SRXPROXY_HELLO)
@@ -228,11 +228,14 @@ func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb
 	binary.BigEndian.PutUint32(buf[12:16], pdu.Asn)
 	binary.BigEndian.PutUint32(buf[16:20], pdu.NoPeerAS)
 
+	grpcClientID := pdu.ProxyIdentifier
+
 	retData := C.RET_DATA{}
-	retData = C.responseGRPC(C.int(C.sizeof_SRXPROXY_HELLO), (*C.uchar)(unsafe.Pointer(&buf[0])))
+	retData = C.responseGRPC(C.int(C.sizeof_SRXPROXY_HELLO), (*C.uchar)(unsafe.Pointer(&buf[0])),
+		C.uint(grpcClientID))
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
-	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
+	fmt.Printf("++ [grpc server] return size: %d \t data: %#v\n", retData.size, b)
 
 	return &pb.ProxyHelloResponse{
 		Type:            uint32(b[0]),
@@ -245,9 +248,9 @@ func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb
 
 func (s *Server) ProxyGoodBye(ctx context.Context, pdu *pb.ProxyGoodByeRequest) (*pb.ProxyGoodByeResponse, error) {
 
-	fmt.Println("calling SRxServer server:ProxyGoodBye()")
-	fmt.Printf("input :  %#v\n", pdu.Type)
-	fmt.Printf("ProxyGoodBye Request: %#v", pdu)
+	fmt.Println("++ [grpc server] calling SRxServer server:ProxyGoodBye()")
+	fmt.Printf("++ [grpc server] input :  %#v\n", pdu.Type)
+	fmt.Printf("++ [grpc server] ProxyGoodBye Request: %#v \n", pdu)
 
 	/* serialize */
 	buf := make([]byte, C.sizeof_SRXPROXY_GOODBYE)
@@ -256,11 +259,15 @@ func (s *Server) ProxyGoodBye(ctx context.Context, pdu *pb.ProxyGoodByeRequest) 
 	buf[3] = byte(pdu.Zero)
 	binary.BigEndian.PutUint32(buf[4:8], pdu.Length)
 
+	grpcClientID := pdu.GrpcClientID
+	fmt.Printf("++ [grpc server] ProxyGoodBye grpcClientID : %02x \n", grpcClientID)
+
 	retData := C.RET_DATA{}
-	retData = C.responseGRPC(C.int(C.sizeof_SRXPROXY_GOODBYE), (*C.uchar)(unsafe.Pointer(&buf[0])))
+	retData = C.responseGRPC(C.int(C.sizeof_SRXPROXY_GOODBYE), (*C.uchar)(unsafe.Pointer(&buf[0])),
+		C.uint(grpcClientID))
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
-	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
+	fmt.Printf("++ [grpc server] return size: %d \t data: %#v\n", retData.size, b)
 
 	return &pb.ProxyGoodByeResponse{
 		Status: true,
@@ -285,7 +292,7 @@ func (s *Server) ProxyVerify(pdu *pb.ProxyVerifyV4Request, stream pb.SRxApi_Prox
 	fmt.Printf("stream server: %#v\n", pdu)
 
 	retData := C.RET_DATA{}
-	retData = C.responseGRPC(C.int(0), (*C.uchar)(unsafe.Pointer(nil)))
+	retData = C.responseGRPC(C.int(0), (*C.uchar)(unsafe.Pointer(nil)), 0)
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
 	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
@@ -310,7 +317,7 @@ func (s *Server) ProxyVerify(pdu *pb.ProxyVerifyV4Request, stream pb.SRxApi_Prox
 }
 
 func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_ProxyVerifyStreamServer) error {
-	fmt.Println("calling SRxServer server:ProxyVerifyStream()")
+	fmt.Println("++ [grpc server] calling SRxServer server:ProxyVerifyStream()")
 
 	gStream_verify = stream
 	ctx := stream.Context()
@@ -321,18 +328,19 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 			log.Println(err)
 		}
 		_, _, line, _ := runtime.Caller(0)
-		fmt.Printf("+ [%d] server context done\n", line+1)
+		fmt.Printf("++ [grpc server][:%d] server context done\n", line+1)
 		close(done)
 	}()
+	fmt.Printf("++ [grpc server] grpc Client ID: %02x, data length: %d, \n Data: %#v\n",
+		pdu.GrpcClientID, pdu.Length, pdu)
 
-	fmt.Printf("stream server: %s %#v\n", pdu.Data, pdu)
-
-	fmt.Println("calling SRxServer responseGRPC()")
+	fmt.Println("++ [grpc server] calling SRxServer responseGRPC()")
 	retData := C.RET_DATA{}
-	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])))
+	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])),
+		C.uint(pdu.GrpcClientID))
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
-	fmt.Printf("return size: %d \t data: %#v\n", retData.size, b)
+	fmt.Printf("++ [grpc server] return size: %d \t data: %#v\n", retData.size, b)
 
 	resp := pb.ProxyVerifyNotify{
 		Type:         uint32(b[0]),
@@ -347,10 +355,10 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 	if err := stream.Send(&resp); err != nil {
 		log.Printf("send error %v", err)
 	}
-	log.Printf("sending stream data")
+	log.Printf("++ [grpc server] sending stream data")
 
 	<-done
-	log.Printf("[ProxyVerifyStream] Finished with RPC send \n")
+	log.Printf("++ [grpc server] [ProxyVerifyStream] Finished with RPC send \n")
 
 	return nil
 

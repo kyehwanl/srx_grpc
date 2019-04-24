@@ -31,6 +31,8 @@ int main ()
       hdr->noPeers         = htonl(noPeers); 
     */
 
+    // XXX init process
+    //
     GoString gs_addr = {
         p : "localhost:50000",
         n : 15
@@ -38,20 +40,25 @@ int main ()
     gs_addr.n = strlen((const char*)gs_addr.p);
     printf("size: %d \n", gs_addr.n);
 
-    unsigned int res = InitSRxGrpc(gs_addr);
+    bool res = InitSRxGrpc(gs_addr);
     printf("init result: %d \n", res);
 
 
+    // XXX Hello Request
     char buff_hello_request[20] = 
     {0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0};
 
     GoSlice hello_requiest_pdu = {(void*)buff_hello_request, (GoInt)20, (GoInt)20};
     //result = Run(hello_requiest_pdu);
-    RunProxyHello(hello_requiest_pdu);
-    //printf("Hello Request Result: %02x\n", result);
+    struct RunProxyHello_return resp = RunProxyHello(hello_requiest_pdu);
+    printf("Hello Request Result ID: %02x\n", (uint8_t)resp.r1);
+
+    unsigned int grpcClientID = resp.r1;
 
 
 
+    // XXX Verify 
+    //
     /* test 3: request verification */
     printf("[%s] Validation  Request\n", __FILE__ );
     printf("[%s] verify update sent\n", __FILE__);
@@ -72,10 +79,12 @@ int main ()
     
     GoSlice verify_pdu = {(void*)verify_buff, (GoInt)169, (GoInt)170};
     //result = RunStream(verify_pdu);
-    result = RunProxyVerify(verify_pdu);
+    result = RunProxyVerify(verify_pdu, grpcClientID);
     printf("[%s] Validation Result: %02x\n", __FILE__, result);
 
 
+    // XXX GoodBye protocol
+    // 
     uint32_t length = sizeof(SRXPROXY_GOODBYE);     
     uint8_t pdu[length];                            
     SRXPROXY_GOODBYE* hdr = (SRXPROXY_GOODBYE*)pdu; 
@@ -86,7 +95,7 @@ int main ()
     hdr->keepWindow = htons(SRX_DEFAULT_KEEP_WINDOW);           
     hdr->length     = htonl(length);               
 
-    RunProxyGoodBye(*hdr);
+    RunProxyGoodBye(*hdr, grpcClientID);
 
 
     printf("main program terminated\n");

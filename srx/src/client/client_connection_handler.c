@@ -608,10 +608,55 @@ bool sendGoodbye_grpc(ClientConnectionHandler* self, uint16_t keepWindow)
   self->established = false;
 
   return true;
-
-
-
 }
+
+typedef struct {
+    SRxProxy* proxy;
+    uint32_t proxyID;
+} StreamThreadData;
+
+static void* GoodByeStreamThread(void *arg)
+{
+    StreamThreadData *std = (StreamThreadData*)arg;
+    printf("Run Proxy Good Bye Stream \n");
+    printf("[%s:%d] arguments proxy: %p, proxyID: %08x\n", __FUNCTION__, __LINE__, std->proxy, std->proxyID);
+
+    char buff_goodbye_stream_request[8] = {0x02, 0x03, 0x84, 0x0, 0x0, 0x0, 0x0, 0x08};
+    GoSlice goodbye_stream_pdu = {(void*)buff_goodbye_stream_request, (GoInt)8, (GoInt)8};
+    int result = RunProxyGoodByeStream (goodbye_stream_pdu, std->proxyID);
+
+    printf("Run Proxy Good Bye Stream terminated \n");
+    
+
+    // XXX: here general closure procedures by receiving GoodBye
+    //
+    releaseSRxProxy(std->proxy);
+}
+
+void ImpleGoStreamThread (SRxProxy* proxy, uint32_t proxyID)
+{
+    pthread_t tid;
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    printf("+ pthread grpc service started...\n");
+
+
+    StreamThreadData *std = (StreamThreadData*)malloc(sizeof(StreamThreadData));
+    std->proxy = proxy;
+    std->proxyID = proxyID;
+    printf("[%s:%d] arguments proxy: %p, proxyID: %08x\n", __FUNCTION__, __LINE__, std->proxy, std->proxyID);
+
+    int ret = pthread_create(&tid, &attr, GoodByeStreamThread, (void*)std);
+    if (ret != 0)
+    {
+        RAISE_ERROR("Failed to create a grpc thread");
+    }
+    printf("+ pthread created \n");
+    pthread_join(tid, NULL);
+}
+
+
 #endif
 ////////////////////////////////////////////////////////////////////////////////
 // Local helper functions

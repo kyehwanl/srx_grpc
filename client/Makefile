@@ -6,4 +6,4 @@ all:
 		-I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/ \
 		-I/opt/project/srx_test1/srx/../_inst//include \
 		-I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/../extras/local/include \
-		-Wl,--unresolved-symbols=ignore-all
+		-Wl,--unresolved-symbols=ignore-all -lpthread

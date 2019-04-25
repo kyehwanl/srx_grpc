@@ -364,11 +364,15 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
     rt.data[3] = 0x33; rt.data[4] = 0xAB; rt.data[5] = 0xCD; rt.data[6] = 0xEF;
     */
 
-    // TODO: need handling functions for multiplexing the request
     SRXPROXY_BasicHeader* bhdr = (SRXPROXY_BasicHeader*)data;
+    uint8_t clientID;
+    ClientThread* cthread;
           
-    switch (bhdr->type)
+    uint32_t length = sizeof(SRXPROXY_GOODBYE);     
+    uint8_t pdu[length];                            
+    SRXPROXY_GOODBYE* hdr = (SRXPROXY_GOODBYE*)pdu; 
 
+    switch (bhdr->type)
     {                   
       case PDU_SRXPROXY_HELLO:
         processHandshake_grpc(data, &rt);
@@ -384,15 +388,14 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
         break;
       case PDU_SRXPROXY_GOODBYE:
         printf("[SRx Server] Received GOOD BYE from proxyID: %d\n", grpcClientID);
-        uint8_t clientID = findClientID(grpcServiceHandler.svrConnHandler, grpcClientID);
+        clientID = findClientID(grpcServiceHandler.svrConnHandler, grpcClientID);
       
         printf("[SRx server] proxyID: %d --> mapping[clientID:%d] cthread: %p\n", 
           grpcClientID,  clientID, grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket);
 
-        ClientThread* cthread = (ClientThread*)grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket;
+        cthread = (ClientThread*)grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket;
         // in order to skip over terminating a client pthread which was not generated if grpc enabled
         cthread->active  = false;
-
         closeClientConnection(&grpcServiceHandler.cmdHandler->svrConnHandler->svrSock, cthread);
 
         //clientID = ((ClientThread*)item->client)->routerID;
@@ -409,26 +412,26 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
         break;
       default:
         RAISE_ERROR("Unknown/unsupported pdu type: %d", bhdr->type);
-        /*
-         * TODO: do the same way in GoodBye above
-         *
-        sendError(SRXERR_INVALID_PACKET, item->serverSocket,
-            item->client, false);
-        sendGoodbye(item->serverSocket, item->client, false);
-        closeClientConnection(&cmdHandler->svrConnHandler->svrSock,
-            item->client);
 
-        clientID = ((ClientThread*)item->client)->routerID;
-        // The deaktivatio will also delete the mapping because it was NOT
-        // a crash.
-        deactivateConnectionMapping(cmdHandler->svrConnHandler, clientID,
-            false, cmdHandler->sysConfig->defaultKeepWindow);
-        //cmdHandler->svrConnHandler->proxyMap[clientID].isActive = false;
-        //delMapping(cmdHandler->svrConnHandler, clientID);
+        memset(pdu, 0, length);                         
+        LOG(LEVEL_DEBUG, HDR" send Goodbye! called" );  
+        hdr->type       = PDU_SRXPROXY_GOODBYE;         
+        hdr->keepWindow = htons(900);            
+        hdr->length     = htonl(length);                
 
-        deleteFromSList(&cmdHandler->svrConnHandler->clients,
-            item->client);
-            */
+        printf("\n\nCalling CallBack function forGoodbye STREAM\n\n");         
+        cb_proxyGoodBye(*hdr);
+        
+        // XXX: NOTE: do the same way in GoodBye above
+        clientID = findClientID(grpcServiceHandler.svrConnHandler, grpcClientID);
+        printf("[SRx server] proxyID: %d --> mapping[clientID:%d] cthread: %p\n", 
+          grpcClientID,  clientID, grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket);
+        cthread = (ClientThread*)grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket;
+        cthread->active  = false;
+        closeClientConnection(&grpcServiceHandler.cmdHandler->svrConnHandler->svrSock, cthread);
+        deactivateConnectionMapping(grpcServiceHandler.svrConnHandler, clientID, false, 0);
+        deleteFromSList(&grpcServiceHandler.cmdHandler->svrConnHandler->clients, cthread);
+        LOG(LEVEL_DEBUG, HDR "GoodBye!", pthread_self());
     }
 
     return rt;

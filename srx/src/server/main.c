@@ -763,6 +763,7 @@ int main(int argc, const char* argv[])
       {           
 #ifdef USE_GRPC
         createGRPCService();
+        printf("[server] created GRPC Service thread\n");
 #endif
         // Ready for requests
         cleanupRequired = true;

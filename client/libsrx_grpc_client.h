@@ -87,6 +87,8 @@ extern struct RunProxyHello_return RunProxyHello(GoSlice p0);
 
 extern GoUint8 RunProxyGoodBye(SRXPROXY_GOODBYE p0, GoUint32 p1);
 
+extern GoUint32 RunProxyGoodByeStream(GoSlice p0, GoUint32 p1);
+
 extern GoUint32 RunStream(GoSlice p0);
 
 extern GoUint32 RunProxyVerify(GoSlice p0, GoUint32 p1);

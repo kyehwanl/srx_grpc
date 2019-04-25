@@ -3,6 +3,9 @@
 #include "libsrx_grpc_client.h"
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
+
+static void* GoodByeStreamThread(void *arg);
 
 int main ()
 {
@@ -56,6 +59,20 @@ int main ()
     unsigned int grpcClientID = resp.r1;
 
 
+    pthread_t tid;
+    pthread_attr_t attr;
+    pthread_attr_init(&attr);
+    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    printf("+ pthread grpc service started...\n");
+
+    int ret = pthread_create(&tid, &attr, GoodByeStreamThread, (void*)&grpcClientID);
+    if (ret != 0)
+    {
+        RAISE_ERROR("Failed to create a grpc thread");
+    }
+    printf("+ pthread created \n");
+    pthread_join(tid, NULL);
+
 
     // XXX Verify 
     //
@@ -100,6 +117,22 @@ int main ()
 
     printf("main program terminated\n");
     return 0;
+}
+
+static void* GoodByeStreamThread(void *arg)
+{
+    // XXX TEST: GoodBye Stream
+    // TODO: this needs to generate pthread and run concurrently
+    //
+    
+    unsigned int grpcClientID = *((unsigned int*)arg);
+    printf("Run Proxy Good Bye Stream \n");
+    char buff_goodbye_stream_request[8] = {0x02, 0x03, 0x84, 0x0, 0x0, 0x0, 0x0, 0x08};
+    GoSlice goodbye_stream_pdu = {(void*)buff_goodbye_stream_request, (GoInt)8, (GoInt)8};
+    int result = RunProxyGoodByeStream (goodbye_stream_pdu, grpcClientID);
+    
+    printf("Run Proxy Good Bye Stream terminated \n");
+
 }
 
 #if 0

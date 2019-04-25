@@ -18,6 +18,7 @@ import (
 	"log"
 	"runtime"
 	pb "srx_grpc"
+	_ "time"
 	"unsafe"
 )
 
@@ -31,14 +32,15 @@ type Client struct {
 	cli  pb.SRxApiClient
 }
 
+var client Client
+
 type ProxyVerifyClient struct {
 	stream pb.SRxApi_ProxyVerifyClient
 }
 
-var client Client
-
 //export InitSRxGrpc
 func InitSRxGrpc(addr string) bool {
+	log.Printf("InitSRxGrpc Called \n")
 	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
 		log.Printf("did not connect: %v", err)
@@ -232,25 +234,51 @@ func RunProxyGoodBye(in C.SRXPROXY_GOODBYE, grpcClientID uint32) bool {
 	return resp.Status
 }
 
+//export RunProxyGoodByeStream
+func RunProxyGoodByeStream(data []byte, grpcClientID uint32) uint32 {
+
+	fmt.Printf("+ [grpc client] Goobye Stream function Started : input parameter: %#v \n", data)
+	cli := client.cli
+	stream, err := cli.ProxyGoodByeStream(context.Background(), &pb.PduRequest{Data: data, Length: uint32(len(data))})
+	ctx := stream.Context()
+	if err != nil {
+		log.Printf("open stream error %v", err)
+	}
+
+	go func() {
+		<-ctx.Done()
+		log.Printf("+ Client Context Done")
+		if err := ctx.Err(); err != nil {
+			log.Println(err)
+		}
+		fmt.Printf("+ client context done\n")
+		return
+	}()
+
+	//for {
+	fmt.Printf("+ [grpc client][GoodByeStream] Goobye Stream function Receiving ... \n")
+	resp, err := stream.Recv()
+	if err == io.EOF {
+		log.Printf("[client] EOF close ")
+		return 1
+	}
+	if err != nil {
+		log.Printf("can not receive %v", err)
+	}
+
+	// NOTE : receive process here
+	fmt.Printf("+ [grpc client][GoodByeStream] data : %#v\n", resp.Data)
+	fmt.Printf("+ [grpc client][GoodByeStream] size : %#v\n", resp.Length)
+	fmt.Println()
+	//}
+
+	return 0
+}
+
 //export RunStream
 func RunStream(data []byte) uint32 {
 
-	// TODO: how to persistently obtain grpc Dial object
-
-	// Set up a connection to the server.
-	/*
-		conn, err := grpc.Dial(address, grpc.WithInsecure())
-		if err != nil {
-			log.Printf("did not connect: %v", err)
-		}
-		defer conn.Close()
-		cli := pb.NewSRxApiClient(conn)
-	*/
-
-	///*
-	//cli := pb.NewSRxApiClient(client.conn)
 	cli := client.cli
-	//*/
 	fmt.Printf("client data: %#v\n", client)
 
 	if data == nil {
@@ -442,6 +470,16 @@ func main() {
 	log.Printf("Transferred: %#v, proxyID: %d\n\n", res, grpcClientID)
 	//*/
 
+	// NOTE: SRx Proxy GoodBye Stream Test
+	go func() {
+		log.Printf("GoodBye Stream Request\n")
+		buff_goodbye_stream_request := []byte{0x02, 0x03, 0x84, 0x0, 0x0, 0x0, 0x0, 0x08}
+		result := RunProxyGoodByeStream(buff_goodbye_stream_request, grpcClientID)
+		log.Println("result:", result)
+	}()
+
+	//time.Sleep(2 * time.Second)
+
 	// NOTE: SRx Proxy Verify
 	log.Printf("Verify Request\n")
 	buff_verify_req := []byte{0x03, 0x83, 0x01, 0x01, 0x00, 0x00, 0x00, 0xa9, 0x03, 0x03, 0x00, 0x18,
@@ -470,9 +508,8 @@ func main() {
 	defer C.free(unsafe.Pointer(gb))
 
 	goGB.Pack(unsafe.Pointer(gb))
-
-	//	_type: 0x02, //:      [2]uint8{0x01, 0x02}, C.SRX_DEFAULT_KEEP_WINDOW = 900 //	length: 8,
 	log.Printf(" gb: %#v\n", gb)
+
 	status := RunProxyGoodBye(*gb, uint32(grpcClientID))
 	log.Printf(" GoodBye response status: %#v\n", status)
 

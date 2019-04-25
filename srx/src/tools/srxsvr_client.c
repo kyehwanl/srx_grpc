@@ -1916,6 +1916,10 @@ bool processLine(bool log, char* line)
   return stop;
 }
 
+#ifdef USE_GRPC
+extern void ImpleGoStreamThread (SRxProxy* proxy, uint32_t proxyID);
+#endif
+
 /** The main program.*/
 int main(int argc, char* argv[])
 {
@@ -1937,10 +1941,15 @@ int main(int argc, char* argv[])
                          NULL);
 
 #ifdef USE_GRPC
+  // initialize GRPC 
   bool initResult = callSRxGRPC_Init("localhost:50000");
   proxy->grpcClientEnable = initResult;
-  printf(" proxy ID [defaul]: %08x, grpcEnabled[%b]\n", proxyID, initResult);
+  printf("proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%b]\n", proxy, proxyID, initResult);
+
+  // NOTE: here some stream server threads
+  ImpleGoStreamThread(proxy, proxyID);
 #endif
+
   if (proxy == NULL)
   {
     RAISE_ERROR("Proxy could not be created. Abort program!\n");

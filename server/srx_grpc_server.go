@@ -45,6 +45,13 @@ type Server struct {
 	grpcServer *grpc.Server
 }
 
+type GoodByeStreamData struct {
+	data   []byte
+	length uint8
+}
+
+var chGbsData chan GoodByeStreamData
+
 //export cb_proxy
 func cb_proxy(f C.int, v unsafe.Pointer) {
 	fmt.Printf("++ [grpc server] proxy callback function : arg[%d, %#v]\n", f, v)
@@ -56,6 +63,20 @@ func cb_proxy(f C.int, v unsafe.Pointer) {
 
 	//MyCallback(int(f), b)
 	cbVerifyNotify(int(f), b)
+}
+
+//export cb_proxyGoodBye
+func cb_proxyGoodBye(in C.SRXPROXY_GOODBYE) {
+
+	GbIn := C.GoBytes(unsafe.Pointer(&in), C.sizeof_SRXPROXY_GOODBYE)
+
+	m := GoodByeStreamData{
+		data:   GbIn,
+		length: uint8(C.sizeof_SRXPROXY_GOODBYE),
+	}
+	fmt.Printf("channel callback message: %#v\n", m)
+
+	chGbsData <- m
 }
 
 func MyCallback(f int, b []byte) {
@@ -235,7 +256,7 @@ func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb
 		C.uint(grpcClientID))
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
-	fmt.Printf("++ [grpc server] return size: %d \t data: %#v\n", retData.size, b)
+	fmt.Printf("++ [grpc server][ProxyHello] return size: %d \t data: %#v\n", retData.size, b)
 
 	return &pb.ProxyHelloResponse{
 		Type:            uint32(b[0]),
@@ -267,11 +288,54 @@ func (s *Server) ProxyGoodBye(ctx context.Context, pdu *pb.ProxyGoodByeRequest) 
 		C.uint(grpcClientID))
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
-	fmt.Printf("++ [grpc server] return size: %d \t data: %#v\n", retData.size, b)
+	fmt.Printf("++ [grpc server][ProxyGoodBye] return size: %d \t data: %#v\n", retData.size, b)
 
 	return &pb.ProxyGoodByeResponse{
 		Status: true,
 	}, nil
+}
+
+func (s *Server) ProxyGoodByeStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyGoodByeStreamServer) error {
+	fmt.Printf("++ [grpc server][GoodByeStreamData] pdu type: %02x \n", pdu.Data[0])
+	fmt.Printf("++ [grpc server][GoodByeStreamData] received data: %#v\n", pdu)
+
+	ctx := stream.Context()
+	go func() {
+		<-ctx.Done()
+		if err := ctx.Err(); err != nil {
+			log.Println(err)
+		}
+
+		_, _, line, _ := runtime.Caller(0)
+		fmt.Printf("+ [%d] server context done\n", line+1)
+		// XXX: panic - close a closed channel when run this program more than once, --> Do Not close
+		//close(chGbsData)
+		return
+	}()
+
+	fmt.Printf("++ [grpc server][GoodByeStreamData] Waiting Channel Event ...\n")
+	for {
+		select {
+		case m, ok := <-chGbsData:
+			if ok {
+				fmt.Printf("channel event message : %#v\n", m)
+				resp := pb.PduResponse{
+					Data:   m.data,
+					Length: uint32(len(m.data)),
+				}
+
+				if err := stream.Send(&resp); err != nil {
+					log.Printf("send error %v", err)
+					return err
+				}
+			} else {
+				fmt.Printf("++ [grpc server][GoodByeStreamData] Channel Closed\n")
+				return nil
+			}
+		}
+	}
+
+	return nil
 }
 
 // stale function -- depricated
@@ -340,7 +404,11 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 		C.uint(pdu.GrpcClientID))
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
-	fmt.Printf("++ [grpc server] return size: %d \t data: %#v\n", retData.size, b)
+	fmt.Printf("++ [grpc server][ProxyVerifyStream] return size: %d \t data: %#v\n", retData.size, b)
+
+	if retData.size == 0 {
+		return nil
+	}
 
 	resp := pb.ProxyVerifyNotify{
 		Type:         uint32(b[0]),
@@ -375,6 +443,9 @@ func NewServer(g *grpc.Server) *Server {
 
 //export Serve
 func Serve() {
+
+	// NOTE: here init handling
+	chGbsData = make(chan GoodByeStreamData)
 
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))

@@ -84,6 +84,8 @@ extern "C" {
 
 extern void cb_proxy(int p0, void* p1);
 
+extern void cb_proxyGoodBye(SRXPROXY_GOODBYE p0);
+
 extern void Serve();
 
 #ifdef __cplusplus

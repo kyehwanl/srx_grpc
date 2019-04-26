@@ -21,8 +21,10 @@ typedef struct { const char *p; ptrdiff_t n; } _GoString_;
 
 
 
+
 #include <stdlib.h>
 #include "shared/srx_packets.h"
+#include "client/grpc_client_service.h"
 
 #line 1 "cgo-generated-wrapper"
 
@@ -88,6 +90,8 @@ extern struct RunProxyHello_return RunProxyHello(GoSlice p0);
 extern GoUint8 RunProxyGoodBye(SRXPROXY_GOODBYE p0, GoUint32 p1);
 
 extern GoUint32 RunProxyGoodByeStream(GoSlice p0, GoUint32 p1);
+
+extern GoUint32 RunProxyStream(GoSlice p0, GoUint32 p1);
 
 extern GoUint32 RunStream(GoSlice p0);
 

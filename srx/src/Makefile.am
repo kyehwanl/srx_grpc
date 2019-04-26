@@ -83,10 +83,12 @@ libsrx_util_la_LDFLAGS = $(GRPC_CLIENT_LDFLAG)
 
 if ENABLE_GRPC_COND
 # srx grpc library
-lib_LTLIBRARIES = libgrpc_service.la
+lib_LTLIBRARIES = libgrpc_service.la libgrpc_client_service.la
 libgrpc_service_la_SOURCES = $(SERVER_DIR)/grpc_service.c 
 #libgrpc_service_la_LIBADD = 
 #libgrpc_service_la_LDFLAGS = 
+
+libgrpc_client_service_la_SOURCES = $(CLIENT_DIR)/grpc_client_service.c 
 endif	
 ################################################################################
 ##  SRX - PROXY - API INSTALL

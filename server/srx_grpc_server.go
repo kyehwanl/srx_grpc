@@ -7,6 +7,7 @@ package main
 #cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -lgrpc_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -Wl,--unresolved-symbols=ignore-all
 
 //#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/server -lgrpc_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/server -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/lib64/srx -lSRxProxy -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/lib64/srx -Wl,--unresolved-symbols=ignore-all
+
 #include <stdio.h>
 #include "srx/srx_api.h"
 #include "server/grpc_service.h"
@@ -45,12 +46,13 @@ type Server struct {
 	grpcServer *grpc.Server
 }
 
-type GoodByeStreamData struct {
+type StreamData struct {
 	data   []byte
 	length uint8
 }
 
-var chGbsData chan GoodByeStreamData
+var chGbsData chan StreamData
+var chProxyStreamData chan StreamData
 
 //export cb_proxy
 func cb_proxy(f C.int, v unsafe.Pointer) {
@@ -70,13 +72,28 @@ func cb_proxyGoodBye(in C.SRXPROXY_GOODBYE) {
 
 	GbIn := C.GoBytes(unsafe.Pointer(&in), C.sizeof_SRXPROXY_GOODBYE)
 
-	m := GoodByeStreamData{
+	m := StreamData{
 		data:   GbIn,
 		length: uint8(C.sizeof_SRXPROXY_GOODBYE),
 	}
-	fmt.Printf("channel callback message: %#v\n", m)
+	fmt.Printf("channel callback message for server's GoodBye: %#v\n", m)
 
 	chGbsData <- m
+}
+
+//export cb_proxyStream
+func cb_proxyStream(f C.int, v unsafe.Pointer) {
+
+	b := C.GoBytes(unsafe.Pointer(v), f)
+
+	m := StreamData{
+		data:   b,
+		length: uint8(f),
+	}
+	fmt.Printf("channel callback message: %#v\n", m)
+
+	chProxyStreamData <- m
+
 }
 
 func MyCallback(f int, b []byte) {
@@ -296,8 +313,8 @@ func (s *Server) ProxyGoodBye(ctx context.Context, pdu *pb.ProxyGoodByeRequest) 
 }
 
 func (s *Server) ProxyGoodByeStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyGoodByeStreamServer) error {
-	fmt.Printf("++ [grpc server][GoodByeStreamData] pdu type: %02x \n", pdu.Data[0])
-	fmt.Printf("++ [grpc server][GoodByeStreamData] received data: %#v\n", pdu)
+	fmt.Printf("++ [grpc server][ProxyGoodByeStream] pdu type: %02x \n", pdu.Data[0])
+	fmt.Printf("++ [grpc server][ProxyGoodByeStream] received data: %#v\n", pdu)
 
 	ctx := stream.Context()
 	go func() {
@@ -313,7 +330,7 @@ func (s *Server) ProxyGoodByeStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyGo
 		return
 	}()
 
-	fmt.Printf("++ [grpc server][GoodByeStreamData] Waiting Channel Event ...\n")
+	fmt.Printf("++ [grpc server][ProxyGoodByeStream] Waiting Channel Event ...\n")
 	for {
 		select {
 		case m, ok := <-chGbsData:
@@ -329,7 +346,48 @@ func (s *Server) ProxyGoodByeStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyGo
 					return err
 				}
 			} else {
-				fmt.Printf("++ [grpc server][GoodByeStreamData] Channel Closed\n")
+				fmt.Printf("++ [grpc server][ProxyGoodByeStream] Channel Closed\n")
+				return nil
+			}
+		}
+	}
+
+	return nil
+}
+
+func (s *Server) ProxyStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyStreamServer) error {
+	fmt.Printf("++ [grpc server][ProxyStream] pdu type: %02x \n", pdu.Data[0])
+	fmt.Printf("++ [grpc server][ProxyStream] received data: %#v\n", pdu)
+
+	ctx := stream.Context()
+	go func() {
+		<-ctx.Done()
+		if err := ctx.Err(); err != nil {
+			log.Println(err)
+		}
+
+		_, _, line, _ := runtime.Caller(0)
+		fmt.Printf("+ [%d] server context done\n", line+1)
+		return
+	}()
+
+	fmt.Printf("++ [grpc server][ProxyStream] Waiting Channel Event ...\n")
+	for {
+		select {
+		case m, ok := <-chProxyStreamData:
+			if ok {
+				fmt.Printf("channel event message : %#v\n", m)
+				resp := pb.PduResponse{
+					Data:   m.data,
+					Length: uint32(len(m.data)),
+				}
+
+				if err := stream.Send(&resp); err != nil {
+					log.Printf("send error %v", err)
+					return err
+				}
+			} else {
+				fmt.Printf("++ [grpc server][ProxyGoodByeStream] Channel Closed\n")
 				return nil
 			}
 		}
@@ -445,7 +503,8 @@ func NewServer(g *grpc.Server) *Server {
 func Serve() {
 
 	// NOTE: here init handling
-	chGbsData = make(chan GoodByeStreamData)
+	chGbsData = make(chan StreamData)
+	chProxyStreamData = make(chan StreamData)
 
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))

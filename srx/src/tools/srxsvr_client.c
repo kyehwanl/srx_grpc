@@ -115,6 +115,9 @@
 #include "util/prefix.h"
 #include "util/str.h"
 #include "util/socket.h"
+#ifdef USE_GRPC
+#include "client/grpc_client_service.h"
+#endif
 
 #define DEFAULT_SERVER    "localhost"
 #define DEFAULT_PORT      17900
@@ -1945,6 +1948,8 @@ int main(int argc, char* argv[])
   bool initResult = callSRxGRPC_Init("localhost:50000");
   proxy->grpcClientEnable = initResult;
   printf("proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%b]\n", proxy, proxyID, initResult);
+
+  g_proxy = proxy;
 
   // NOTE: here some stream server threads
   ImpleGoStreamThread(proxy, proxyID);

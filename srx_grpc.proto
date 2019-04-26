@@ -15,6 +15,7 @@ service SRxApi {
   rpc ProxyGoodByeStream (PduRequest) returns (stream PduResponse) {}
   rpc ProxyVerify (ProxyVerifyV4Request) returns (stream ProxyVerifyNotify) {}
   rpc ProxyVerifyStream (ProxyVerifyRequest) returns (stream ProxyVerifyNotify) {}
+  rpc ProxyStream (PduRequest) returns (stream PduResponse) {}
 }
 
 

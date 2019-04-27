@@ -155,9 +155,9 @@ func cbVerifyNotify(f int, b []byte) {
 				ResultType:   uint32(b[1]),
 				RoaResult:    uint32(b[2]),
 				BgpsecResult: uint32(b[3]),
-				Length:       binary.BigEndian.Uint32(b[4:8]),
-				RequestToken: binary.BigEndian.Uint32(b[8:12]),
-				UpdateID:     binary.BigEndian.Uint32(b[12:16]),
+				Length:       *((*uint32)(unsafe.Pointer(&b[4]))),
+				RequestToken: *((*uint32)(unsafe.Pointer(&b[8]))),
+				UpdateID:     *((*uint32)(unsafe.Pointer(&b[12]))),
 			}
 		}
 
@@ -473,9 +473,9 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 		ResultType:   uint32(b[1]),
 		RoaResult:    uint32(b[2]),
 		BgpsecResult: uint32(b[3]),
-		Length:       binary.BigEndian.Uint32(b[4:8]),
-		RequestToken: binary.BigEndian.Uint32(b[8:12]),
-		UpdateID:     binary.BigEndian.Uint32(b[12:16]),
+		Length:       *((*uint32)(unsafe.Pointer(&b[4]))),
+		RequestToken: *((*uint32)(unsafe.Pointer(&b[8]))),
+		UpdateID:     *((*uint32)(unsafe.Pointer(&b[12]))),
 	}
 
 	if err := stream.Send(&resp); err != nil {

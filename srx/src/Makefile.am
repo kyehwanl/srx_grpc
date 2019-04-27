@@ -78,8 +78,8 @@ libsrx_util_la_SOURCES = \
 		     $(UTIL_DIR)/str.c \
 		     $(UTIL_DIR)/timer.c \
 		     $(UTIL_DIR)/xml_out.c
-libsrx_util_la_LIBADD = $(GRPC_CLIENT_LIBS)
-libsrx_util_la_LDFLAGS = $(GRPC_CLIENT_LDFLAG)
+libsrx_util_la_LIBADD = #$(GRPC_CLIENT_LIBS)
+libsrx_util_la_LDFLAGS =# $(GRPC_CLIENT_LDFLAG)
 
 if ENABLE_GRPC_COND
 # srx grpc library

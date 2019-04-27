@@ -95,27 +95,9 @@ func Run(data []byte) uint32 {
 	return uint32(r.ValidationStatus)
 }
 
-/* test 2: request HelloRequest */
-/*
-   hdr->type            = PDU_SRXPROXY_HELLO;
-   hdr->version         = htons(SRX_PROTOCOL_VER);
-   hdr->length          = htonl(length);
-   hdr->proxyIdentifier = htonl(5);   // htonl(proxy->proxyID);
-   hdr->asn             = htonl(65005);
-   hdr->noPeers         = htonl(noPeers);
-*/
-
 //export RunProxyHello
 func RunProxyHello(data []byte) (*C.uchar, uint32) {
 
-	/*
-		conn, err := grpc.Dial(address, grpc.WithInsecure())
-		if err != nil {
-			log.Printf("did not connect: %v", err)
-		}
-		defer conn.Close()
-		cli := pb.NewSRxApiClient(conn)
-	*/
 	cli := client.cli
 	fmt.Println()
 	fmt.Printf("client : %#v\n", client)
@@ -173,6 +155,25 @@ func RunProxyHello(data []byte) (*C.uchar, uint32) {
 	fmt.Printf("+ cb: %#v\n", cb)
 	//return (*C.uchar)(unsafe.Pointer(&buf[0]))
 	return &cb[0], resp.ProxyIdentifier
+}
+
+type Go_ProxySyncRequest struct {
+	_type     uint8
+	_reserved uint16
+	_zero     uint8
+	_length   uint32
+}
+
+func (g *Go_ProxySyncRequest) Pack(out unsafe.Pointer) {
+	buf := &bytes.Buffer{}
+	binary.Write(buf, binary.LittleEndian, g)
+	l := buf.Len()
+	o := (*[1 << 20]C.uchar)(out)
+
+	for i := 0; i < l; i++ {
+		b, _ := buf.ReadByte()
+		o[i] = C.uchar(b)
+	}
 }
 
 type Go_ProxyVerifyNotify struct {
@@ -261,7 +262,7 @@ func RunProxyGoodBye(in C.SRXPROXY_GOODBYE, grpcClientID uint32) bool {
 //export RunProxyGoodByeStream
 func RunProxyGoodByeStream(data []byte, grpcClientID uint32) uint32 {
 
-	fmt.Printf("+ [grpc client] Goobye Stream function Started : input parameter: %#v \n", data)
+	//fmt.Printf("+ [grpc client] Goobye Stream function Started : input parameter: %#v \n", data)
 	cli := client.cli
 	stream, err := cli.ProxyGoodByeStream(context.Background(), &pb.PduRequest{Data: data, Length: uint32(len(data))})
 	ctx := stream.Context()
@@ -279,9 +280,8 @@ func RunProxyGoodByeStream(data []byte, grpcClientID uint32) uint32 {
 		return
 	}()
 
-	//for {
-	fmt.Printf("+ [grpc client][GoodByeStream] Goobye Stream function Receiving ... \n")
 	resp, err := stream.Recv()
+	fmt.Printf("+ [grpc client][GoodByeStream] Goodbye Stream function Received... \n")
 	if err == io.EOF {
 		log.Printf("[client] EOF close ")
 		return 1
@@ -294,7 +294,22 @@ func RunProxyGoodByeStream(data []byte, grpcClientID uint32) uint32 {
 	fmt.Printf("+ [grpc client][GoodByeStream] data : %#v\n", resp.Data)
 	fmt.Printf("+ [grpc client][GoodByeStream] size : %#v\n", resp.Length)
 	fmt.Println()
-	//}
+
+	go_gb := &Go_ProxyGoodBye{
+		_type:       resp.Data[0],
+		_keepWindow: *((*uint16)(unsafe.Pointer(&resp.Data[1]))),
+		_zero:       resp.Data[3],
+		_length:     *((*uint32)(unsafe.Pointer(&resp.Data[4]))),
+	}
+
+	gb := (*C.SRXPROXY_GOODBYE)(C.malloc(C.sizeof_SRXPROXY_GOODBYE))
+	defer C.free(unsafe.Pointer(gb))
+	go_gb.Pack(unsafe.Pointer(gb))
+
+	log.Printf(" gb: %#v\n", gb)
+
+	//void processGoodbye_grpc(SRXPROXY_GOODBYE* hdr)
+	C.processGoodbye_grpc(gb)
 
 	return 0
 }
@@ -302,7 +317,7 @@ func RunProxyGoodByeStream(data []byte, grpcClientID uint32) uint32 {
 //export RunProxyStream
 func RunProxyStream(data []byte, grpcClientID uint32) uint32 {
 
-	fmt.Printf("+ [grpc client] Stream function Started : input parameter: %#v \n", data)
+	//fmt.Printf("+ [grpc client] Stream function Started : input parameter: %#v \n", data)
 	cli := client.cli
 	stream, err := cli.ProxyStream(context.Background(), &pb.PduRequest{Data: data, Length: uint32(len(data))})
 	ctx := stream.Context()
@@ -320,22 +335,55 @@ func RunProxyStream(data []byte, grpcClientID uint32) uint32 {
 		return
 	}()
 
-	//for {
-	fmt.Printf("+ [grpc client][ProxyStream] Proxy_Stream function Receiving ... \n")
-	resp, err := stream.Recv()
-	if err == io.EOF {
-		log.Printf("[client] EOF close ")
-		return 1
-	}
-	if err != nil {
-		log.Printf("can not receive %v", err)
-	}
+	for {
+		resp, err := stream.Recv()
+		fmt.Printf("+ [grpc client][ProxyStream] Proxy_Stream function Received... \n")
+		if err == io.EOF {
+			log.Printf("[client] EOF close ")
+			return 1
+		}
+		if err != nil {
+			log.Printf("can not receive %v", err)
+		}
 
-	// NOTE : receive process here
-	fmt.Printf("+ [grpc client][ProxyStream] data : %#v\n", resp.Data)
-	fmt.Printf("+ [grpc client][ProxyStream] size : %#v\n", resp.Length)
-	fmt.Println()
-	//}
+		// NOTE : receive process here
+		fmt.Printf("+ [grpc client][ProxyStream] data : %#v\n", resp.Data)
+		fmt.Printf("+ [grpc client][ProxyStream] size : %#v\n", resp.Length)
+		fmt.Println()
+
+		if resp.Data == nil || resp.Length == 0 {
+			_, _, line, _ := runtime.Caller(0)
+			log.Printf("[client:%d] not available message", line+1)
+
+		} else {
+
+			switch resp.Data[0] {
+			case C.PDU_SRXPROXY_SYNC_REQUEST:
+				log.Printf("[client] Sync Request\n")
+
+				go_sr := &Go_ProxySyncRequest{
+					_type:     resp.Data[0],
+					_reserved: *((*uint16)(unsafe.Pointer(&resp.Data[1]))),
+					_zero:     resp.Data[3],
+					_length:   *((*uint32)(unsafe.Pointer(&resp.Data[4]))),
+				}
+				sr := (*C.SRXPROXY_SYNCH_REQUEST)(C.malloc(C.sizeof_SRXPROXY_SYNCH_REQUEST))
+				defer C.free(unsafe.Pointer(sr))
+				go_sr.Pack(unsafe.Pointer(sr))
+				log.Printf(" sr: %#v\n", sr)
+
+				//void processSyncRequest_grpc(SRXPROXY_SYNCH_REQUEST* hdr)
+				C.processSyncRequest_grpc(sr)
+
+			case C.PDU_SRXPROXY_SIGN_NOTIFICATION:
+				log.Printf("[client] Sign Notification\n")
+
+				//void processSignNotify_grpc(SRXPROXY_SIGNATURE_NOTIFICATION* hdr)
+				C.processSignNotify_grpc(nil)
+
+			}
+		}
+	}
 
 	return 0
 }
@@ -454,15 +502,12 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 			fmt.Printf("+ data : %#v\n", resp)
 			fmt.Printf("+ size : %#v\n", resp.Length)
 
-			// TODO : call client callback when received notification
-
 			if resp.Type == 0 && resp.Length == 0 {
 				_, _, line, _ := runtime.Caller(0)
 				log.Printf("[client:%d] close stream \n", line+1)
 				close(done)
 			} else {
 
-				// TODO: length, requestToken and updateID change to BigEndian
 				go_vn := &Go_ProxyVerifyNotify{
 					_type:         uint8(resp.Type),
 					_resultType:   uint8(resp.ResultType),
@@ -477,7 +522,7 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 				go_vn.Pack(unsafe.Pointer(vn))
 				log.Printf(" vn: %#v\n", vn)
 
-				// TODO: to avoid runtime: address space conflict:
+				// to avoid runtime: address space conflict:
 				//			and fatal error: runtime: address space conflict
 				//	    NEED to make a shared library at the client side same way at server side
 				C.processVerifyNotify_grpc(vn)

@@ -633,12 +633,28 @@ static void* GoodByeStreamThread(void *arg)
     releaseSRxProxy(std->proxy);
 }
 
+static void* StreamThread(void *arg)
+{
+    StreamThreadData *std = (StreamThreadData*)arg;
+    printf("Run Proxy Stream \n");
+    printf("[%s:%d] arguments proxy: %p, proxyID: %08x\n", __FUNCTION__, __LINE__, std->proxy, std->proxyID);
+
+    char buff_stream_request[8] = {0x02, 0x00, 0x00, 0x0, 0x0, 0x0, 0x0, 0x08};
+    GoSlice stream_pdu = {(void*)buff_stream_request, (GoInt)8, (GoInt)8};
+    int result = RunProxyStream (stream_pdu, std->proxyID);
+
+    printf("Run Proxy Stream terminated \n");
+
+}
+
 void ImpleGoStreamThread (SRxProxy* proxy, uint32_t proxyID)
 {
-    pthread_t tid;
-    pthread_attr_t attr;
+    pthread_t tid, tid2;
+    pthread_attr_t attr, attr2;
     pthread_attr_init(&attr);
+    pthread_attr_init(&attr2);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    pthread_attr_setdetachstate(&attr2, PTHREAD_CREATE_DETACHED);
     printf("+ pthread grpc service started...\n");
 
 
@@ -652,8 +668,18 @@ void ImpleGoStreamThread (SRxProxy* proxy, uint32_t proxyID)
     {
         RAISE_ERROR("Failed to create a grpc thread");
     }
-    printf("+ pthread created \n");
+    printf("+ GoodBye Stream Thread created \n");
     pthread_join(tid, NULL);
+
+
+
+    int ret2 = pthread_create(&tid2, &attr2, StreamThread, (void*)std);
+    if (ret2 != 0)
+    {
+        RAISE_ERROR("Failed to create a grpc thread");
+    }
+    printf("+ General Purpose Stream Thread created \n");
+    pthread_join(tid2, NULL);
 }
 
 

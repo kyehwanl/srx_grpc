@@ -336,6 +336,49 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt, uns
   return retVal;
 }
 
+static void _processUpdateSigning_grpc(unsigned char *data, RET_DATA *rt, unsigned int grpcClientID)
+{
+  // TODO Sign the data
+  LOG(LEVEL_INFO, "Signing of updates is currently not supported!");
+}
+
+//static void _processDeleteUpdate(CommandHandler* cmdHandler, CommandQueueItem* item)
+static void _processDeleteUpdate_grpc(unsigned char *data, RET_DATA *rt, unsigned int grpcClientID)
+{
+
+  CommandHandler* cmdHandler =  grpcServiceHandler.cmdHandler;
+
+  // TODO: replace item with real pointer variable
+  CommandQueueItem* item;
+  // For now the delete will NOT remove the update from the cache. It will
+  // remove the client - update association though or return an error in case
+  // no association existed.
+  SRxUpdateID   updateID = (SRxUpdateID)item->dataID;
+  ClientThread* clThread = (ClientThread*)item->client;
+  SRXPROXY_DELETE_UPDATE* duHdr = (SRXPROXY_DELETE_UPDATE*)item->data;
+
+  if (deleteUpdateFromCache(cmdHandler->updCache, clThread->routerID,
+                            &updateID, htons(duHdr->keepWindow)))
+  {
+    // Reduce the updates by one. BZ308
+    cmdHandler->svrConnHandler->proxyMap[clThread->routerID].updateCount--;
+  }
+  else
+  {
+    // The update was either not found or the client was not associated to the
+    // specified update.
+    sendError(SRXERR_UPDATE_NOT_FOUND, item->serverSocket, item->client, false);
+    LOG(LEVEL_NOTICE, "Deletion request for update [0x%08X] from client "
+                      "[0x%02X] failed, update not found in update cache!");
+  }
+}
+
+static void _processPeerChange_grpc(unsigned char *data, RET_DATA *rt, unsigned int grpcClientID)
+{
+  // TODO@ add code for deletion of peer data
+  LOG(LEVEL_WARNING, "Peer Changes are not supported prior Version 0.4.0!");
+}
+
 
 
 //int responseGRPC (int size, unsigned char* data)
@@ -384,7 +427,7 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
         break;
 
       case PDU_SRXPROXY_SIGN_REQUEST:
-        //_processUpdateSigning(cmdHandler, item);
+        _processUpdateSigning_grpc(data, &rt, grpcClientID);
         break;
       case PDU_SRXPROXY_GOODBYE:
         printf("[SRx Server] Received GOOD BYE from proxyID: %d\n", grpcClientID);
@@ -406,9 +449,11 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
 
       case PDU_SRXPROXY_DELTE_UPDATE:
         //_processDeleteUpdate(cmdHandler, item);
+        _processDeleteUpdate_grpc(data, &rt, grpcClientID);
         break;
       case PDU_SRXPROXY_PEER_CHANGE:
         //_processPeerChange(cmdHandler, item);
+        _processPeerChange_grpc(data, &rt, grpcClientID);
         break;
       default:
         RAISE_ERROR("Unknown/unsupported pdu type: %d", bhdr->type);

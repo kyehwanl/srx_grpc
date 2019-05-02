@@ -1946,8 +1946,8 @@ int main(int argc, char* argv[])
 #ifdef USE_GRPC
   // initialize GRPC 
   bool initResult = callSRxGRPC_Init("localhost:50000");
-  proxy->grpcClientEnable = initResult;
-  printf("proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%b]\n", proxy, proxyID, initResult);
+  //proxy->grpcClientEnable = initResult;
+  printf("proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%d]\n", proxy, proxyID, initResult);
 
   g_proxy = proxy;
 

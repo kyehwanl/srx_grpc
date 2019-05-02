@@ -162,7 +162,7 @@ func cbVerifyNotify(f int, b []byte) {
 		}
 
 		if err := gStream_verify.Send(&resp); err != nil {
-			log.Printf("send error %v", err)
+			log.Printf("[grpc server] grpc send error %v", err)
 		}
 		_, _, line, _ := runtime.Caller(0)
 		log.Printf("[server:%d] sending stream data", line+1)
@@ -324,7 +324,7 @@ func (s *Server) ProxyGoodByeStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyGo
 		}
 
 		_, _, line, _ := runtime.Caller(0)
-		fmt.Printf("+ [%d] server context done\n", line+1)
+		fmt.Printf("+ [%d] server Proxy_GoodBye_Stream context done\n", line+1)
 		// XXX: panic - close a closed channel when run this program more than once, --> Do Not close
 		//close(chGbsData)
 		return
@@ -367,7 +367,7 @@ func (s *Server) ProxyStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyStreamSer
 		}
 
 		_, _, line, _ := runtime.Caller(0)
-		fmt.Printf("+ [%d] server context done\n", line+1)
+		fmt.Printf("+ [%d] server Proxy_Stream context done\n", line+1)
 		return
 	}()
 
@@ -450,7 +450,7 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 			log.Println(err)
 		}
 		_, _, line, _ := runtime.Caller(0)
-		fmt.Printf("++ [grpc server][:%d] server context done\n", line+1)
+		fmt.Printf("++ [grpc server][:%d] server Proxy_Verify_Stream context done\n", line+1)
 		close(done)
 	}()
 	fmt.Printf("++ [grpc server] grpc Client ID: %02x, data length: %d, \n Data: %#v\n",

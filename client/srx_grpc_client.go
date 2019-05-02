@@ -48,6 +48,7 @@ func InitSRxGrpc(addr string) bool {
 		log.Printf("did not connect: %v", err)
 		return false
 	}
+	//log.Printf("conn: %#v, err: %#v\n", conn, err)
 	log.Printf("gRPC Client Initiated and Connected Server Address: %s\n", addr)
 	//defer conn.Close()
 	cli := pb.NewSRxApiClient(conn)
@@ -129,6 +130,7 @@ func RunProxyHello(data []byte) (*C.uchar, uint32) {
 	fmt.Printf("+ response		: %#v\n", resp)
 
 	rp := C.SRXPROXY_HELLO_RESPONSE{
+		//version:         C.ushort(resp.Version), // --> TODO: need to pack/unpack for packed struct in C
 		//version:         C.ushort(resp.Version), // --> TODO: need to pack/unpack for packed struct in C
 		length:          C.uint(resp.Length),
 		proxyIdentifier: C.uint(resp.ProxyIdentifier),
@@ -633,7 +635,6 @@ func main() {
 	goGB := &Go_ProxyGoodBye{
 		_type:       0x02,
 		_keepWindow: binary.BigEndian.Uint16([]byte{0x83, 0x03}), // 0x03 0x84 : 900
-		_zero:       0,
 		_length:     binary.BigEndian.Uint32([]byte{0x8, 0x00, 0x00, 0x00}),
 	}
 

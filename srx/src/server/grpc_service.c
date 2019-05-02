@@ -90,6 +90,7 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
     cthread->proxyID  = proxyID;
     cthread->routerID = clientID;
 
+    grpcServiceHandler.cmdHandler->grpcEnable = true;
 
     // TODO: client registration should be followed
     //  _processHandshake()
@@ -444,6 +445,7 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
         //clientID = ((ClientThread*)item->client)->routerID;
         deactivateConnectionMapping(grpcServiceHandler.svrConnHandler, clientID, false, 0);
         deleteFromSList(&grpcServiceHandler.cmdHandler->svrConnHandler->clients, cthread);
+        grpcServiceHandler.cmdHandler->grpcEnable = false;
         LOG(LEVEL_DEBUG, HDR "GoodBye!", pthread_self());
         break;
 
@@ -476,6 +478,7 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
         closeClientConnection(&grpcServiceHandler.cmdHandler->svrConnHandler->svrSock, cthread);
         deactivateConnectionMapping(grpcServiceHandler.svrConnHandler, clientID, false, 0);
         deleteFromSList(&grpcServiceHandler.cmdHandler->svrConnHandler->clients, cthread);
+        grpcServiceHandler.cmdHandler->grpcEnable = false;
         LOG(LEVEL_DEBUG, HDR "GoodBye!", pthread_self());
     }
 

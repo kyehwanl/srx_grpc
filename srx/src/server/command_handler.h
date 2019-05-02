@@ -73,6 +73,9 @@ typedef struct {
   // Internal
   pthread_t                 threads[NUM_COMMAND_HANDLER_THREADS];
   int                       numThreads;
+#ifdef USE_GRPC
+  bool                      grpcEnable;
+#endif
 } CommandHandler;
 
 /**

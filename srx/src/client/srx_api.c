@@ -504,8 +504,11 @@ bool disconnectFromSRx(SRxProxy* proxy, uint16_t keepWindow)
   if (isConnected(proxy))
   {
 #ifdef USE_GRPC
-      if(proxy->grpcClientEnable)
+      if(proxy->grpcClientEnable && connHandler->grpcClientID)
+      {
           sendGoodbye_grpc(connHandler, keepWindow);
+          connHandler->grpcClientID = 0;
+      }
       else
           sendGoodbye(connHandler, keepWindow);
 #endif
@@ -1458,6 +1461,7 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   if (connHandler->established)
   {
       connHandler->grpcClientID = ntohl(((SRXPROXY_HELLO_RESPONSE*)result)->proxyIdentifier);
+      proxy->grpcClientEnable = true;
       printf("[SRx Client] grpc client id: %08x\n", connHandler->grpcClientID);
   }
 

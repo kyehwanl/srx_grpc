@@ -158,7 +158,7 @@ srx_server_LDADD = $(LIB_PATRICIA) $(SCA_LIBS) \
 		   libsrx_shared.la \
 		   libsrx_util.la \
 		   libgrpc_service.la \
-		   $(GRPC_LIBS)
+		   $(GRPC_SERVER_LIBS)
 else 
 srx_server_LDADD = $(LIB_PATRICIA) $(SCA_LIBS) \
 		   libsrx_shared.la \

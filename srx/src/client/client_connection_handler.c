@@ -621,6 +621,11 @@ static void* GoodByeStreamThread(void *arg)
     printf("Run Proxy Good Bye Stream \n");
     printf("[%s:%d] arguments proxy: %p, proxyID: %08x\n", __FUNCTION__, __LINE__, std->proxy, std->proxyID);
 
+    while(!std->proxy->grpcClientEnable)
+    {
+        sleep(1);
+    }
+
     char buff_goodbye_stream_request[8] = {0x02, 0x03, 0x84, 0x0, 0x0, 0x0, 0x0, 0x08};
     GoSlice goodbye_stream_pdu = {(void*)buff_goodbye_stream_request, (GoInt)8, (GoInt)8};
     int result = RunProxyGoodByeStream (goodbye_stream_pdu, std->proxyID);
@@ -638,6 +643,11 @@ static void* StreamThread(void *arg)
     StreamThreadData *std = (StreamThreadData*)arg;
     printf("Run Proxy Stream \n");
     printf("[%s:%d] arguments proxy: %p, proxyID: %08x\n", __FUNCTION__, __LINE__, std->proxy, std->proxyID);
+
+    while(!std->proxy->grpcClientEnable)
+    {
+        sleep(1);
+    }
 
     char buff_stream_request[8] = {0x02, 0x00, 0x00, 0x0, 0x0, 0x0, 0x0, 0x08};
     GoSlice stream_pdu = {(void*)buff_stream_request, (GoInt)8, (GoInt)8};

@@ -438,7 +438,8 @@ static bool _processUpdateValidation(CommandHandler* cmdHandler,
     
 #ifdef USE_GRPC
   // [grpc] close send stream from server
-  cb_proxy(0, NULL);
+  if (cmdHandler->grpcEnable)
+      cb_proxy(0, NULL);
 #endif
   
   return processed;
@@ -689,7 +690,8 @@ bool broadcastResult(CommandHandler* self, SRxValidationResult* valResult)
     /* extract a specific client to send packet */
     retVal = false;
 #ifdef USE_GRPC
-    cb_proxy(pduLength, pdu);
+    if (self->grpcEnable)
+        cb_proxy(pduLength, pdu);
 #endif
 
     while  (clientCt-- > 0)

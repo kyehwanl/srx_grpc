@@ -32,13 +32,14 @@ import (
 	"encoding/binary"
 	_ "io"
 	"runtime"
-	_ "time"
+	"time"
 	"unsafe"
 )
 
 var port = flag.Int("port", 50000, "The server port")
 var gStream pb.SRxApi_SendAndWaitProcessServer
 var gStream_verify pb.SRxApi_ProxyVerifyStreamServer
+var gCancel context.CancelFunc
 
 //var done chan bool
 
@@ -443,6 +444,8 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 
 	gStream_verify = stream
 	ctx := stream.Context()
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 	done := make(chan bool)
 	go func() {
 		<-ctx.Done()

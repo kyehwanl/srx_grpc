@@ -448,13 +448,14 @@ func RunStream(data []byte) uint32 {
 			log.Println(err)
 		}
 		fmt.Printf("+ client context done\n")
-		close(done)
+		//close(done)
 	}()
 
 	<-done
 	//log.Printf("Finished with Resopnse valie: %d", uint32(resp.ValidationStatus))
 	log.Printf("Finished with Resopnse valie")
 	//fmt.Printf("Finished with Resopnse valie: %d", uint32(resp.ValidationStatus))
+	//close(ctx.Done)
 
 	return 0
 	//return uint32(resp.ValidationStatus)
@@ -485,6 +486,8 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 	}
 
 	ctx := stream.Context()
+	//ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
+	//defer cancel()
 	done := make(chan bool)
 	//var r pb.ProxyVerifyNotify
 
@@ -540,7 +543,7 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 			log.Println(err)
 		}
 		fmt.Printf("+ client context done\n")
-		close(done)
+		//close(done)
 	}()
 
 	<-done

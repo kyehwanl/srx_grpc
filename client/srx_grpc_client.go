@@ -20,7 +20,7 @@ import (
 	"log"
 	"runtime"
 	pb "srx_grpc"
-	_ "time"
+	"time"
 	"unsafe"
 )
 
@@ -486,8 +486,8 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 	}
 
 	ctx := stream.Context()
-	//ctx, cancel := context.WithTimeout(ctx, 30*time.Second)
-	//defer cancel()
+	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
+	defer cancel()
 	done := make(chan bool)
 	//var r pb.ProxyVerifyNotify
 

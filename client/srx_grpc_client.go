@@ -489,13 +489,14 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
 	done := make(chan bool)
-	//var r pb.ProxyVerifyNotify
 
 	go func() {
 		for {
 			resp, err := stream.Recv()
 			if err == io.EOF {
-				close(done)
+				// NOTE: remove close below to prevent panic from calling close again
+				//		 which was done by the case of type=0, length=0
+				//close(done)
 				log.Printf("[client] EOF close ")
 				return
 			}

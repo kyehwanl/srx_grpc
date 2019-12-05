@@ -2462,7 +2462,7 @@ void doVerify_db_grpc(bool log, char** argPtr)
 
   // The method verifyUpdate will go into wait mode if receipt is requested.
   int i;
-  for (i=0; i<1000; i++)
+  for (i=0; i<100000; i++)
   {
       verifyUpdate_grpc(proxy, localID,
                    (method & SRX_FLAG_ROA) == SRX_FLAG_ROA,

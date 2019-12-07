@@ -1,0 +1,61 @@
+ChangeLog information for Quagga is now recorded in our source-code
+management system. Please see:
+
+	http://www.quagga.net/devel.php
+
+
+QuaggaSRx changes are:
+======================
+  0.4.2.7 - October 2017
+    * Fixed more issues in configuration script regarding static OpenSSL library
+
+  0.4.2.6 - October 2017
+    * Fixed more issues in configuration script
+
+  0.4.2.5 - August - October 2017
+    * Fixed some issues in configuration script
+    * Update RPM spec file. This version will be incompatible with srx-proxy
+      0.5.1, and SRxCryptoAPI 0.3.0
+
+  0.4.2.4 - July 2017
+    * Update implementation to comply with latest BGPsec Protocol specification
+    * Modified the valies of CAPABILITY_CODE_BGPSEC and BGP_ATTR_BGPSEC to
+      the IANA assigned values.
+      For backwards compatibility with code written during the time where IANA 
+      did not have the values assigned yet, these values still can be modified 
+      during compile time to other values using -DCAPABILITY_CODE_BGPSEC=<num>
+      and -DBGP_ATTR_BGPSEC=<num>
+      - for backwards compatibility the previously used values were 
+        [CAPABILITY_CODE_BGPSEC=72] and [CAPABILITY_CODE_BGPSEC=30]
+    * Minor Bug Fixes
+
+  0.4.2.3 - February 2017
+    * Minor BUG Fixes
+
+  0.4.2.2 - February 2017
+    * Minor Bug Fixes
+    * Added capability negotiation for Extended Message (> 4094)
+
+  0.4.2.1 - July 2016
+    * Removed unused in line documentation
+    * Minor Bug Fixes
+
+  0.4.2.0 - July 2016
+    * Rewrote BGPSEC Path processing according to bgpsec draft 17
+    * Removed handling of public keys. This musat be done in SRxCryptoAPI as 
+      well as SRx-Server
+    * Enabled MPNLRI encoding for IPv4 addresses
+    * Allowing to specify more than one private key for path signing
+    * Minor Bug Fixes
+
+  0.4.1.5 - March 2016
+    * Minor bug fixes
+
+  0.4.1.4 - October 2015
+    * Modified RPM build tool to require SRxCryptoAPI >= 1.2.0
+    * Removed methods used from SRxCryptoAPI 1.1.x
+    * Fixed configuration issues in configure.ac
+
+  0.4.1.3b - October 2015
+    * Started Adding information to ChangeLog
+    * Modified RPM build tool to require SRxCryptoAPI >= 1.1.0 < 1.2.0

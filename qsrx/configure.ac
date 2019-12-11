@@ -352,6 +352,22 @@ AC_ARG_ENABLE(srxcryptoapi,
               [  --disable-srxcryptoapi        disable srxcryptoapi integration], 
               [enable_srxcryptoapi="no"] [enable_srxcryptoapi="yes"])
 
+# check gRPC support variables
+AC_ARG_ENABLE(grpc,
+              [ --enable-grpc       enable grpc features],
+              [enable_grpc="yes"],[])
+
+AM_CONDITIONAL([ENABLE_GRPC_COND], [test x$enable_grpc = xyes])
+
+AC_MSG_CHECKING(checking to see if grpc is enabled)
+if test "x${enable_grpc}" = "xyes"; then
+    AC_MSG_RESULT(yes)
+    AC_DEFINE([USE_GRPC],[], SRX GRPC)
+    AC_ARG_VAR(grpc_dir, provide grpc driver directory in which grpc server and client installed)
+else
+    AC_MSG_RESULT(no)
+fi
+
 if test x"${enable_srx}" != x"yes" ; then
   if test x"${enable_srxcryptoapi}" = x"yes" ; then
     AC_MSG_ERROR([--enable-srxcryptoapi not possible with --disable-srx !!])

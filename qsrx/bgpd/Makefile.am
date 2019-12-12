@@ -9,6 +9,7 @@ INSTALL_SDATA=@INSTALL@ -m 600
 if ENABLE_GRPC_COND
 GRPC_SERVER_LIBS = -lsrx_grpc_server
 GRPC_CLIENT_LIBS = -lsrx_grpc_client
+GRPC_LIBS = $(GRPC_SERVER_LIBS) $(GRPC_CLIENT_LIBS)
 
 #GRPC_DIR = /opt/project/gobgp_test/gowork/src/srx_grpc
 GRPC_DIR = $(grpc_dir)
@@ -51,7 +52,12 @@ noinst_HEADERS = \
 
 bgpd_SOURCES = bgp_main.c
 
+if ENABLE_GRPC_COND
+bgpd_LDADD = libbgp.a ../lib/libzebra.la $(GRPC_CLIENT_LIBS) @LIBCAP@ @LIBM@
+bgpd_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
+else
 bgpd_LDADD = libbgp.a ../lib/libzebra.la @LIBCAP@ @LIBM@
+endif
 
 examplesdir = $(exampledir)
 dist_examples_DATA = bgpd.conf.sample bgpd.conf.sample2 bgpd.conf.sampleSRx

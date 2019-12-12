@@ -124,11 +124,18 @@ am__installdirs = "$(DESTDIR)$(sbindir)" "$(DESTDIR)$(examplesdir)"
 PROGRAMS = $(sbin_PROGRAMS)
 am_bgpd_OBJECTS = bgp_main.$(OBJEXT)
 bgpd_OBJECTS = $(am_bgpd_OBJECTS)
-bgpd_DEPENDENCIES = libbgp.a ../lib/libzebra.la
+am__DEPENDENCIES_1 =
+#bgpd_DEPENDENCIES = libbgp.a \
+#	../lib/libzebra.la
+bgpd_DEPENDENCIES = libbgp.a ../lib/libzebra.la \
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
 am__v_lt_1 = 
+bgpd_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
+	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+	$(bgpd_LDFLAGS) $(LDFLAGS) -o $@
 AM_V_P = $(am__v_P_$(V))
 am__v_P_ = $(am__v_P_$(AM_DEFAULT_VERBOSITY))
 am__v_P_0 = false
@@ -233,7 +240,7 @@ BUILD_TESTS =
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/include -I/opt/project/srx_test1/srx/../_inst//include -Os -fno-omit-frame-pointer -g -std=gnu99 -Wall -Wsign-compare -Wpointer-arith -Wbad-function-cast -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wchar-subscripts -Wcast-qual
-CONFDATE = 20191206
+CONFDATE = 20191211
 CPP = gcc -E
 CPPFLAGS = 
 CURSES = 
@@ -241,6 +248,7 @@ CYGPATH_W = echo
 #DEFS = -DHAVE_CONFIG_H -DSYSCONFDIR=\"$(sysconfdir)/\" -D__TIME_MEASURE__
 DEFS = -DHAVE_CONFIG_H -DSYSCONFDIR=\"$(sysconfdir)/\"
 DEPDIR = .deps
+DLLTOOL = false
 DOC = 
 DSYMUTIL = 
 DUMPBIN = 
@@ -287,6 +295,7 @@ LN_S = ln -s
 LTLIBOBJS = 
 MAJOR_VER = 4
 MAKEINFO = makeinfo
+MANIFEST_TOOL = :
 MINOR_VER = 2
 MKDIR_P = /bin//mkdir -p
 MORE_TOOLS = 
@@ -337,6 +346,7 @@ abs_builddir = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/bgpd
 abs_srcdir = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/bgpd
 abs_top_builddir = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx
 abs_top_srcdir = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx
+ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
 am__include = include
@@ -360,6 +370,7 @@ enable_user = root
 enable_vty_group = 
 exampledir = ${prefix}/etc
 exec_prefix = ${prefix}
+grpc_dir = /opt/project/gobgp_test/gowork/src/srx_grpc
 host = x86_64-unknown-linux-gnu
 host_alias = 
 host_cpu = x86_64
@@ -373,7 +384,6 @@ libdir = ${exec_prefix}/lib64
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
 localstatedir = ${prefix}/var
-lt_ECHO = echo
 mandir = ${datarootdir}/man
 mkdir_p = $(MKDIR_P)
 oldincludedir = /usr/include
@@ -383,7 +393,7 @@ pkgsrcrcdir =
 prefix = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/test_install
 program_transform_name = s,x,x,
 psdir = ${docdir}
-quagga_statedir = /var/run
+quagga_statedir = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/test_install/etc
 sbindir = ${exec_prefix}/sbin
 sca_dir = /opt/project/srx_test1/srx/../_inst/
 sharedstatedir = ${prefix}/com
@@ -399,6 +409,20 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 INSTALL_SDATA = /bin//install -c -m 600
+GRPC_SERVER_LIBS = -lsrx_grpc_server
+GRPC_CLIENT_LIBS = -lsrx_grpc_client
+GRPC_LIBS = $(GRPC_SERVER_LIBS) $(GRPC_CLIENT_LIBS)
+
+#GRPC_DIR = /opt/project/gobgp_test/gowork/src/srx_grpc
+GRPC_DIR = $(grpc_dir)
+GRPC_SERVER_PATH = $(GRPC_DIR)/server
+GRPC_CLIENT_PATH = $(GRPC_DIR)/client
+GRPC_SERVER_LDFLAG = -L$(GRPC_SERVER_PATH) #-rpath '$(GRPC_SERVER_PATH)'
+GRPC_CLIENT_LDFLAG = -L$(GRPC_CLIENT_PATH) #-rpath '$(GRPC_CLIENT_PATH)'
+GRPC_SERVER_RPATH = -rpath '$(GRPC_SERVER_PATH)'
+GRPC_CLIENT_RPATH = -Wl,-rpath -Wl,$(GRPC_CLIENT_PATH)
+#GRPC_CLIENT_RPATH = -rpath '$(GRPC_CLIENT_PATH)'
+GRPC_CFLAGS = -I$(GRPC_DIR)
 AM_CFLAGS = $(PICFLAGS)
 #AM_LDFLAGS = $(PILDFLAGS) -ldl -L/opt/project/tm-library/tm_rdtsc -ltm_rdtsc -Wl,-rpath -Wl,/opt/project/tm-library/tm_rdtsc/.libs
 AM_LDFLAGS = $(PILDFLAGS) -ldl
@@ -420,7 +444,9 @@ noinst_HEADERS = \
 	bgp_validate.h
 
 bgpd_SOURCES = bgp_main.c
-bgpd_LDADD = libbgp.a ../lib/libzebra.la  -lm
+#bgpd_LDADD = libbgp.a ../lib/libzebra.la  -lm
+bgpd_LDADD = libbgp.a ../lib/libzebra.la $(GRPC_CLIENT_LIBS)  -lm
+bgpd_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 examplesdir = $(exampledir)
 dist_examples_DATA = bgpd.conf.sample bgpd.conf.sample2 bgpd.conf.sampleSRx
 EXTRA_DIST = BGP4-MIB.txt
@@ -518,7 +544,7 @@ clean-sbinPROGRAMS:
 
 bgpd$(EXEEXT): $(bgpd_OBJECTS) $(bgpd_DEPENDENCIES) $(EXTRA_bgpd_DEPENDENCIES) 
 	@rm -f bgpd$(EXEEXT)
-	$(AM_V_CCLD)$(LINK) $(bgpd_OBJECTS) $(bgpd_LDADD) $(LIBS)
+	$(AM_V_CCLD)$(bgpd_LINK) $(bgpd_OBJECTS) $(bgpd_LDADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)

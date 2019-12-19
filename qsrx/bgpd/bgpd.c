@@ -2646,6 +2646,10 @@ void srx_set_default(struct bgp *bgp)
 //  }
 
   memset(bgp->srx_bgpsec_key, 0, sizeof (BGPSecKey));
+
+#ifdef USE_GRPC
+  grpc_init(bgp->srxProxy, bgp->srx_proxyID);
+#endif /* USE_GRPC */
 }
 #endif /* USE_SRX */
 
@@ -6394,6 +6398,20 @@ bgp_init (void)
   bgp_snmp_init ();
 #endif /* HAVE_SNMP */
 }
+
+#ifdef USE_GRPC
+extern void ImpleGoStreamThread (SRxProxy* proxy, uint32_t proxyID);
+
+void grpc_init (SRxProxy* proxy, uint32_t proxyID)
+{
+    // calling to initialize GRPC on libSRxProxy
+    bool initResult = callSRxGRPC_Init("localhost:50000"); 
+    printf("proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%d]\n", proxy, proxyID, initResult);
+
+    // NOTE: here some stream server threads
+    ImpleGoStreamThread(proxy, proxyID);
+}
+#endif /* USE_GRPC */
 
 void
 bgp_terminate (void)

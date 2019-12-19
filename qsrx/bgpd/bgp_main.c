@@ -459,6 +459,9 @@ main (int argc, char **argv)
   /* Parse config file. */
   vty_read_config (config_file, config_default);
 
+  /* gRPC related initialization */
+  grpc_init();
+
   /* Start execution only if not in dry-run mode */
   if(dryrun)
     return(0);

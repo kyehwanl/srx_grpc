@@ -2653,6 +2653,8 @@ void srx_set_default(struct bgp *bgp)
 }
 #endif /* USE_SRX */
 
+
+
 /* BGP instance creation by `router bgp' commands. */
 static struct bgp *
 bgp_create (as_t *as, const char *name)

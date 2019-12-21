@@ -624,6 +624,17 @@ int srx_connect_proxy(struct bgp *bgp)
   // configuration, set a flag to connect once g_rq is established.
   if (g_rq != NULL)
   {
+#ifdef USE_GRPC
+    connected = connectToSRx_grpc(bgp->srxProxy, bgp->srx_host, bgp->srx_port,
+        bgp->srx_handshakeTimeout, false);  
+
+    if (connected)
+    {
+      if ( CHECK_FLAG(bgp->srx_config, SRX_CONFIG_EVAL_DISTR))
+        zlog_info ("\033[92m""Enabled Distributed Evaluation on SRx server <GRPC>""\033[0m" );
+    }
+
+#else
     // The last parameter (true) stands for external socket control
     connected = connectToSRx (bgp->srxProxy, bgp->srx_host, bgp->srx_port,
                               bgp->srx_handshakeTimeout, true);
@@ -647,6 +658,7 @@ int srx_connect_proxy(struct bgp *bgp)
       zlog_err ("Could not connect to SRx server at %s:%d, check if server is "
                 "running", bgp->srx_host, bgp->srx_port);
     }
+#endif /* USE_GRPC */
   }
 
   return connected ? 0 : 1;

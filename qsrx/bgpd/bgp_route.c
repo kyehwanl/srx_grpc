@@ -3069,8 +3069,13 @@ void verify_update (struct bgp *bgp, struct bgp_info *info,
         usePathVal = true;
       }
 
+#ifdef USE_GRPC
+      verifyUpdate_grpc(bgp->srxProxy, info->localID, true, usePathVal, defResult,
+                   prefix, oas, bgpsec);
+#else
       verifyUpdate(bgp->srxProxy, info->localID, true, usePathVal, defResult,
                    prefix, oas, bgpsec);
+#endif /* USE_GRPC */
 
       srx_free_bgpsec_data(bgpsec);
       free(prefix);

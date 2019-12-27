@@ -6414,6 +6414,7 @@ bgp_init (void)
 }
 
 #ifdef USE_GRPC
+extern SRxProxy *g_proxy;
 extern void ImpleGoStreamThread (SRxProxy* proxy, uint32_t proxyID);
 
 void grpc_init (SRxProxy* proxy, uint32_t proxyID)
@@ -6421,6 +6422,8 @@ void grpc_init (SRxProxy* proxy, uint32_t proxyID)
     // calling to initialize GRPC on libSRxProxy
     bool initResult = callSRxGRPC_Init("localhost:50000"); 
     printf("proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%d]\n", proxy, proxyID, initResult);
+
+    g_proxy = proxy;
 
     // NOTE: here some stream server threads
     ImpleGoStreamThread(proxy, proxyID);

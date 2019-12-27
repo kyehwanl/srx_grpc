@@ -85,7 +85,9 @@
 #include "util/mutex.h"
 #include "util/log.h"
 #include "util/socket.h"
-
+#ifdef USE_GRPC
+#include "client/grpc_client_service.h"
+#endif
 #define HDR "(SRX API): "
 
 static ProxyLogger _pLogger = NULL;

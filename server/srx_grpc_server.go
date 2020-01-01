@@ -31,6 +31,8 @@ import (
 	_ "bytes"
 	"encoding/binary"
 	_ "io"
+	"io/ioutil"
+	"os"
 	"runtime"
 	"time"
 	"unsafe"
@@ -517,6 +519,11 @@ func Serve() {
 	if err != nil {
 		log.Printf("failed to listen: %v", err)
 	}
+
+	/* Disable Logging for performance measurement */
+	log.SetFlags(0)               // skip all formatting
+	log.SetOutput(ioutil.Discard) // using this as io.Writer to skip logging
+	os.Stdout = nil               // to suppress fmt.Print
 
 	server := NewServer(grpc.NewServer())
 	if err := server.grpcServer.Serve(lis); err != nil {

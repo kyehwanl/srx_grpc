@@ -25,7 +25,7 @@ __attribute__((always_inline)) inline void printHex(int len, unsigned char* buff
 
 void processVerifyNotify_grpc(SRXPROXY_VERIFY_NOTIFICATION* hdr)
 {
-    printf("+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
+    LOG(LEVEL_DEBUG, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
     SRxProxy* proxy = g_proxy;
 
     printHex(sizeof(SRXPROXY_VERIFY_NOTIFICATION), (unsigned char*)hdr);
@@ -44,13 +44,13 @@ void processVerifyNotify_grpc(SRXPROXY_VERIFY_NOTIFICATION* hdr)
 
 #ifdef BZ263
             ct++;
-            printf("#%u - uid:0x%08x lid:0x%08X (%u)\n", ct, updateID, localID,
+            LOG(LEVEL_DEBUG, HDR "#%u - uid:0x%08x lid:0x%08X (%u)\n", ct, updateID, localID,
                     localID);
 #endif
 
             if (localID > 0 && !hasReceipt)
             {
-                printf(" -> ERROR, no receipt flag set.\n");
+                LOG(LEVEL_DEBUG, HDR " -> ERROR, no receipt flag set.\n");
                 LOG(LEVEL_WARNING, HDR "Unusual notification for update [0x%08X] with "
                         "local id [0x%08X] but receipt flag NOT SET!",
                         updateID, localID);
@@ -78,13 +78,13 @@ void processVerifyNotify_grpc(SRXPROXY_VERIFY_NOTIFICATION* hdr)
     }
     else
     {
-        printf("this client doens't have a proxy pointer set, maybe due to simple test\n");
+        LOG(LEVEL_WARNING, HDR "this client doens't have a proxy pointer set, maybe due to simple test\n");
     }
 }
 
 void processGoodbye_grpc(SRXPROXY_GOODBYE* hdr)
 {
-    printf("+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
+    LOG(LEVEL_DEBUG, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
     SRxProxy* proxy = g_proxy;
 
     if (proxy)
@@ -137,14 +137,14 @@ void processGoodbye_grpc(SRXPROXY_GOODBYE* hdr)
     }
     else
     {
-        printf("this client doens't have a proxy pointer set, maybe due to simple test\n");
+        LOG(LEVEL_WARNING, HDR "this client doens't have a proxy pointer set, maybe due to simple test\n");
     }
 
 }
 
 void processSyncRequest_grpc(SRXPROXY_SYNCH_REQUEST* hdr)
 {
-    printf("+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
+    LOG(LEVEL_DEBUG, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
     SRxProxy* proxy = g_proxy;
 
     if (proxy)
@@ -161,13 +161,13 @@ void processSyncRequest_grpc(SRXPROXY_SYNCH_REQUEST* hdr)
     }
     else{
 
-        printf("this client doens't have a proxy pointer set, maybe due to simple test\n");
+        LOG(LEVEL_WARNING, HDR "this client doens't have a proxy pointer set, maybe due to simple test\n");
     }
 }
 
 void processSignNotify_grpc(SRXPROXY_SIGNATURE_NOTIFICATION* hdr)
 {
-    printf("+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
+    LOG(LEVEL_DEBUG, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
     SRxProxy* proxy = g_proxy;
     
     if (proxy)

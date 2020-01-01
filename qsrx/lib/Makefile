@@ -218,7 +218,7 @@ BUILD_TESTS =
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/include -I/opt/project/srx_test1/srx/../_inst//include -Os -fno-omit-frame-pointer -g -std=gnu99 -Wall -Wsign-compare -Wpointer-arith -Wbad-function-cast -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wchar-subscripts -Wcast-qual
-CONFDATE = 20191211
+CONFDATE = 20191230
 CPP = gcc -E
 CPPFLAGS = 
 CURSES = 

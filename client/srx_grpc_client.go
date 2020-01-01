@@ -2,7 +2,7 @@ package main
 
 /*
 #cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/../extras/local/include -I/opt/project/srx_test1/srx/../_inst//include
-#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -lgrpc_client_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -Wl,--unresolved-symbols=ignore-all
+#cgo LDFLAGS: /opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs/log.o -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -lgrpc_client_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -Wl,--unresolved-symbols=ignore-all
 
 #include <stdlib.h>
 #include "shared/srx_packets.h"
@@ -17,7 +17,9 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 	"io"
+	"io/ioutil"
 	"log"
+	"os"
 	"runtime"
 	pb "srx_grpc"
 	"time"
@@ -42,6 +44,12 @@ type ProxyVerifyClient struct {
 
 //export InitSRxGrpc
 func InitSRxGrpc(addr string) bool {
+
+	/* Disable Logging */
+	log.SetFlags(0)               // skip all formatting
+	log.SetOutput(ioutil.Discard) // using this as io.Writer to skip logging
+	os.Stdout = nil               // to suppress fmt.Print
+
 	log.Printf("InitSRxGrpc Called \n")
 	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {

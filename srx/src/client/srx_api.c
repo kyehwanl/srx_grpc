@@ -994,7 +994,6 @@ void setProxyLogger(ProxyLogger logger)
  */
 bool setLogMode(int logMode)
 {
-    printf(" %s testing : input param: %d\n", __FUNCTION__, logMode);
   switch (logMode)
   {
     case LEVEL_ERROR:
@@ -1009,24 +1008,6 @@ bool setLogMode(int logMode)
   }
 }
 
-/*
-bool setLogMode2(int logMode)
-{
-    printf(" %s testing : input param: %d\n", __FUNCTION__, logMode);
-  switch (logMode)
-  {
-    case LEVEL_ERROR:
-    case LEVEL_WARNING:
-    case LEVEL_NOTICE:
-    case LEVEL_INFO:
-    case LEVEL_DEBUG:
-      setLogLevel(logMode);
-      return true;
-    default:
-      return false;
-  }
-}
-*/
 ////////////////////////////////////////////////////////////////////////////////
 // RECEIVE AND HANDLE PACKETS - for HEADER IMPLEMENTATION
 ////////////////////////////////////////////////////////////////////////////////
@@ -1039,7 +1020,7 @@ bool setLogMode2(int logMode)
  */
 void processHelloResponse(SRXPROXY_HELLO_RESPONSE* hdr, SRxProxy* proxy)
 {
-    printf("[%s] function called \n", __FUNCTION__);
+  LOG(LEVEL_INFO, HDR "[%s] function called \n", __FUNCTION__);
   // The client connection handler
   ClientConnectionHandler* connHandler =
                                    (ClientConnectionHandler*)proxy->connHandler;
@@ -1094,7 +1075,6 @@ static int ct = 0;
  */
 void processVerifyNotify(SRXPROXY_VERIFY_NOTIFICATION* hdr, SRxProxy* proxy)
 {
-    printf("+++ [%s] called \n", __FUNCTION__);
   if (proxy->resCallback != NULL)
   {
     bool hasReceipt = (hdr->resultType & SRX_FLAG_REQUEST_RECEIPT)
@@ -1107,13 +1087,12 @@ void processVerifyNotify(SRXPROXY_VERIFY_NOTIFICATION* hdr, SRxProxy* proxy)
 
 #ifdef BZ263
     ct++;
-    printf("#%u - uid:0x%08x lid:0x%08X (%u)\n", ct, updateID, localID,
-           localID);
+    //LOG(LEVEL_DEBUG, HDR "#%u - uid:0x%08x lid:0x%08X (%u)\n", ct, updateID, localID, localID);
 #endif
 
     if (localID > 0 && !hasReceipt)
     {
-      printf(" -> ERROR, no receipt flag set.\n");
+      LOG(LEVEL_WARNING, HDR " -> ERROR, no receipt flag set.\n");
       LOG(LEVEL_WARNING, HDR "Unusual notification for update [0x%08X] with "
                          "local id [0x%08X] but receipt flag NOT SET!",
           updateID, localID);
@@ -1121,8 +1100,8 @@ void processVerifyNotify(SRXPROXY_VERIFY_NOTIFICATION* hdr, SRxProxy* proxy)
     }
     else
     {
-      LOG(LEVEL_DEBUG, HDR "Update [0x%08X] with localID [0x%08X]: %d",
-                       updateID, localID, localID);
+      //LOG(LEVEL_DEBUG, HDR "Update [0x%08X] with localID [0x%08X]: %d",
+      //                 updateID, localID, localID);
     }
 
     uint8_t roaResult    = useROA ? hdr->roaResult : SRx_RESULT_UNDEFINED;
@@ -1286,7 +1265,7 @@ void processError(SRXPROXY_ERROR* hdr, SRxProxy* proxy)
  */
 static void dispatchPackets(SRXPROXY_BasicHeader* packet, void* proxyPtr)
 {
-    printf("+++ [%s] called \n", __FUNCTION__);
+  //LOG(LEVEL_INFO, HDR "+++ [%s] called \n", __FUNCTION__);
   SRxProxy* proxy = (SRxProxy*)proxyPtr;
 
   switch (packet->type)
@@ -1427,9 +1406,13 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   hdr->asn             = htonl(proxy->proxyAS);
   hdr->noPeers         = htonl(noPeers);
 
-  printf("\nRequest Proxy Hello:\n");
-  printHex(length, pdu);
+  LOG(LEVEL_INFO, HDR "\nRequest Proxy Hello:\n");
 
+  LogLevel lv = getLogLevel();
+  LOG(LEVEL_INFO, HDR "srx client log Level: %d\n", lv);
+  if (lv >= LEVEL_INFO) {
+    printHex(length, pdu);
+  }
 
   unsigned char result[sizeof(SRXPROXY_HELLO_RESPONSE)];
   //unsigned char result[12];
@@ -1444,8 +1427,10 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   unsigned char* pRes = tResp.r0;
   memcpy(result, pRes, sizeof(SRXPROXY_HELLO_RESPONSE));
 
-  printf("\nResponse Proxy[ID:%d] Hello Response: \n", tResp.r1);
-  printHex(sizeof(SRXPROXY_HELLO_RESPONSE), result);
+  LOG(LEVEL_INFO, HDR "\nResponse Proxy[ID:%d] Hello Response: \n", tResp.r1);
+  if (lv >= LEVEL_INFO) {
+    printHex(sizeof(SRXPROXY_HELLO_RESPONSE), result);
+  }
 
   ClientConnectionHandler* connHandler =
                                    (ClientConnectionHandler*)proxy->connHandler;
@@ -1465,7 +1450,7 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   {
       connHandler->grpcClientID = ntohl(((SRXPROXY_HELLO_RESPONSE*)result)->proxyIdentifier);
       proxy->grpcClientEnable = true;
-      printf("[SRx Client] grpc client id: %08x\n", connHandler->grpcClientID);
+      LOG(LEVEL_INFO, HDR "[SRx Client] grpc client id: %08x\n", connHandler->grpcClientID);
   }
 
   // following return value will be determined by calling (fn_packetHandler --> fn_dispatchPackets)
@@ -1535,7 +1520,7 @@ void verifyUpdate_grpc(SRxProxy* proxy, uint32_t localID,
   GoSlice verify_pdu = {(void*)pdu, (GoInt)length, (GoInt)length};
   //int32_t result = RunStream(verify_pdu);
   int32_t result = RunProxyVerify(verify_pdu, connHandler->grpcClientID);
-  printf("[SRx Client] Validation Result: %02x\n", result);
+  //LOG(LEVEL_INFO, HDR "[SRx Client] Validation Result: %02x\n", result);
 
 }
 
@@ -1548,7 +1533,7 @@ bool callSRxGRPC_Init(const char* addr)
     gs_addr.n = strlen((const char*)addr);
 
     bool res = InitSRxGrpc(gs_addr);
-    LOG(LEVEL_DEBUG, HDR  "Init SRx GRPC result: %d \n", res);
+    LOG(LEVEL_INFO, HDR  "Init SRx GRPC result: %d \n", res);
 
     return res;
 }

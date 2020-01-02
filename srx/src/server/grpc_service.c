@@ -21,12 +21,12 @@ __attribute__((always_inline)) inline void printHex(int len, unsigned char* buff
         
 static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
 {
-  printf("[%s] function called \n", __FUNCTION__);
-  printf("++ grpcServiceHandler : %p  \n", &grpcServiceHandler );
-  printf("++ grpcServiceHandler.CommandQueue   : %p  \n", grpcServiceHandler.cmdQueue);
-  printf("++ grpcServiceHandler.CommandHandler : %p  \n", grpcServiceHandler.cmdHandler );
-  printf("++ grpcServiceHandler.UpdateCache    : %p  \n", grpcServiceHandler.updCache);
-  printf("++ grpcServiceHandler.svrConnHandler : %p  \n", grpcServiceHandler.svrConnHandler);
+  LOG(LEVEL_DEBUG, HDR "[%s] function called \n", __FUNCTION__);
+  LOG(LEVEL_DEBUG, HDR "++ grpcServiceHandler : %p  \n", &grpcServiceHandler );
+  LOG(LEVEL_DEBUG, HDR "++ grpcServiceHandler.CommandQueue   : %p  \n", grpcServiceHandler.cmdQueue);
+  LOG(LEVEL_DEBUG, HDR "++ grpcServiceHandler.CommandHandler : %p  \n", grpcServiceHandler.cmdHandler );
+  LOG(LEVEL_DEBUG, HDR "++ grpcServiceHandler.UpdateCache    : %p  \n", grpcServiceHandler.updCache);
+  LOG(LEVEL_DEBUG, HDR "++ grpcServiceHandler.svrConnHandler : %p  \n", grpcServiceHandler.svrConnHandler);
 
   SRXPROXY_HELLO* hdr  = (SRXPROXY_HELLO*)data;
   uint32_t proxyID     = 0;
@@ -50,7 +50,7 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
   //cthread->caddr	  = caddr;
 
 
-  printf("[SRx server] Obtained cthread: %p \n", cthread);
+  LOG(LEVEL_DEBUG, HDR "[SRx server] Obtained cthread: %p \n", cthread);
 
 
   if (ntohs(hdr->version) != SRX_PROTOCOL_VER)
@@ -80,7 +80,7 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
         clientID = 0; // FAIL HANDSHAKE
       }
 
-      printf("[SRx server] proxyID: %d --> mapping[clientID:%d] cthread: %p\n", 
+      LOG(LEVEL_INFO, HDR "[SRx server] proxyID: %d --> mapping[clientID:%d] cthread: %p\n", 
           proxyID,  clientID, grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket);
     }
 
@@ -126,8 +126,8 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
 
 static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt, unsigned int grpcClientID)
 {
-  printf("[%s] function called, grpc clientID: %d \n", __FUNCTION__, grpcClientID);
-  LOG(LEVEL_DEBUG, HDR "Enter processValidationRequest", pthread_self());
+  LOG(LEVEL_DEBUG, HDR "[%s] function called, grpc clientID: %d \n", __FUNCTION__, grpcClientID);
+  LOG(LEVEL_INFO, HDR "Enter processValidationRequest", pthread_self());
     
   bool retVal = true;
   SRXRPOXY_BasicHeader_VerifyRequest* hdr =
@@ -214,7 +214,7 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt, uns
 
   // 2. Generate the CRC based updateID
   updateID = generateIdentifier(originAS, prefix, &bgpData);
-  printf("\n[SRx server] Generated Update ID: %08X, client ID:%d \n\n", updateID, clientID);
+  LOG(LEVEL_DEBUG, HDR "\n[SRx server] Generated Update ID: %08X, client ID:%d \n\n", updateID, clientID);
 
 
   //  3. Try to find the update, if it does not exist yet, store it.
@@ -225,7 +225,7 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt, uns
   ProxyClientMapping* clientMapping = clientID > 0 ? &grpcServiceHandler.svrConnHandler->proxyMap[clientID]
                                                    : NULL;
 
-  printf("[SRx Server] proxyMap[clientID:%d]: %p\n", clientID, clientMapping);
+  LOG(LEVEL_DEBUG, HDR "[SRx Server] proxyMap[clientID:%d]: %p\n", clientID, clientMapping);
 
   doStoreUpdate = !getUpdateResult (grpcServiceHandler.svrConnHandler->updateCache, &updateID,
                                     clientID, clientMapping,
@@ -254,8 +254,8 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt, uns
   free(prefix);
   prefix = NULL;
 
-  printf("+ from updata cache srxRes.roaResult : %02x\n", srxRes.roaResult);
-  printf("+ from updata cache srxRes.bgpsecResult : %02x\n", srxRes.bgpsecResult);
+  LOG(LEVEL_INFO, HDR "+ from updata cache srxRes.roaResult : %02x\n", srxRes.roaResult);
+  LOG(LEVEL_INFO, HDR "+ from updata cache srxRes.bgpsecResult : %02x\n", srxRes.bgpsecResult);
 
   // Just check if the client has the correct values for the requested results
   if (doOriginVal && (hdr->roaDefRes != srxRes.roaResult))
@@ -331,7 +331,7 @@ static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt, uns
       }
     }
 
-    LOG(LEVEL_DEBUG, HDR "Exit processValidationRequest", pthread_self());
+    LOG(LEVEL_INFO, HDR "Exit processValidationRequest", pthread_self());
 
   }
   return retVal;
@@ -385,7 +385,7 @@ static void _processPeerChange_grpc(unsigned char *data, RET_DATA *rt, unsigned 
 //int responseGRPC (int size, unsigned char* data)
 RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
 {
-    printf("[SRx server] [%s] calling - size: %d, grpcClient ID: %02x  \n", __FUNCTION__, size, grpcClientID);
+    LOG(LEVEL_DEBUG, HDR "[SRx server] [%s] calling - size: %d, grpcClient ID: %02x  \n", __FUNCTION__, size, grpcClientID);
     //setLogLevel(LEVEL_DEBUG);
 
     /*
@@ -393,7 +393,12 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
     printf("ret bool: %d \n", ret);
     */
 
-    printHex(size, data);
+    LogLevel lv = getLogLevel();
+    LOG(LEVEL_INFO, HDR "srx server log Level: %d\n", lv);
+
+    if (lv >= LEVEL_INFO) {
+      printHex(size, data);
+    }
 
     RET_DATA rt;
     memset(&rt, 0x0, sizeof(RET_DATA));
@@ -431,10 +436,10 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
         _processUpdateSigning_grpc(data, &rt, grpcClientID);
         break;
       case PDU_SRXPROXY_GOODBYE:
-        printf("[SRx Server] Received GOOD BYE from proxyID: %d\n", grpcClientID);
+        LOG(LEVEL_DEBUG, HDR "[SRx Server] Received GOOD BYE from proxyID: %d\n", grpcClientID);
         clientID = findClientID(grpcServiceHandler.svrConnHandler, grpcClientID);
       
-        printf("[SRx server] proxyID: %d --> mapping[clientID:%d] cthread: %p\n", 
+        LOG(LEVEL_DEBUG, HDR "[SRx server] proxyID: %d --> mapping[clientID:%d] cthread: %p\n", 
           grpcClientID,  clientID, grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket);
 
         cthread = (ClientThread*)grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket;
@@ -461,17 +466,17 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
         RAISE_ERROR("Unknown/unsupported pdu type: %d", bhdr->type);
 
         memset(pdu, 0, length);                         
-        LOG(LEVEL_DEBUG, HDR" send Goodbye! called" );  
+        LOG(LEVEL_INFO, HDR" send Goodbye! called" );  
         hdr->type       = PDU_SRXPROXY_GOODBYE;         
         hdr->keepWindow = htons(900);            
         hdr->length     = htonl(length);                
 
-        printf("\n\nCalling CallBack function forGoodbye STREAM\n\n");         
+        LOG(LEVEL_DEBUG, HDR "\n\nCalling CallBack function forGoodbye STREAM\n\n");         
         cb_proxyGoodBye(*hdr);
         
         // XXX: NOTE: do the same way in GoodBye above
         clientID = findClientID(grpcServiceHandler.svrConnHandler, grpcClientID);
-        printf("[SRx server] proxyID: %d --> mapping[clientID:%d] cthread: %p\n", 
+        LOG(LEVEL_INFO, HDR "[SRx server] proxyID: %d --> mapping[clientID:%d] cthread: %p\n", 
           grpcClientID,  clientID, grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket);
         cthread = (ClientThread*)grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket;
         cthread->active  = false;

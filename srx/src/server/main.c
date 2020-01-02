@@ -763,7 +763,7 @@ int main(int argc, const char* argv[])
       {           
 #ifdef USE_GRPC
         createGRPCService();
-        printf("[server] created GRPC Service thread\n");
+        LOG(LEVEL_INFO, HDR "[server] created GRPC Service thread\n");
 #endif
         // Ready for requests
         cleanupRequired = true;
@@ -814,7 +814,7 @@ void createGRPCService()
   pthread_attr_t attr;
   pthread_attr_init(&attr);
   pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-  printf("+ pthread grpc service started...\n");
+  LOG(LEVEL_INFO, HDR "+ pthread grpc service started...\n");
 
   /* init service handler */
   grpcServiceHandler.cmdQueue   = &cmdQueue;
@@ -822,11 +822,11 @@ void createGRPCService()
   grpcServiceHandler.updCache = &updCache;
   grpcServiceHandler.svrConnHandler = &svrConnHandler;
 
-  printf("+ grpcServiceHandler : %p  \n", &grpcServiceHandler );
-  printf("+ grpcServiceHandler.CommandQueue   : %p  \n", grpcServiceHandler.cmdQueue);
-  printf("+ grpcServiceHandler.CommandHandler : %p  \n", grpcServiceHandler.cmdHandler );
-  printf("+ grpcServiceHandler.UpdateCache    : %p  \n", grpcServiceHandler.updCache);
-  printf("+ grpcServiceHandler.svrConnHandler : %p  \n", grpcServiceHandler.svrConnHandler);
+  LOG(LEVEL_DEBUG, HDR "+ grpcServiceHandler : %p  \n", &grpcServiceHandler );
+  LOG(LEVEL_DEBUG, HDR "+ grpcServiceHandler.CommandQueue   : %p  \n", grpcServiceHandler.cmdQueue);
+  LOG(LEVEL_DEBUG, HDR "+ grpcServiceHandler.CommandHandler : %p  \n", grpcServiceHandler.cmdHandler );
+  LOG(LEVEL_DEBUG, HDR "+ grpcServiceHandler.UpdateCache    : %p  \n", grpcServiceHandler.updCache);
+  LOG(LEVEL_DEBUG, HDR "+ grpcServiceHandler.svrConnHandler : %p  \n", grpcServiceHandler.svrConnHandler);
 
   int ret = pthread_create(&tid, &attr, gRPCService, &cmdHandler);
 
@@ -836,15 +836,15 @@ void createGRPCService()
   }
 
   pthread_join(tid, NULL);
-  LOG(LEVEL_DEBUG, "grpc service thread STOPPED and going to joinable status");
-  printf("+ pthread grpc service thread stopped and going to joinable status\n");
+  LOG(LEVEL_INFO, HDR "grpc service thread STOPPED and going to joinable status");
+  LOG(LEVEL_INFO, HDR "+ pthread grpc service thread stopped and going to joinable status\n");
 }
 
 static void* gRPCService(void* arg)
 {
-  LOG(LEVEL_DEBUG, "([0x%08X]) > gRPC Server Thread started ", pthread_self());
+  LOG(LEVEL_INFO, HDR "([0x%08X]) > gRPC Server Thread started ", pthread_self());
 
-  printf("++ pthread grpc service thread started...\n");
+  LOG(LEVEL_INFO, HDR "++ pthread grpc service thread started...\n");
 
   Serve();
 

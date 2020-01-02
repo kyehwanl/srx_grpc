@@ -696,7 +696,7 @@ bool broadcastResult(CommandHandler* self, SRxValidationResult* valResult)
 
     while  (clientCt-- > 0)
     {
-        printf(" +++++++++ clientCt : %d \n", clientCt);
+      //printf(" +++++++++ clientCt : %d \n", clientCt);
       // work the clients array backwards - saves maintaining a counter variable
       if (self->svrConnHandler->proxyMap[clients[clientCt]].isActive)
       {

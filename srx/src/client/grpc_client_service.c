@@ -25,10 +25,10 @@ __attribute__((always_inline)) inline void printHex(int len, unsigned char* buff
 
 void processVerifyNotify_grpc(SRXPROXY_VERIFY_NOTIFICATION* hdr)
 {
-    LOG(LEVEL_DEBUG, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
+    //LOG(LEVEL_DEBUG, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
     SRxProxy* proxy = g_proxy;
 
-    printHex(sizeof(SRXPROXY_VERIFY_NOTIFICATION), (unsigned char*)hdr);
+    //printHex(sizeof(SRXPROXY_VERIFY_NOTIFICATION), (unsigned char*)hdr);
 
     if (proxy)
     {
@@ -44,8 +44,8 @@ void processVerifyNotify_grpc(SRXPROXY_VERIFY_NOTIFICATION* hdr)
 
 #ifdef BZ263
             ct++;
-            LOG(LEVEL_DEBUG, HDR "#%u - uid:0x%08x lid:0x%08X (%u)\n", ct, updateID, localID,
-                    localID);
+            //LOG(LEVEL_DEBUG, HDR "#%u - uid:0x%08x lid:0x%08X (%u)\n", ct, updateID, localID,
+            //        localID);
 #endif
 
             if (localID > 0 && !hasReceipt)
@@ -58,8 +58,8 @@ void processVerifyNotify_grpc(SRXPROXY_VERIFY_NOTIFICATION* hdr)
             }
             else
             {
-                LOG(LEVEL_DEBUG, HDR "Update [0x%08X] with localID [0x%08X]: %d",
-                        updateID, localID, localID);
+                //LOG(LEVEL_DEBUG, HDR "Update [0x%08X] with localID [0x%08X]: %d",
+                //        updateID, localID, localID);
             }
 
             uint8_t roaResult    = useROA ? hdr->roaResult : SRx_RESULT_UNDEFINED;

@@ -25,6 +25,8 @@ __attribute__((always_inline)) inline void printHex(int len, unsigned char* buff
 
 void processVerifyNotify_grpc(SRXPROXY_VERIFY_NOTIFICATION* hdr)
 {
+    static int cnt=0;
+    printf(" counter : processVerifyNotify_grpc: %d\n", cnt++);
     //LOG(LEVEL_DEBUG, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
     SRxProxy* proxy = g_proxy;
 

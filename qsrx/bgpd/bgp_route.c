@@ -2988,6 +2988,13 @@ uint32_t getNextLocalID(void)
 void verify_update (struct bgp *bgp, struct bgp_info *info,
                     SRxDefaultResult* defResult, bool doRegisterLocalID)
 {
+#if defined (USE_GRPC) && defined (__TIME_MEASURE__)
+  static unsigned int valCount=0;
+  extern unsigned int g_measureCount;
+  unsigned long long val_end_clock;
+#endif /* __TIME_MEASURE__ */
+
+
   /* the received extend community value handling */
   if (CHECK_FLAG (bgp->srx_ecommunity_flags, SRX_BGP_FLAG_ECOMMUNITY))
   {
@@ -3070,12 +3077,34 @@ void verify_update (struct bgp *bgp, struct bgp_info *info,
       }
 
 #ifdef USE_GRPC
+#if defined (__TIME_MEASURE__) 
+      if(valCount == 0) {
+        clk_t0 = rdtsc();
+      }
+#endif /* __TIME_MEASURE__ */
+  
+      printf("prefix: %s \/%d \n", inet_ntoa(prefix->ip.addr.v4.in_addr), prefix->length);
       verifyUpdate_grpc(bgp->srxProxy, info->localID, true, usePathVal, defResult,
                    prefix, oas, bgpsec);
-#else
+#if defined (__TIME_MEASURE__) 
+      valCount++;
+      printf("[%d] ", valCount);
+      if(valCount >= g_measureCount)
+      {
+        val_end_clock = rdtsc();
+        printf(" validate count reached %ld and terminate \n", g_measureCount);
+        valCount =0;
+        //exit(0);
+        print_clock_time(end_clock, start_clock,      "Receiving time");
+        print_clock_time(val_end_clock , clk_t0,      "validation time :");
+        print_clock_time(val_end_clock , start_clock, "overall time (including validation) :");
+      }
+#endif /* __TIME_MEASURE__ */
+
+#else   /* USE_GRPC */
       verifyUpdate(bgp->srxProxy, info->localID, true, usePathVal, defResult,
                    prefix, oas, bgpsec);
-#endif /* USE_GRPC */
+#endif  /* USE_GRPC */
 
       srx_free_bgpsec_data(bgpsec);
       free(prefix);

@@ -2794,6 +2794,7 @@ bgp_read (struct thread *thread)
       bgp_update_receive (peer, size);
 #if defined (__TIME_MEASURE__)
       tCount++;
+      printf ("%d ", tCount);
       if(tCount >= g_measureCount && g_measureCount != 0)
       {
         end_clock = rdtsc();

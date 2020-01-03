@@ -2435,7 +2435,7 @@ bool handleSRxValidationResult (SRxUpdateID updateID, uint32_t localID,
 
   bool retVal = false;
 
-#if defined (__TIME_MEASURE__)
+#if defined (__TIME_MEASURE__) && !defined (USE_GRPC)
   static unsigned int valCount=0;
   extern unsigned int g_measureCount;
   unsigned long long val_end_clock;
@@ -2494,7 +2494,7 @@ bool handleSRxValidationResult (SRxUpdateID updateID, uint32_t localID,
   }
   else // it is an update
   {
-#if defined (__TIME_MEASURE__)
+#if defined (__TIME_MEASURE__) && !defined (USE_GRPC)
         if(valCount == 0)
         {
           clk_t0 = rdtsc();
@@ -2508,7 +2508,7 @@ bool handleSRxValidationResult (SRxUpdateID updateID, uint32_t localID,
       bgp_info_set_validation_result (info, valType, roaResult, bgpsecResult);
       retVal = true;
     }
-#if defined (__TIME_MEASURE__)
+#if defined (__TIME_MEASURE__) && !defined (USE_GRPC)
     valCount++;
     if(valCount >= g_measureCount)
     {

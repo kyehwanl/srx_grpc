@@ -3083,12 +3083,12 @@ void verify_update (struct bgp *bgp, struct bgp_info *info,
       }
 #endif /* __TIME_MEASURE__ */
   
-      printf("prefix: %s \/%d \n", inet_ntoa(prefix->ip.addr.v4.in_addr), prefix->length);
+      //printf("prefix: %s \/%d \n", inet_ntoa(prefix->ip.addr.v4.in_addr), prefix->length);
       verifyUpdate_grpc(bgp->srxProxy, info->localID, true, usePathVal, defResult,
                    prefix, oas, bgpsec);
 #if defined (__TIME_MEASURE__) 
       valCount++;
-      printf("[%d] ", valCount);
+      //printf("[%d] ", valCount);
       if(valCount >= g_measureCount)
       {
         val_end_clock = rdtsc();

@@ -245,8 +245,8 @@ CPP = gcc -E
 CPPFLAGS = 
 CURSES = 
 CYGPATH_W = echo
-DEFS = -DHAVE_CONFIG_H -DSYSCONFDIR=\"$(sysconfdir)/\" -D__TIME_MEASURE__
-#DEFS = -DHAVE_CONFIG_H -DSYSCONFDIR=\"$(sysconfdir)/\"
+#DEFS = -DHAVE_CONFIG_H -DSYSCONFDIR=\"$(sysconfdir)/\" -D__TIME_MEASURE__
+DEFS = -DHAVE_CONFIG_H -DSYSCONFDIR=\"$(sysconfdir)/\"
 DEPDIR = .deps
 DLLTOOL = false
 DOC = 
@@ -424,8 +424,8 @@ GRPC_CLIENT_RPATH = -Wl,-rpath -Wl,$(GRPC_CLIENT_PATH)
 #GRPC_CLIENT_RPATH = -rpath '$(GRPC_CLIENT_PATH)'
 GRPC_CFLAGS = -I$(GRPC_DIR)
 AM_CFLAGS = $(PICFLAGS)
-#AM_LDFLAGS = $(PILDFLAGS) -ldl
-AM_LDFLAGS = $(PILDFLAGS) -ldl -L/opt/project/tm-library/tm_rdtsc -ltm_rdtsc -Wl,-rpath -Wl,/opt/project/tm-library/tm_rdtsc/.libs
+#AM_LDFLAGS = $(PILDFLAGS) -ldl -L/opt/project/tm-library/tm_rdtsc -ltm_rdtsc -Wl,-rpath -Wl,/opt/project/tm-library/tm_rdtsc/.libs
+AM_LDFLAGS = $(PILDFLAGS) -ldl
 noinst_LIBRARIES = libbgp.a
 libbgp_a_SOURCES = \
 	bgpd.c bgp_fsm.c bgp_aspath.c bgp_community.c bgp_attr.c \
@@ -446,7 +446,7 @@ noinst_HEADERS = \
 bgpd_SOURCES = bgp_main.c
 #bgpd_LDADD = libbgp.a ../lib/libzebra.la  -lm
 bgpd_LDADD = libbgp.a ../lib/libzebra.la $(GRPC_CLIENT_LIBS)  -lm
-bgpd_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH) $(AM_LDFLAGS)
+bgpd_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 examplesdir = $(exampledir)
 dist_examples_DATA = bgpd.conf.sample bgpd.conf.sample2 bgpd.conf.sampleSRx
 EXTRA_DIST = BGP4-MIB.txt

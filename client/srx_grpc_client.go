@@ -31,6 +31,8 @@ const (
 	defaultName = "RPKI_DATA"
 )
 
+const NUM_PREFIX = 10000
+
 type Client struct {
 	conn *grpc.ClientConn
 	cli  pb.SRxApiClient
@@ -42,12 +44,18 @@ type ProxyVerifyClient struct {
 	stream pb.SRxApi_ProxyVerifyClient
 }
 
+var g_count int32
+var start time.Time
+var elapsed time.Duration
+var g_std *os.File
+
 //export InitSRxGrpc
 func InitSRxGrpc(addr string) bool {
 
 	/* Disable Logging */
 	log.SetFlags(0)               // skip all formatting
-	log.SetOutput(ioutil.Discard) // using this as io.Writer to skip logging
+	log.SetOutput(ioutil.Discard) // using this as io.Writer to skip logging. To restore, use os.Stdout
+	g_std = os.Stdout             // backup for later use
 	os.Stdout = nil               // to suppress fmt.Print
 
 	log.Printf("InitSRxGrpc Called \n")
@@ -472,6 +480,12 @@ func RunStream(data []byte) uint32 {
 //export RunProxyVerify
 func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 
+	//fmt.Printf("RunProxyVerify Count : %d\n", g_count)
+	if g_count == 0 {
+		start = time.Now()
+	}
+	g_count++
+
 	cli := client.cli
 	fmt.Printf("client data: %#v\n", client)
 
@@ -556,6 +570,17 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 	}()
 
 	<-done
+	if g_count >= NUM_PREFIX {
+		elapsed = time.Since(start)
+		os.Stdout = g_std
+		log.SetOutput(os.Stdout)
+		log.Printf(" count: %d  took %s\n", g_count, elapsed)
+		g_count = 0
+
+		/* printout discard again */
+		os.Stdout = nil
+		log.SetOutput(ioutil.Discard)
+	}
 	log.Printf("Finished with Resopnse value")
 	return 0
 }

@@ -657,14 +657,22 @@ static void* StreamThread(void *arg)
 
 }
 
+static void* WorkerPoolThread(void *arg)
+{
+
+    bool ret = InitWorkerPool();
+}
+
 void ImpleGoStreamThread (SRxProxy* proxy, uint32_t proxyID)
 {
-    pthread_t tid, tid2;
-    pthread_attr_t attr, attr2;
+    pthread_t tid, tid2, tid3;
+    pthread_attr_t attr, attr2, attr3;
     pthread_attr_init(&attr);
     pthread_attr_init(&attr2);
+    pthread_attr_init(&attr3);
     pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
     pthread_attr_setdetachstate(&attr2, PTHREAD_CREATE_DETACHED);
+    pthread_attr_setdetachstate(&attr3, PTHREAD_CREATE_DETACHED);
     printf("+ pthread grpc service started...\n");
 
 
@@ -690,6 +698,15 @@ void ImpleGoStreamThread (SRxProxy* proxy, uint32_t proxyID)
     }
     printf("+ General Purpose Stream Thread created \n");
     pthread_join(tid2, NULL);
+
+
+    int ret3 = pthread_create(&tid3, &attr3, WorkerPoolThread, (void*)NULL);
+    if (ret3 != 0)
+    {
+        RAISE_ERROR("Failed to create a grpc workerPoll thread");
+    }
+    printf("+ General Purpose Stream Thread created \n");
+    pthread_join(tid3, NULL);
 }
 
 

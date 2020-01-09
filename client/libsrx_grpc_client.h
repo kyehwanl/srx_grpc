@@ -75,6 +75,8 @@ extern "C" {
 #endif
 
 
+extern GoUint8 InitWorkerPool();
+
 extern GoUint8 InitSRxGrpc(GoString p0);
 
 extern GoUint32 Run(GoSlice p0);

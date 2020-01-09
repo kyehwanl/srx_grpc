@@ -22,6 +22,7 @@ import (
 	"os"
 	"runtime"
 	pb "srx_grpc"
+	"sync"
 	"time"
 	"unsafe"
 )
@@ -49,6 +50,57 @@ var start time.Time
 var elapsed time.Duration
 var g_std *os.File
 
+var wg sync.WaitGroup
+var wgVf sync.WaitGroup
+var jobChan chan Job
+
+const WorkerCount = 1
+
+func worker(jobChan <-chan Job, id int32) {
+	defer wg.Done()
+
+	for job := range jobChan {
+		//fmt.Printf("+++ job: %#v\n", job)
+		ProxyVerify(job.data, job.grpcClientID, job.done, id)
+
+	}
+}
+
+type Job struct {
+	data         []byte
+	grpcClientID uint32
+	done         chan bool
+}
+
+func NewJob(data []byte, grpcClientID uint32) *Job {
+
+	// to prevent losing data slice, need to copy its slice into a new variable
+	var d = make([]byte, len(data))
+	copy(d, data)
+
+	return &Job{
+		data:         d,
+		grpcClientID: grpcClientID,
+		done:         make(chan bool),
+	}
+}
+
+//export InitWorkerPool
+func InitWorkerPool() bool {
+
+	// worker pool generation
+	for i := 0; i < WorkerCount; i++ {
+		wg.Add(1)
+		go worker(jobChan, int32(i))
+	}
+
+	//close(jobChan)
+
+	wg.Wait()
+
+	return true
+}
+
 //export InitSRxGrpc
 func InitSRxGrpc(addr string) bool {
 
@@ -71,6 +123,9 @@ func InitSRxGrpc(addr string) bool {
 
 	client.conn = conn
 	client.cli = cli
+
+	// make a channel with a capacity of 100
+	jobChan = make(chan Job, 10000)
 
 	//fmt.Printf("cli : %#v\n", cli)
 	//fmt.Printf("client.cli : %#v\n", client.cli)
@@ -480,7 +535,23 @@ func RunStream(data []byte) uint32 {
 //export RunProxyVerify
 func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 
-	//fmt.Printf("RunProxyVerify Count : %d\n", g_count)
+	//fmt.Printf("++ data: %#v, clientID: %d\n", data, grpcClientID)
+	job := NewJob(data, grpcClientID)
+	//fmt.Printf("++ job: %#v\n", job)
+	//fmt.Printf("--------*job: %#v\n", *job)
+
+	select {
+	case jobChan <- *job:
+		return 0
+	default:
+		fmt.Printf(" ============== NO processing ===============\n")
+		return 1
+	}
+}
+
+func ProxyVerify(data []byte, grpcClientID uint32, jobDone chan bool, workerId int32) uint32 {
+
+	fmt.Printf("[WorkerID: %d] ProxyVerify Count : %d\n", workerId, g_count)
 	if g_count == 0 {
 		start = time.Now()
 	}
@@ -510,7 +581,7 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 	ctx := stream.Context()
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
-	done := make(chan bool)
+	//done := make(chan bool)
 
 	go func() {
 		for {
@@ -533,7 +604,7 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 			if resp.Type == 0 && resp.Length == 0 {
 				_, _, line, _ := runtime.Caller(0)
 				log.Printf("[client:%d] close stream \n", line+1)
-				close(done)
+				close(jobDone)
 			} else {
 
 				go_vn := &Go_ProxyVerifyNotify{
@@ -569,7 +640,7 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 		//close(done)
 	}()
 
-	<-done
+	<-jobDone
 	if g_count >= NUM_PREFIX {
 		elapsed = time.Since(start)
 		os.Stdout = g_std

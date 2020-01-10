@@ -60,7 +60,9 @@ var chProxyStreamData chan StreamData
 
 //export cb_proxy
 func cb_proxy(f C.int, v unsafe.Pointer) {
-	fmt.Printf("++ [grpc server] proxy callback function : arg[%d, %#v]\n", f, v)
+	/*
+		fmt.Printf("++ [grpc server] proxy callback function : arg[%d, %#v]\n", f, v)
+	*/
 
 	b := C.GoBytes(unsafe.Pointer(v), f)
 
@@ -136,17 +138,16 @@ func MyCallback(f int, b []byte) {
 }
 
 func cbVerifyNotify(f int, b []byte) {
-
-	fmt.Printf("++ [grpc server] [cbVerifyNotify] function - received arg: %d, %#v \n", f, b)
+	/*
+		fmt.Printf("++ [grpc server] [cbVerifyNotify] function - received arg: %d, %#v \n", f, b)
+	*/
 	var resp pb.ProxyVerifyNotify
 
 	if gStream_verify != nil {
 
-		//if f == 0 && b[0] == 0 {
 		if f == 0 && len(b) == 0 {
 			_, _, line, _ := runtime.Caller(0)
 			log.Printf("[server:%d] End of Notify", line)
-			//close(done)
 			resp = pb.ProxyVerifyNotify{
 				Type:   0,
 				Length: 0,
@@ -445,7 +446,7 @@ func (s *Server) ProxyVerify(pdu *pb.ProxyVerifyV4Request, stream pb.SRxApi_Prox
 }
 
 func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_ProxyVerifyStreamServer) error {
-	fmt.Println("++ [grpc server] calling SRxServer server:ProxyVerifyStream()")
+	//fmt.Println("++ [grpc server] calling SRxServer server:ProxyVerifyStream()")
 
 	gStream_verify = stream
 	ctx := stream.Context()
@@ -461,16 +462,20 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 		fmt.Printf("++ [grpc server][:%d] server Proxy_Verify_Stream context done\n", line+1)
 		close(done)
 	}()
-	fmt.Printf("++ [grpc server] grpc Client ID: %02x, data length: %d, \n Data: %#v\n",
-		pdu.GrpcClientID, pdu.Length, pdu)
+	/*
+		fmt.Printf("++ [grpc server] grpc Client ID: %02x, data length: %d, \n Data: %#v\n",
+			pdu.GrpcClientID, pdu.Length, pdu)
 
-	fmt.Println("++ [grpc server] calling SRxServer responseGRPC()")
+		fmt.Println("++ [grpc server] calling SRxServer responseGRPC()")
+	*/
 	retData := C.RET_DATA{}
 	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])),
 		C.uint(pdu.GrpcClientID))
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
-	fmt.Printf("++ [grpc server][ProxyVerifyStream] return size: %d \t data: %#v\n", retData.size, b)
+	/*
+		fmt.Printf("++ [grpc server][ProxyVerifyStream] return size: %d \t data: %#v\n", retData.size, b)
+	*/
 
 	if retData.size == 0 {
 		return nil

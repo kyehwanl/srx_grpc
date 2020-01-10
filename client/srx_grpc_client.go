@@ -32,7 +32,8 @@ const (
 	defaultName = "RPKI_DATA"
 )
 
-const NUM_PREFIX = 10000
+const NUM_PREFIX = 100000
+const NUM_JobChan = 1000
 
 type Client struct {
 	conn *grpc.ClientConn
@@ -125,7 +126,7 @@ func InitSRxGrpc(addr string) bool {
 	client.cli = cli
 
 	// make a channel with a capacity of 100
-	jobChan = make(chan Job, 10000)
+	jobChan = make(chan Job, NUM_JobChan)
 
 	//fmt.Printf("cli : %#v\n", cli)
 	//fmt.Printf("client.cli : %#v\n", client.cli)
@@ -147,7 +148,6 @@ func Run(data []byte) uint32 {
 	//defer cancel()
 
 	if data == nil {
-		fmt.Println("#############")
 		data = []byte(defaultName)
 	}
 
@@ -538,35 +538,34 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 	//fmt.Printf("++ data: %#v, clientID: %d\n", data, grpcClientID)
 	job := NewJob(data, grpcClientID)
 	//fmt.Printf("++ job: %#v\n", job)
-	//fmt.Printf("--------*job: %#v\n", *job)
 
 	select {
 	case jobChan <- *job:
 		return 0
-	default:
-		fmt.Printf(" ============== NO processing ===============\n")
-		return 1
+		/*
+			default:
+				return 1
+		*/
 	}
 }
 
 func ProxyVerify(data []byte, grpcClientID uint32, jobDone chan bool, workerId int32) uint32 {
 
-	fmt.Printf("[WorkerID: %d] ProxyVerify Count : %d\n", workerId, g_count)
+	//fmt.Printf("[WorkerID: %d] ProxyVerify Count : %d\n", workerId, g_count)
 	if g_count == 0 {
 		start = time.Now()
 	}
 	g_count++
 
 	cli := client.cli
-	fmt.Printf("client data: %#v\n", client)
+	//fmt.Printf("[WorkerID: %d] client data: %#v\n", workerId, client)
 
 	if data == nil {
-		fmt.Println("#############")
 		data = []byte(defaultName)
 	}
-
-	fmt.Printf("input data for stream response: %#v\n", data)
-
+	/*
+		fmt.Printf("input data for stream response: %#v\n", data)
+	*/
 	stream, err := cli.ProxyVerifyStream(context.Background(),
 		&pb.ProxyVerifyRequest{
 			Data:         data,
@@ -577,19 +576,20 @@ func ProxyVerify(data []byte, grpcClientID uint32, jobDone chan bool, workerId i
 	if err != nil {
 		log.Printf("open stream error %v", err)
 	}
+	//fmt.Printf("[WorkerID: %d] (before go func) stream: %#v\n", workerId, stream)
 
 	ctx := stream.Context()
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
 	defer cancel()
-	//done := make(chan bool)
 
-	go func() {
+	// XXX: Unfortunately, stream object is not thread-safe, so that it can't be used
+	//		for multi-go routines, otherwise stream.Recv() receives an arbituary Send() call
+	//		which was sent from the stream server
+	go func(stream pb.SRxApi_ProxyVerifyStreamClient, jobDone chan bool, workerId int32) {
 		for {
+			//fmt.Printf("[WorkerID: %d] (in go func) stream: %#v\n", workerId, stream)
 			resp, err := stream.Recv()
 			if err == io.EOF {
-				// NOTE: remove close below to prevent panic from calling close again
-				//		 which was done by the case of type=0, length=0
-				//close(done)
 				log.Printf("[client] EOF close ")
 				return
 			}
@@ -597,13 +597,15 @@ func ProxyVerify(data []byte, grpcClientID uint32, jobDone chan bool, workerId i
 				log.Printf("can not receive %v", err)
 			}
 
-			fmt.Println()
-			fmt.Printf("+ data : %#v\n", resp)
-			fmt.Printf("+ size : %#v\n", resp.Length)
-
+			//fmt.Printf("[WorkerID: %d] (in go func, after Recv) stream: %#v\n", workerId, stream)
+			/*
+				fmt.Println()
+				fmt.Printf("[WorkerID: %d, update count: %d] data : %#v\n", workerId, g_count, resp)
+				fmt.Printf("[WorkerID: %d] size : %#v\n", workerId, resp.Length)
+			*/
 			if resp.Type == 0 && resp.Length == 0 {
 				_, _, line, _ := runtime.Caller(0)
-				log.Printf("[client:%d] close stream \n", line+1)
+				log.Printf("[WorkerID: %d] [client line:%d] close stream \n", workerId, line+1)
 				close(jobDone)
 			} else {
 
@@ -619,25 +621,28 @@ func ProxyVerify(data []byte, grpcClientID uint32, jobDone chan bool, workerId i
 				vn := (*C.SRXPROXY_VERIFY_NOTIFICATION)(C.malloc(C.sizeof_SRXPROXY_VERIFY_NOTIFICATION))
 				defer C.free(unsafe.Pointer(vn))
 				go_vn.Pack(unsafe.Pointer(vn))
-				log.Printf(" vn: %#v\n", vn)
+				//log.Printf("[WorkerID: %d] vn: %#v\n", workerId, vn)
 
 				// to avoid runtime: address space conflict:
 				//			and fatal error: runtime: address space conflict
 				//	    NEED to make a shared library at the client side same way at server side
 				C.processVerifyNotify_grpc(vn)
 
+				// signal when the notification is over from SRx server
+				// TODO: need to consider to have a flag that indicates ROA validation result was received
+				if resp.Type == 0x06 && resp.ResultType == 0x02 && resp.RequestToken == 0x0 {
+					close(jobDone)
+				}
 			}
 		}
-	}()
+	}(stream, jobDone, workerId)
 
 	go func() {
 		<-ctx.Done()
-		log.Printf("+ Client Context Done")
+		log.Printf("[WorkerID: %d] Client Context Done", workerId)
 		if err := ctx.Err(); err != nil {
 			log.Println(err)
 		}
-		fmt.Printf("+ client context done\n")
-		//close(done)
 	}()
 
 	<-jobDone
@@ -652,7 +657,9 @@ func ProxyVerify(data []byte, grpcClientID uint32, jobDone chan bool, workerId i
 		os.Stdout = nil
 		log.SetOutput(ioutil.Discard)
 	}
-	log.Printf("Finished with Resopnse value")
+	/*
+		log.Printf("[WorkerID: %d] Finished with Resopnse value", workerId)
+	*/
 	return 0
 }
 

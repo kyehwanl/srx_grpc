@@ -1,18 +1,40 @@
 
 1. gRPC enabled qsrx Test result 
 
-1.1 bgpsec validation with 1k prefix 
-    657 ms
-    comparing to bgpsec-SRxserver TCP socket comm.  [2.649s]
+1. bgpsec validation with 1k prefix
+(1) grpc qsrx
+    exp1: 657 ms
+    exp2: 536.645172ms
+    exp3: 493.15 ms, 468.36 ms, 462.68 ms
 
-1.2 bgpsec validation with 10k prefix
-    7.501s
-    7.596s
+(2) tcp/ip qsrx: comparing to bgpsec-SRxserver TCP socket comm.  
+    [2.649s]
+
+    without Roa Validation: 
+        160342.04 us
+
+2. bgpsec validation with 10k prefix
+(1) grpc qsrx
+    exp1: 7.501s 7.596s
+    exp2: 6.507535304s
+    exp3: 5.98 s, 5.93 s, 5.71 s
     
-    comparing to bgpsec-SRxserver TCP socket comm.  [22.458s]
+(2) tcp/ip qsrx:  comparing to bgpsec-SRxserver TCP socket comm.  
+    [22.458s]
 
-1.3 bgpsec validation with 100k prefix
-    3m 34.152s
-    3m 34.342s
+    without Roa Validation: 
+        2145697.50 us
+        2201971.16 us
 
-    comparing to bgpsec-SRxserver TCP socket comm.  [4m 28.340s]
+
+3. bgpsec validation with 100k prefix
+
+(1) grpc qsrx 
+    exp1: 3m 34.152s,  3m 34.342s
+    exp2: 3m8.89887878s,  3m5.887651939s
+    exp3: 3m3.21s, 3m2.57s, 
+
+(2) tcp/ip qsr:x comparing to bgpsec-SRxserver TCP socket comm.  
+    [4m 28.340s]
+    
+    without Roa Validation: 158142127.62 us

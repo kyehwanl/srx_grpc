@@ -66,7 +66,7 @@ void processVerifyNotify_grpc(SRXPROXY_VERIFY_NOTIFICATION* hdr)
             uint8_t bgpsecResult = useBGPSEC ? hdr->bgpsecResult : SRx_RESULT_UNDEFINED;
             ValidationResultType valType = hdr->resultType & SRX_FLAG_ROA_AND_BGPSEC;
 
-            // hasReceipt ? localID : 0 is result of BZ263
+            // hasReceipt ? localID : 0 is result of BZ263  // in qsrx, calls handleSRxValidationResult()
             proxy->resCallback(updateID, localID, valType, roaResult, bgpsecResult,
                     proxy->userPtr);
         }

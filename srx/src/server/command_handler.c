@@ -386,6 +386,7 @@ static bool _processUpdateValidation(CommandHandler* cmdHandler,
                                                 uData);
   }
 
+#if 0
   // Only do origin validation if not already performed
   if (originVal && (srxRes.roaResult == SRx_RESULT_UNDEFINED))
   {
@@ -420,6 +421,7 @@ static bool _processUpdateValidation(CommandHandler* cmdHandler,
     }
     free(prefix);
   }
+#endif
   
   // Now check if the update changed - In a future version check if bgpsecResult
   // is not DONOTUSE and  not originVal - in a future version the origin 

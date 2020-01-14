@@ -1,5 +1,6 @@
 
 1. gRPC enabled qsrx Test result 
+-- tested on vmware-005 and vmware-011 server machines
 
 1. bgpsec validation with 1k prefix
 (1) grpc qsrx
@@ -11,7 +12,7 @@
     [2.649s]
 
     without Roa Validation: 
-        160342.04 us
+        160,342.04 us
 
 2. bgpsec validation with 10k prefix
 (1) grpc qsrx
@@ -23,8 +24,8 @@
     [22.458s]
 
     without Roa Validation: 
-        2145697.50 us
-        2201971.16 us
+        2,145,697.50 us
+        2,201,971.16 us
 
 
 3. bgpsec validation with 100k prefix
@@ -37,4 +38,4 @@
 (2) tcp/ip qsr:x comparing to bgpsec-SRxserver TCP socket comm.  
     [4m 28.340s]
     
-    without Roa Validation: 158142127.62 us
+    without Roa Validation: 158,142,127.62 us

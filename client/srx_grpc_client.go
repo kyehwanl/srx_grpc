@@ -32,7 +32,7 @@ const (
 	defaultName = "RPKI_DATA"
 )
 
-const NUM_PREFIX = 100000
+const NUM_PREFIX = 9000
 const NUM_JobChan = 1000
 
 type Client struct {

@@ -4,3 +4,21 @@ gcc -DHAVE_CONFIG_H  -fPIC -shared -o server/libgrpc_service.so server/grpc_serv
         -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src \
         -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/../extras/local/include \
         -I/opt/project/srx_test1/srx/../_inst//include
+
+
+
+
+
+
+
+mkdir ${GOATH}/src/srx_grpc/srx/src/.libs
+gcc -DHAVE_CONFIG_H -fPIC -shared -o .libs/libgrpc_client_service.so client/grpc_client_service.c \
+          -I${GOPATH}/src/srx_grpc/srx/src \
+          -I${GOPATH}/src/srx_grpc/srx/src/../extras/local/include \
+          -I${GOPATH}/src/srx_grpc/srx/../_inst/include
+
+
+gcc -DHAVE_CONFIG_H -fPIC -shared -o .libs/libgrpc_service.so server/grpc_service.c \
+          -I${GOPATH}/src/srx_grpc/srx/src \
+          -I${GOPATH}/src/srx_grpc/srx/src/../extras/local/include \
+          -I${GOPATH}/src/srx_grpc/srx/../_inst/include

@@ -1,0 +1,16534 @@
+cscope 15 /opt/project/gobgp_test/gowork/src/srx_grpc -q 0000000453 0000084489
+	@/opt/project/gobgp_test/gowork/src/srx_grpc/client/srx_grpc_client.go
+
+1 
+∑ckage
+ 
+maö
+
+
+11 
+	gimp‹t
+ "C"
+
+13 
+imp‹t
+ (
+
+24 
+pb
+ "srx_grpc"
+
+30 
+	gaddªss
+ = "localhost:50000"
+
+31 
+deÁu…Name
+ = "RPKI_DATA"
+
+34 c⁄° 
+NUM_PREFIX
+ = 10000
+
+36 
+ty≥
+ 
+Clõ¡
+ struct {
+
+37 
+c⁄n
+ *
+gΩc
+.
+Clõ¡C⁄n
+
+
+38 
+˛i
+ 
+pb
+.
+SRxApiClõ¡
+
+
+41 
+v¨
+ 
+˛õ¡
+ 
+Clõ¡
+
+
+43 
+ty≥
+ 
+ProxyVîifyClõ¡
+ struct {
+
+44 
+°ªam
+ 
+pb
+.
+SRxApi_ProxyVîifyClõ¡
+
+
+47 
+v¨
+ 
+g_cou¡
+ 
+öt32
+
+
+48 
+v¨
+ 
+°¨t
+ 
+time
+.
+Time
+
+
+49 
+v¨
+ 
+ñ≠£d
+ 
+time
+.
+Duøti⁄
+
+
+50 
+v¨
+ 
+g_°d
+ *
+os
+.
+Fûe
+
+
+53 
+func
+ 
+	$InôSRxGΩc
+(
+addr
+ 
+°rög
+Ë
+boﬁ
+ {
+
+56 
+log
+.
+	`SëFœgs
+(0)
+
+57 
+log
+.
+	`SëOuçut
+(
+ioutû
+.
+Disˇrd
+)
+
+58 
+g_°d
+ = 
+os
+.
+Stdout
+
+
+59 
+os
+.
+Stdout
+ = 
+nû
+
+
+61 
+log
+.
+	`Prötf
+("InitSRxGrpc Called \n")
+
+62 
+c⁄n
+, 
+îr
+ :
+gΩc
+.
+	`Dül
+(
+addr
+, gΩc.
+	`WôhIn£cuª
+())
+
+63 
+îr
+ !
+nû
+ {
+
+64 
+log
+.
+	`Prötf
+("didÇŸ c⁄√˘: %v", 
+îr
+)
+
+65  
+Ál£
+
+
+68 
+log
+.
+	`Prötf
+("gRPC Clõ¡ Inôüãdánd C⁄√˘ed Sîvî Addªss: %s\n", 
+addr
+)
+
+70 
+˛i
+ :
+pb
+.
+	`NewSRxApiClõ¡
+(
+c⁄n
+)
+
+72 
+˛õ¡
+.
+c⁄n
+ = conn
+
+73 
+˛õ¡
+.
+˛i
+ = cli
+
+78  
+åue
+
+
+79 
+	}
+}
+
+82 
+func
+ 
+	$Run
+(
+d©a
+ []
+byã
+Ë
+uöt32
+ {
+
+84 
+˛i
+ :
+˛õ¡
+.cli
+
+85 
+fmt
+.
+	`Prötf
+("˛õ¡ : %#v\n", 
+˛õ¡
+)
+
+86 
+fmt
+.
+	`Prötf
+("˛õ¡.˛òd©a: %#v\n", 
+˛õ¡
+.
+˛i
+)
+
+87 
+fmt
+.
+	`Pröén
+()
+
+94 
+d©a
+ =
+nû
+ {
+
+95 
+fmt
+.
+	`Pröén
+("#############")
+
+96 
+d©a
+ = []
+	`byã
+(
+deÁu…Name
+)
+
+99 
+fmt
+.
+	`Prötf
+("öpuàd©a: %#v\n", 
+d©a
+)
+
+101 
+r
+, 
+îr
+ :
+˛i
+.
+	`SídPackëToSRxSîvî
+(
+c⁄ãxt
+.
+	`Background
+(), &
+pb
+.
+PduReque°
+{
+D©a
+: 
+d©a
+, 
+Lígth
+: 
+	`uöt32
+(
+	`Àn
+(data))})
+
+102 
+îr
+ !
+nû
+ {
+
+103 
+log
+.
+	`Prötf
+("couldÇŸÑe˚ive: %v", 
+îr
+)
+
+106 
+fmt
+.
+	`Prötf
+("d©®: %#v\n", 
+r
+.
+D©a
+)
+
+107 
+fmt
+.
+	`Prötf
+("sizê: %#v\n", 
+r
+.
+Lígth
+)
+
+108 
+fmt
+.
+	`Prötf
+("°©us: %#v\n", 
+r
+.
+VÆid©i⁄Sètus
+)
+
+109 
+fmt
+.
+	`Pröén
+()
+
+112  
+	`uöt32
+(
+r
+.
+VÆid©i⁄Sètus
+)
+
+113 
+	}
+}
+
+116 
+func
+ 
+RunProxyHñlo
+(
+d©a
+ []
+byã
+Ë(*
+	gC
+.
+	guch¨
+, 
+	guöt32
+) {
+
+118 
+	g˛i
+ :
+˛õ¡
+.
+˛i
+
+
+119 
+fmt
+.
+Pröén
+()
+
+120 
+fmt
+.
+Prötf
+("˛õ¡ : %#v\n", 
+˛õ¡
+)
+
+121 
+	gfmt
+.
+Prötf
+("˛õ¡.˛ò: %#v\n", 
+˛õ¡
+.
+˛i
+)
+
+122 
+	gfmt
+.
+Pröén
+(
+˛i
+)
+
+123 
+	gfmt
+.
+Prötf
+("öpuàd©a: %#v\n", 
+d©a
+)
+
+130 
+	gªq
+ :
+pb
+.
+ProxyHñloReque°
+{
+
+131 
+Ty≥
+: 
+uöt32
+(
+d©a
+[0]),
+
+132 
+Vîsi⁄
+: 
+uöt32
+(
+bö¨y
+.
+BigEndün
+.
+Uöt16
+(
+d©a
+[1:3])),
+
+133 
+Zîo
+: 
+uöt32
+(
+d©a
+[3]),
+
+134 
+Lígth
+: 
+bö¨y
+.
+BigEndün
+.
+Uöt32
+(
+d©a
+[4:8]),
+
+135 
+ProxyIdítifõr
+: 
+bö¨y
+.
+BigEndün
+.
+Uöt32
+(
+d©a
+[8:12]),
+
+136 
+A¢
+: 
+bö¨y
+.
+BigEndün
+.
+Uöt32
+(
+d©a
+[12:16]),
+
+137 
+NoPìrAS
+: 
+bö¨y
+.
+BigEndün
+.
+Uöt32
+(
+d©a
+[16:20]),
+
+140 
+ª•
+, 
+	gîr
+ :
+˛i
+.
+ProxyHñlo
+(
+c⁄ãxt
+.
+Background
+(), &
+ªq
+)
+
+141 
+	gîr
+ !
+nû
+ {
+
+142 
+log
+.
+Prötf
+("couldÇŸÑe˚ive: %v", 
+îr
+)
+
+145 
+fmt
+.
+Prötf
+("+ HñloReque° : %#v\n", 
+ªq
+)
+
+146 
+	gfmt
+.
+Prötf
+("+Ñe•⁄£ : %#v\n", 
+ª•
+)
+
+148 
+	gΩ
+ :
+C
+.
+SRXPROXY_HELLO_RESPONSE
+{
+
+151 
+Àngth
+: 
+C
+.
+uöt
+(
+ª•
+.
+Lígth
+),
+
+152 
+¥oxyIdítifõr
+: 
+C
+.
+uöt
+(
+ª•
+.
+ProxyIdítifõr
+),
+
+154 
+Ω
+.
+_ty≥
+ = 
+C
+.
+uch¨
+(
+ª•
+.
+Ty≥
+)
+
+158 
+buf
+ :
+make
+([]
+byã
+, 
+C
+.
+sizeof_SRXPROXY_HELLO_RESPONSE
+)
+
+160 
+	gbuf
+[0] = 
+byã
+(
+ª•
+.
+Ty≥
+)
+
+161 
+bö¨y
+.
+BigEndün
+.
+PutUöt16
+(
+buf
+[1:3], 
+uöt16
+(
+ª•
+.
+Vîsi⁄
+))
+
+162 
+	gbö¨y
+.
+	gBigEndün
+.
+PutUöt32
+(
+buf
+[4:8], 
+ª•
+.
+Lígth
+)
+
+163 
+	gbö¨y
+.
+	gBigEndün
+.
+PutUöt32
+(
+buf
+[8:12], 
+ª•
+.
+ProxyIdítifõr
+)
+
+165 
+	gcb
+ :(*[
+C
+.
+sizeof_SRXPROXY_HELLO_RESPONSE
+]C.
+uch¨
+)(C.
+mÆloc
+(C.sizeof_SRXPROXY_HELLO_RESPONSE))
+
+167 
+c°r
+ :(*[
+C
+.
+sizeof_SRXPROXY_HELLO_RESPONSE
+]C.
+uch¨
+)(
+unß„
+.
+Poöãr
+(&
+buf
+[0]))
+
+169 
+i
+ :0; 
+	gi
+ < 
+	gC
+.
+	gsizeof_SRXPROXY_HELLO_RESPONSE
+; i++ {
+
+170 
+	gcb
+[
+i
+] = 
+c°r
+[i]
+
+173 
+	gfmt
+.
+Prötf
+("+ cb: %#v\n", 
+cb
+)
+
+175  &
+	gcb
+[0], 
+	gª•
+.
+	gProxyIdítifõr
+
+
+178 
+ty≥
+ 
+Go_ProxySyncReque°
+ struct {
+
+179 
+_ty≥
+ 
+uöt8
+
+
+180 
+_ª£rved
+ 
+uöt16
+
+
+181 
+_zîo
+ 
+uöt8
+
+
+182 
+_Àngth
+ 
+	muöt32
+
+
+185 
+	$func
+ (
+g
+ *
+Go_ProxySyncReque°
+Ë
+	$Pack
+(
+out
+ 
+unß„
+.
+Poöãr
+) {
+
+186 
+buf
+ :&
+byãs
+.
+Buf„r
+{}
+
+187 
+bö¨y
+.
+	`Wrôe
+(
+buf
+, bö¨y.
+LôéeEndün
+, 
+g
+)
+
+188 
+l
+ :
+buf
+.
+	`Lí
+()
+
+189 
+o
+ :(*[1 << 20]
+C
+.
+uch¨
+)(
+out
+)
+
+191 
+i
+ :0; i < 
+l
+; i++ {
+
+192 
+b
+, 
+_
+ :
+buf
+.
+	`RódByã
+()
+
+193 
+o
+[
+i
+] = 
+C
+.
+	`uch¨
+(
+b
+)
+
+195 
+	}
+}
+
+197 
+ty≥
+ 
+Go_ProxyVîifyNŸify
+ struct {
+
+198 
+_ty≥
+ 
+uöt8
+
+
+199 
+_ªsu…Ty≥
+ 
+uöt8
+
+
+200 
+_rﬂResu…
+ 
+uöt8
+
+
+201 
+_bgp£cResu…
+ 
+uöt8
+
+
+202 
+_Àngth
+ 
+uöt32
+
+
+203 
+_ªque°Tokí
+ 
+uöt32
+
+
+204 
+_upd©eID
+ 
+uöt32
+
+
+207 
+	$func
+ (
+g
+ *
+Go_ProxyVîifyNŸify
+Ë
+	$Pack
+(
+out
+ 
+unß„
+.
+Poöãr
+) {
+
+208 
+buf
+ :&
+byãs
+.
+Buf„r
+{}
+
+209 
+bö¨y
+.
+	`Wrôe
+(
+buf
+, bö¨y.
+LôéeEndün
+, 
+g
+)
+
+210 
+l
+ :
+buf
+.
+	`Lí
+()
+
+211 
+o
+ :(*[1 << 20]
+C
+.
+uch¨
+)(
+out
+)
+
+213 
+i
+ :0; i < 
+l
+; i++ {
+
+214 
+b
+, 
+_
+ :
+buf
+.
+	`RódByã
+()
+
+215 
+o
+[
+i
+] = 
+C
+.
+	`uch¨
+(
+b
+)
+
+217 
+	}
+}
+
+219 
+ty≥
+ 
+Go_ProxyGoodBye
+ struct {
+
+220 
+_ty≥
+ 
+uöt8
+
+
+221 
+_kìpWödow
+ 
+uöt16
+
+
+222 
+_zîo
+ 
+uöt8
+
+
+223 
+_Àngth
+ 
+uöt32
+
+
+226 
+	$func
+ (
+g
+ *
+Go_ProxyGoodBye
+Ë
+	$Pack
+(
+out
+ 
+unß„
+.
+Poöãr
+) {
+
+228 
+buf
+ :&
+byãs
+.
+Buf„r
+{}
+
+229 
+bö¨y
+.
+	`Wrôe
+(
+buf
+, bö¨y.
+LôéeEndün
+, 
+g
+)
+
+230 
+l
+ :
+buf
+.
+	`Lí
+()
+
+231 
+o
+ :(*[1 << 20]
+C
+.
+uch¨
+)(
+out
+)
+
+233 
+i
+ :0; i < 
+l
+; i++ {
+
+234 
+b
+, 
+_
+ :
+buf
+.
+	`RódByã
+()
+
+235 
+o
+[
+i
+] = 
+C
+.
+	`uch¨
+(
+b
+)
+
+237 
+	}
+}
+
+239 
+	$func
+ (
+g
+ *
+Go_ProxyGoodBye
+Ë
+	$U≈ack
+(
+i
+ *
+C
+.
+SRXPROXY_GOODBYE
+) {
+
+241 
+cd©a
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+i
+), C.
+sizeof_SRXPROXY_GOODBYE
+)
+
+242 
+buf
+ :
+byãs
+.
+	`NewBuf„r
+(
+cd©a
+)
+
+243 
+bö¨y
+.
+	`Ród
+(
+buf
+, bö¨y.
+BigEndün
+, &
+g
+.
+_ty≥
+)
+
+244 
+bö¨y
+.
+	`Ród
+(
+buf
+, bö¨y.
+BigEndün
+, &
+g
+.
+_kìpWödow
+)
+
+245 
+bö¨y
+.
+	`Ród
+(
+buf
+, bö¨y.
+BigEndün
+, &
+g
+.
+_zîo
+)
+
+246 
+bö¨y
+.
+	`Ród
+(
+buf
+, bö¨y.
+BigEndün
+, &
+g
+.
+_Àngth
+)
+
+247 
+	}
+}
+
+250 
+func
+ 
+	$RunProxyGoodBye
+(
+ö
+ 
+C
+.
+SRXPROXY_GOODBYE
+, 
+gΩcClõ¡ID
+ 
+uöt32
+Ë
+boﬁ
+ {
+
+251 
+˛i
+ :
+˛õ¡
+.cli
+
+253 
+fmt
+.
+	`Prötf
+("+ [gΩ¯˛õ¡] Goobyêfun˘i⁄: i≈uà∑ømëî: %#v \n", 
+ö
+)
+
+254 
+fmt
+.
+	`Prötf
+("+ [gΩ¯˛õ¡] Goobyêfun˘i⁄: size: %d \n", 
+C
+.
+sizeof_SRXPROXY_GOODBYE
+)
+
+256 
+goGB
+ :
+Go_ProxyGoodBye
+{}
+
+257 
+goGB
+.
+	`U≈ack
+(&
+ö
+)
+
+259 
+fmt
+.
+	`Prötf
+("+ [gΩ¯˛õ¡] Goodbyêouàbyãs: %#v\n", 
+goGB
+)
+
+261 
+ªq
+ :
+pb
+.
+ProxyGoodByeReque°
+{
+
+262 
+Ty≥
+: 
+	`uöt32
+(
+goGB
+.
+_ty≥
+),
+
+263 
+KìpWödow
+: 
+	`uöt32
+(
+goGB
+.
+_kìpWödow
+),
+
+264 
+Zîo
+: 
+	`uöt32
+(
+goGB
+.
+_zîo
+),
+
+265 
+Lígth
+: 
+	`uöt32
+(
+goGB
+.
+_Àngth
+),
+
+266 
+GΩcClõ¡ID
+: 
+gΩcClõ¡ID
+,
+
+268 
+ª•
+, 
+îr
+ :
+˛i
+.
+	`ProxyGoodBye
+(
+c⁄ãxt
+.
+	`Background
+(), &
+ªq
+)
+
+269 
+îr
+ !
+nû
+ {
+
+270 
+log
+.
+	`Prötf
+("couldÇŸÑe˚ive: %v", 
+îr
+)
+
+271  
+Ál£
+
+
+274 
+log
+.
+	`Prötf
+("+ [gΩ¯˛õ¡] GoodByeReque° : %#v\n", 
+ªq
+)
+
+275 
+log
+.
+	`Prötf
+("+ [gΩ¯˛õ¡]Ñe•⁄£ : %#v\n", 
+ª•
+)
+
+277  
+ª•
+.
+Sètus
+
+
+278 
+	}
+}
+
+281 
+func
+ 
+	$RunProxyGoodByeSåóm
+(
+d©a
+ []
+byã
+, 
+gΩcClõ¡ID
+ 
+uöt32
+) uint32 {
+
+284 
+˛i
+ :
+˛õ¡
+.cli
+
+285 
+°ªam
+, 
+îr
+ :
+˛i
+.
+	`ProxyGoodByeSåóm
+(
+c⁄ãxt
+.
+	`Background
+(), &
+pb
+.
+PduReque°
+{
+D©a
+: 
+d©a
+, 
+Lígth
+: 
+	`uöt32
+(
+	`Àn
+(data))})
+
+286 
+˘x
+ :
+°ªam
+.
+	`C⁄ãxt
+()
+
+287 
+îr
+ !
+nû
+ {
+
+288 
+log
+.
+	`Prötf
+("›í såómÉº‹ %v", 
+îr
+)
+
+291 
+go
+ 
+	`func
+() {
+
+292 <-
+˘x
+.
+	`D⁄e
+()
+
+293 
+log
+.
+	`Prötf
+("+ Client Context Done")
+
+294 
+îr
+ :
+˘x
+.
+	`Eº
+();Éº !
+nû
+ {
+
+295 
+log
+.
+	`Pröén
+(
+îr
+)
+
+297 
+fmt
+.
+	`Prötf
+("+ client context done\n")
+
+301 
+ª•
+, 
+îr
+ :
+°ªam
+.
+	`Recv
+()
+
+302 
+fmt
+.
+	`Prötf
+("+ [grpc client][GoodByeStream] Goodbye Stream function Received... \n")
+
+303 
+îr
+ =
+io
+.
+EOF
+ {
+
+304 
+log
+.
+	`Prötf
+("[client] EOF close ")
+
+307 
+îr
+ !
+nû
+ {
+
+308 
+log
+.
+	`Prötf
+("ˇ¿nŸÑe˚ivê%v", 
+îr
+)
+
+312 
+fmt
+.
+	`Prötf
+("+ [gΩ¯˛õ¡][GoodByeSåóm] d©®: %#v\n", 
+ª•
+.
+D©a
+)
+
+313 
+fmt
+.
+	`Prötf
+("+ [gΩ¯˛õ¡][GoodByeSåóm] sizê: %#v\n", 
+ª•
+.
+Lígth
+)
+
+314 
+fmt
+.
+	`Pröén
+()
+
+316 
+go_gb
+ :&
+Go_ProxyGoodBye
+{
+
+317 
+_ty≥
+: 
+ª•
+.
+D©a
+[0],
+
+318 
+_kìpWödow
+: *((*
+uöt16
+)(
+unß„
+.
+	`Poöãr
+(&
+ª•
+.
+D©a
+[1]))),
+
+319 
+_zîo
+: 
+ª•
+.
+D©a
+[3],
+
+320 
+_Àngth
+: *((*
+uöt32
+)(
+unß„
+.
+	`Poöãr
+(&
+ª•
+.
+D©a
+[4]))),
+
+323 
+gb
+ :(*
+C
+.
+SRXPROXY_GOODBYE
+)(C.
+	`mÆloc
+(C.
+sizeof_SRXPROXY_GOODBYE
+))
+
+324 
+de„r
+ 
+C
+.
+	`‰ì
+(
+unß„
+.
+	`Poöãr
+(
+gb
+))
+
+325 
+go_gb
+.
+	`Pack
+(
+unß„
+.
+	`Poöãr
+(
+gb
+))
+
+327 
+log
+.
+	`Prötf
+(" gb: %#v\n", 
+gb
+)
+
+330 
+C
+.
+	`¥o˚ssGoodbye_gΩc
+(
+gb
+)
+
+333 
+	}
+}
+
+336 
+func
+ 
+	$RunProxySåóm
+(
+d©a
+ []
+byã
+, 
+gΩcClõ¡ID
+ 
+uöt32
+) uint32 {
+
+339 
+˛i
+ :
+˛õ¡
+.cli
+
+340 
+°ªam
+, 
+îr
+ :
+˛i
+.
+	`ProxySåóm
+(
+c⁄ãxt
+.
+	`Background
+(), &
+pb
+.
+PduReque°
+{
+D©a
+: 
+d©a
+, 
+Lígth
+: 
+	`uöt32
+(
+	`Àn
+(data))})
+
+341 
+˘x
+ :
+°ªam
+.
+	`C⁄ãxt
+()
+
+342 
+îr
+ !
+nû
+ {
+
+343 
+log
+.
+	`Prötf
+("›í såómÉº‹ %v", 
+îr
+)
+
+346 
+go
+ 
+	`func
+() {
+
+347 <-
+˘x
+.
+	`D⁄e
+()
+
+348 
+log
+.
+	`Prötf
+("+ Client Context Done")
+
+349 
+îr
+ :
+˘x
+.
+	`Eº
+();Éº !
+nû
+ {
+
+350 
+log
+.
+	`Pröén
+(
+îr
+)
+
+352 
+fmt
+.
+	`Prötf
+("+ client context done\n")
+
+357 
+ª•
+, 
+îr
+ :
+°ªam
+.
+	`Recv
+()
+
+358 
+fmt
+.
+	`Prötf
+("+ [grpc client][ProxyStream] Proxy_Stream function Received... \n")
+
+359 
+îr
+ =
+io
+.
+EOF
+ {
+
+360 
+log
+.
+	`Prötf
+("[client] EOF close ")
+
+363 
+îr
+ !
+nû
+ {
+
+364 
+log
+.
+	`Prötf
+("ˇ¿nŸÑe˚ivê%v", 
+îr
+)
+
+368 
+fmt
+.
+	`Prötf
+("+ [gΩ¯˛õ¡][ProxySåóm] d©®: %#v\n", 
+ª•
+.
+D©a
+)
+
+369 
+fmt
+.
+	`Prötf
+("+ [gΩ¯˛õ¡][ProxySåóm] sizê: %#v\n", 
+ª•
+.
+Lígth
+)
+
+370 
+fmt
+.
+	`Pröén
+()
+
+372 
+ª•
+.
+D©a
+ =
+nû
+ ||Ñe•.
+Lígth
+ == 0 {
+
+373 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+374 
+log
+.
+	`Prötf
+("[˛õ¡:%d]ÇŸávaûabÀ mesßge", 
+löe
++1)
+
+378 
+ª•
+.
+D©a
+[0] {
+
+379 
+C
+.
+PDU_SRXPROXY_SYNC_REQUEST
+:
+
+380 
+log
+.
+	`Prötf
+("[client] Sync Request\n")
+
+382 
+go_§
+ :&
+Go_ProxySyncReque°
+{
+
+383 
+_ty≥
+: 
+ª•
+.
+D©a
+[0],
+
+384 
+_ª£rved
+: *((*
+uöt16
+)(
+unß„
+.
+	`Poöãr
+(&
+ª•
+.
+D©a
+[1]))),
+
+385 
+_zîo
+: 
+ª•
+.
+D©a
+[3],
+
+386 
+_Àngth
+: *((*
+uöt32
+)(
+unß„
+.
+	`Poöãr
+(&
+ª•
+.
+D©a
+[4]))),
+
+388 
+§
+ :(*
+C
+.
+SRXPROXY_SYNCH_REQUEST
+)(C.
+	`mÆloc
+(C.
+sizeof_SRXPROXY_SYNCH_REQUEST
+))
+
+389 
+de„r
+ 
+C
+.
+	`‰ì
+(
+unß„
+.
+	`Poöãr
+(
+§
+))
+
+390 
+go_§
+.
+	`Pack
+(
+unß„
+.
+	`Poöãr
+(
+§
+))
+
+391 
+log
+.
+	`Prötf
+(" sr: %#v\n", 
+§
+)
+
+394 
+C
+.
+	`¥o˚ssSyncReque°_gΩc
+(
+§
+)
+
+396 
+C
+.
+PDU_SRXPROXY_SIGN_NOTIFICATION
+:
+
+397 
+log
+.
+	`Prötf
+("[client] Sign Notification\n")
+
+400 
+C
+.
+	`¥o˚ssSignNŸify_gΩc
+(
+nû
+)
+
+407 
+	}
+}
+
+410 
+func
+ 
+	$RunSåóm
+(
+d©a
+ []
+byã
+Ë
+uöt32
+ {
+
+412 
+˛i
+ :
+˛õ¡
+.cli
+
+413 
+fmt
+.
+	`Prötf
+("˛õ¡ d©a: %#v\n", 
+˛õ¡
+)
+
+415 
+d©a
+ =
+nû
+ {
+
+416 
+fmt
+.
+	`Pröén
+("#############")
+
+417 
+d©a
+ = []
+	`byã
+(
+deÁu…Name
+)
+
+420 
+fmt
+.
+	`Prötf
+("öpuàd©®f‹ såómÑe•⁄£: %#v\n", 
+d©a
+)
+
+422 
+°ªam
+, 
+îr
+ :
+˛i
+.
+	`SídAndWaôPro˚ss
+(
+c⁄ãxt
+.
+	`Background
+(), &
+pb
+.
+PduReque°
+{
+D©a
+: 
+d©a
+, 
+Lígth
+: 
+	`uöt32
+(
+	`Àn
+(data))})
+
+423 
+îr
+ !
+nû
+ {
+
+424 
+log
+.
+	`Prötf
+("›í såómÉº‹ %v", 
+îr
+)
+
+427 
+˘x
+ :
+°ªam
+.
+	`C⁄ãxt
+()
+
+428 
+d⁄e
+ :
+	`make
+(
+ch™
+ 
+boﬁ
+)
+
+431 
+go
+ 
+	`func
+() {
+
+433 
+ª•
+, 
+îr
+ :
+°ªam
+.
+	`Recv
+()
+
+434 
+îr
+ =
+io
+.
+EOF
+ {
+
+435 
+	`˛o£
+(
+d⁄e
+)
+
+436 
+log
+.
+	`Prötf
+("[client] EOF close ")
+
+439 
+îr
+ !
+nû
+ {
+
+440 
+log
+.
+	`Prötf
+("ˇ¿nŸÑe˚ivê%v", 
+îr
+)
+
+444 
+fmt
+.
+	`Prötf
+("+ d©®: %#v\n", 
+ª•
+.
+D©a
+)
+
+445 
+fmt
+.
+	`Prötf
+("+ sizê: %#v\n", 
+ª•
+.
+Lígth
+)
+
+446 
+fmt
+.
+	`Prötf
+("+ sètus: %#v\n", 
+ª•
+.
+VÆid©i⁄Sètus
+)
+
+447 
+fmt
+.
+	`Pröén
+()
+
+450 
+ª•
+.
+D©a
+ =
+nû
+ &&Ñe•.
+Lígth
+ == 0 {
+
+451 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+452 
+log
+.
+	`Prötf
+("[˛õ¡:%d] clo£ såóm ", 
+löe
++1)
+
+455 
+	`˛o£
+(
+d⁄e
+)
+
+460 
+go
+ 
+	`func
+() {
+
+461 <-
+˘x
+.
+	`D⁄e
+()
+
+462 
+log
+.
+	`Prötf
+("+ Client Context Done")
+
+463 
+îr
+ :
+˘x
+.
+	`Eº
+();Éº !
+nû
+ {
+
+464 
+log
+.
+	`Pröén
+(
+îr
+)
+
+466 
+fmt
+.
+	`Prötf
+("+ client context done\n")
+
+470 <-
+d⁄e
+
+
+472 
+log
+.
+	`Prötf
+("Finished with Resopnse valie")
+
+478 
+	}
+}
+
+481 
+func
+ 
+	$RunProxyVîify
+(
+d©a
+ []
+byã
+, 
+gΩcClõ¡ID
+ 
+uöt32
+) uint32 {
+
+484 
+g_cou¡
+ == 0 {
+
+485 
+°¨t
+ = 
+time
+.
+	`Now
+()
+
+487 
+g_cou¡
+++
+
+489 
+˛i
+ :
+˛õ¡
+.cli
+
+490 
+fmt
+.
+	`Prötf
+("˛õ¡ d©a: %#v\n", 
+˛õ¡
+)
+
+492 
+d©a
+ =
+nû
+ {
+
+493 
+fmt
+.
+	`Pröén
+("#############")
+
+494 
+d©a
+ = []
+	`byã
+(
+deÁu…Name
+)
+
+497 
+fmt
+.
+	`Prötf
+("öpuàd©®f‹ såómÑe•⁄£: %#v\n", 
+d©a
+)
+
+499 
+°ªam
+, 
+îr
+ :
+˛i
+.
+	`ProxyVîifySåóm
+(
+c⁄ãxt
+.
+	`Background
+(),
+
+500 &
+pb
+.
+ProxyVîifyReque°
+{
+
+501 
+D©a
+: 
+d©a
+,
+
+502 
+Lígth
+: 
+	`uöt32
+(
+	`Àn
+(
+d©a
+)),
+
+503 
+GΩcClõ¡ID
+: 
+gΩcClõ¡ID
+,
+
+506 
+îr
+ !
+nû
+ {
+
+507 
+log
+.
+	`Prötf
+("›í såómÉº‹ %v", 
+îr
+)
+
+510 
+˘x
+ :
+°ªam
+.
+	`C⁄ãxt
+()
+
+511 
+˘x
+, 
+ˇn˚l
+ :
+c⁄ãxt
+.
+	`WôhTimeout
+(˘x, 10*
+time
+.
+Sec⁄d
+)
+
+512 
+de„r
+ 
+	`ˇn˚l
+()
+
+513 
+d⁄e
+ :
+	`make
+(
+ch™
+ 
+boﬁ
+)
+
+515 
+go
+ 
+	`func
+() {
+
+517 
+ª•
+, 
+îr
+ :
+°ªam
+.
+	`Recv
+()
+
+518 
+îr
+ =
+io
+.
+EOF
+ {
+
+522 
+log
+.
+	`Prötf
+("[client] EOF close ")
+
+525 
+îr
+ !
+nû
+ {
+
+526 
+log
+.
+	`Prötf
+("ˇ¿nŸÑe˚ivê%v", 
+îr
+)
+
+529 
+fmt
+.
+	`Pröén
+()
+
+530 
+fmt
+.
+	`Prötf
+("+ d©®: %#v\n", 
+ª•
+)
+
+531 
+fmt
+.
+	`Prötf
+("+ sizê: %#v\n", 
+ª•
+.
+Lígth
+)
+
+533 
+ª•
+.
+Ty≥
+ =0 &&Ñe•.
+Lígth
+ == 0 {
+
+534 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+535 
+log
+.
+	`Prötf
+("[˛õ¡:%d] clo£ såóm \n", 
+löe
++1)
+
+536 
+	`˛o£
+(
+d⁄e
+)
+
+539 
+go_vn
+ :&
+Go_ProxyVîifyNŸify
+{
+
+540 
+_ty≥
+: 
+	`uöt8
+(
+ª•
+.
+Ty≥
+),
+
+541 
+_ªsu…Ty≥
+: 
+	`uöt8
+(
+ª•
+.
+Resu…Ty≥
+),
+
+542 
+_rﬂResu…
+: 
+	`uöt8
+(
+ª•
+.
+RﬂResu…
+),
+
+543 
+_bgp£cResu…
+: 
+	`uöt8
+(
+ª•
+.
+Bgp£cResu…
+),
+
+544 
+_Àngth
+: 
+ª•
+.
+Lígth
+,
+
+545 
+_ªque°Tokí
+: 
+ª•
+.
+Reque°Tokí
+,
+
+546 
+_upd©eID
+: 
+ª•
+.
+Upd©eID
+,
+
+548 
+vn
+ :(*
+C
+.
+SRXPROXY_VERIFY_NOTIFICATION
+)(C.
+	`mÆloc
+(C.
+sizeof_SRXPROXY_VERIFY_NOTIFICATION
+))
+
+549 
+de„r
+ 
+C
+.
+	`‰ì
+(
+unß„
+.
+	`Poöãr
+(
+vn
+))
+
+550 
+go_vn
+.
+	`Pack
+(
+unß„
+.
+	`Poöãr
+(
+vn
+))
+
+551 
+log
+.
+	`Prötf
+(" vn: %#v\n", 
+vn
+)
+
+556 
+C
+.
+	`¥o˚ssVîifyNŸify_gΩc
+(
+vn
+)
+
+562 
+go
+ 
+	`func
+() {
+
+563 <-
+˘x
+.
+	`D⁄e
+()
+
+564 
+log
+.
+	`Prötf
+("+ Client Context Done")
+
+565 
+îr
+ :
+˘x
+.
+	`Eº
+();Éº !
+nû
+ {
+
+566 
+log
+.
+	`Pröén
+(
+îr
+)
+
+568 
+fmt
+.
+	`Prötf
+("+ client context done\n")
+
+572 <-
+d⁄e
+
+
+573 
+g_cou¡
+ >
+NUM_PREFIX
+ {
+
+574 
+ñ≠£d
+ = 
+time
+.
+	`Sö˚
+(
+°¨t
+)
+
+575 
+os
+.
+Stdout
+ = 
+g_°d
+
+
+576 
+log
+.
+	`SëOuçut
+(
+os
+.
+Stdout
+)
+
+577 
+log
+.
+	`Prötf
+(" cou¡: %dÅook %s\n", 
+g_cou¡
+, 
+ñ≠£d
+)
+
+578 
+g_cou¡
+ = 0
+
+581 
+os
+.
+Stdout
+ = 
+nû
+
+
+582 
+log
+.
+	`SëOuçut
+(
+ioutû
+.
+Disˇrd
+)
+
+584 
+log
+.
+	`Prötf
+("Finished with Resopnse value")
+
+586 
+	}
+}
+
+588 
+func
+ 
+	$maö
+() {
+
+591 
+log
+.
+	`Prötf
+("maö sèπ Inô(%s)\n", 
+addªss
+)
+
+592 
+rv
+ :
+	`InôSRxGΩc
+(
+addªss
+)
+
+593 
+rv
+ !
+åue
+ {
+
+594 
+log
+.
+	`Prötf
+(" Init Error ")
+
+637 
+log
+.
+	`Prötf
+("Hello Request\n")
+
+638 
+buff_hñlo_ªque°
+ :=
+
+639 []
+byã
+{0x0, 0x0, 0x2, 0x0, 0x0, 0x0, 0x0, 0x14, 0x0, 0x0, 0x0, 0x5, 0x0, 0x0, 0xfd, 0xed, 0x0, 0x0, 0x0, 0x0}
+
+640 
+ªs
+, 
+gΩcClõ¡ID
+ :
+	`RunProxyHñlo
+(
+buff_hñlo_ªque°
+)
+
+642 
+log
+.
+	`Prötf
+("Tøns„ºed: %#v,ÖroxyID: %d\n\n", 
+ªs
+, 
+gΩcClõ¡ID
+)
+
+646 
+go
+ 
+	`func
+() {
+
+647 
+log
+.
+	`Prötf
+("GoodBye Stream Request\n")
+
+648 
+buff_goodbye_°ªam_ªque°
+ :[]
+byã
+{0x02, 0x03, 0x84, 0x0, 0x0, 0x0, 0x0, 0x08}
+
+649 
+ªsu…
+ :
+	`RunProxyGoodByeSåóm
+(
+buff_goodbye_°ªam_ªque°
+, 
+gΩcClõ¡ID
+)
+
+650 
+log
+.
+	`Pröén
+("ªsu…:", 
+ªsu…
+)
+
+656 
+log
+.
+	`Prötf
+("Verify Request\n")
+
+657 
+buff_vîify_ªq
+ :[]
+byã
+{0x03, 0x83, 0x01, 0x01, 0x00, 0x00, 0x00, 0xa9, 0x03, 0x03, 0x00, 0x18,
+
+668 
+	`RunProxyVîify
+(
+buff_vîify_ªq
+, 
+gΩcClõ¡ID
+)
+
+672 
+goGB
+ :&
+Go_ProxyGoodBye
+{
+
+673 
+_ty≥
+: 0x02,
+
+674 
+_kìpWödow
+: 
+bö¨y
+.
+BigEndün
+.
+	`Uöt16
+([]
+byã
+{0x83, 0x03}),
+
+675 
+_Àngth
+: 
+bö¨y
+.
+BigEndün
+.
+	`Uöt32
+([]
+byã
+{0x8, 0x00, 0x00, 0x00}),
+
+678 
+gb
+ :(*
+C
+.
+SRXPROXY_GOODBYE
+)(C.
+	`mÆloc
+(C.
+sizeof_SRXPROXY_GOODBYE
+))
+
+679 
+de„r
+ 
+C
+.
+	`‰ì
+(
+unß„
+.
+	`Poöãr
+(
+gb
+))
+
+681 
+goGB
+.
+	`Pack
+(
+unß„
+.
+	`Poöãr
+(
+gb
+))
+
+682 
+log
+.
+	`Prötf
+(" gb: %#v\n", 
+gb
+)
+
+684 
+°©us
+ :
+	`RunProxyGoodBye
+(*
+gb
+, 
+	`uöt32
+(
+gΩcClõ¡ID
+))
+
+685 
+log
+.
+	`Prötf
+(" GoodByêª•⁄£ sètus: %#v\n", 
+°©us
+)
+
+701 
+	}
+}
+
+	@/opt/project/gobgp_test/gowork/src/srx_grpc/server/srx_grpc_server.go
+
+1 
+∑ckage
+ 
+maö
+
+
+19 
+	gimp‹t
+ "C"
+
+21 
+imp‹t
+ (
+
+26 
+pb
+ "srx_grpc"
+
+31 
+_
+ "bytes"
+
+33 
+_
+ "io"
+
+41 
+v¨
+ 
+	gp‹t
+ = 
+Êag
+.
+I¡
+("port", 50000, "The serverÖort")
+
+42 
+v¨
+ 
+gSåóm
+ 
+	gpb
+.
+SRxApi_SídAndWaôPro˚ssSîvî
+
+
+43 
+v¨
+ 
+gSåóm_vîify
+ 
+	gpb
+.
+SRxApi_ProxyVîifySåómSîvî
+
+
+49 
+ty≥
+ 
+Sîvî
+ struct {
+
+50 
+gΩcSîvî
+ *
+	mgΩc
+.
+	mSîvî
+
+
+53 
+ty≥
+ 
+SåómD©a
+ struct {
+
+54 
+	md©a
+ []
+byã
+
+
+55 
+Àngth
+ 
+	muöt8
+
+
+58 
+v¨
+ 
+chGbsD©a
+ 
+ch™
+ 
+SåómD©a
+
+
+59 
+v¨
+ 
+chProxySåómD©a
+ 
+ch™
+ 
+SåómD©a
+
+
+62 
+func
+ 
+	$cb_¥oxy
+(
+f
+ 
+C
+., 
+v
+ 
+unß„
+.
+Poöãr
+) {
+
+63 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî]Öroxy cÆlback fun˘i⁄ :árg[%d, %#v]\n", 
+f
+, 
+v
+)
+
+65 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+v
+), 
+f
+)
+
+71 
+	`cbVîifyNŸify
+((
+f
+), 
+b
+)
+
+72 
+	}
+}
+
+75 
+func
+ 
+	$cb_¥oxyGoodBye
+(
+ö
+ 
+C
+.
+SRXPROXY_GOODBYE
+) {
+
+77 
+GbIn
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(&
+ö
+), C.
+sizeof_SRXPROXY_GOODBYE
+)
+
+79 
+m
+ :
+SåómD©a
+{
+
+80 
+d©a
+: 
+GbIn
+,
+
+81 
+Àngth
+: 
+	`uöt8
+(
+C
+.
+sizeof_SRXPROXY_GOODBYE
+),
+
+83 
+fmt
+.
+	`Prötf
+("ch™√»ˇŒback mesßgêf‹ sîvî'†GoodBye: %#v\n", 
+m
+)
+
+85 
+chGbsD©a
+ <- 
+m
+
+
+86 
+	}
+}
+
+89 
+func
+ 
+	$cb_¥oxySåóm
+(
+f
+ 
+C
+., 
+v
+ 
+unß„
+.
+Poöãr
+) {
+
+91 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+v
+), 
+f
+)
+
+93 
+m
+ :
+SåómD©a
+{
+
+94 
+d©a
+: 
+b
+,
+
+95 
+Àngth
+: 
+	`uöt8
+(
+f
+),
+
+97 
+fmt
+.
+	`Prötf
+("ch™√»ˇŒback mesßge: %#v\n", 
+m
+)
+
+99 
+chProxySåómD©a
+ <- 
+m
+
+
+101 
+	}
+}
+
+103 
+func
+ 
+	$MyCÆlback
+(
+f
+ , 
+b
+ []
+byã
+) {
+
+105 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî] My cÆlback fun˘i⁄ -Ñe˚ivedárg: %d, %#v \n", 
+f
+, 
+b
+)
+
+107 
+f
+ =0 && 
+b
+ =
+nû
+ {
+
+108 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+109 
+log
+.
+	`Prötf
+("++ [gΩ¯£rvî][:%d] clo£ såóm ", 
+löe
+)
+
+115 
+ª•
+ :
+pb
+.
+PduRe•⁄£
+{
+
+116 
+D©a
+: 
+b
+,
+
+117 
+Lígth
+: 
+	`uöt32
+(
+	`Àn
+(
+b
+)),
+
+118 
+VÆid©i⁄Sètus
+: 2,
+
+121 
+gSåóm
+ !
+nû
+ {
+
+122 
+ª•
+.
+D©a
+ =
+nû
+ &&Ñe•.
+Lígth
+ == 0 {
+
+123 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+124 
+log
+.
+	`Prötf
+("++ [gΩ¯£rvî][:%d] clo£ såóm ", 
+löe
+)
+
+127 
+îr
+ :
+gSåóm
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+128 
+log
+.
+	`Prötf
+("£ndÉº‹ %v", 
+îr
+)
+
+130 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+131 
+log
+.
+	`Prötf
+("++ [gΩ¯£rvî][:%d] sídög såóm d©a", 
+löe
++1)
+
+136 
+	}
+}
+
+138 
+func
+ 
+	$cbVîifyNŸify
+(
+f
+ , 
+b
+ []
+byã
+) {
+
+140 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî] [cbVîifyNŸify] fun˘i⁄ -Ñe˚ivedárg: %d, %#v \n", 
+f
+, 
+b
+)
+
+141 
+v¨
+ 
+ª•
+ 
+pb
+.
+ProxyVîifyNŸify
+
+
+143 
+gSåóm_vîify
+ !
+nû
+ {
+
+146 
+f
+ =0 && 
+	`Àn
+(
+b
+) == 0 {
+
+147 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+148 
+log
+.
+	`Prötf
+("[£rvî:%d] End o‡NŸify", 
+löe
+)
+
+150 
+ª•
+ = 
+pb
+.
+ProxyVîifyNŸify
+{
+
+151 
+Ty≥
+: 0,
+
+152 
+Lígth
+: 0,
+
+159 
+ª•
+ = 
+pb
+.
+ProxyVîifyNŸify
+{
+
+160 
+Ty≥
+: 
+	`uöt32
+(
+b
+[0]),
+
+161 
+Resu…Ty≥
+: 
+	`uöt32
+(
+b
+[1]),
+
+162 
+RﬂResu…
+: 
+	`uöt32
+(
+b
+[2]),
+
+163 
+Bgp£cResu…
+: 
+	`uöt32
+(
+b
+[3]),
+
+164 
+Lígth
+: *((*
+uöt32
+)(
+unß„
+.
+	`Poöãr
+(&
+b
+[4]))),
+
+165 
+Reque°Tokí
+: *((*
+uöt32
+)(
+unß„
+.
+	`Poöãr
+(&
+b
+[8]))),
+
+166 
+Upd©eID
+: *((*
+uöt32
+)(
+unß„
+.
+	`Poöãr
+(&
+b
+[12]))),
+
+170 
+îr
+ :
+gSåóm_vîify
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+171 
+log
+.
+	`Prötf
+("[gΩ¯£rvî] gΩ¯£ndÉº‹ %v", 
+îr
+)
+
+173 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+174 
+log
+.
+	`Prötf
+("[£rvî:%d] sídög såóm d©a", 
+löe
++1)
+
+178 
+	}
+}
+
+180 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	`SídPackëToSRxSîvî
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+pdu
+ *
+pb
+.
+PduReque°
+Ë(*pb.
+PduRe•⁄£
+, 
+îr‹
+) {
+
+181 
+d©a
+ :
+	`uöt32
+(0x07)
+
+183 
+fmt
+.
+	`Prötf
+("£rvî: %†%#v\n", 
+pdu
+.
+D©a
+,Ödu)
+
+185 
+fmt
+.
+	`Pröén
+("calling SRxServerÑesponseGRPC()")
+
+187 
+ªtD©a
+ :
+C
+.
+RET_DATA
+{}
+
+188 
+ªtD©a
+ = 
+C
+.
+	`ª•⁄£GRPC
+(C.(
+pdu
+.
+Lígth
+), (*C.
+uch¨
+)(
+unß„
+.
+	`Poöãr
+(&pdu.
+D©a
+[0])), 0)
+
+190 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+ªtD©a
+.
+d©a
+), C.‘ëD©a.
+size
+))
+
+191 
+fmt
+.
+	`Prötf
+("ªtu∫ size: %d \àd©a: %#v\n", 
+ªtD©a
+.
+size
+, 
+b
+)
+
+194  &
+pb
+.
+PduRe•⁄£
+{
+
+195 
+D©a
+: 
+b
+,
+
+196 
+Lígth
+: 
+	`uöt32
+(
+ªtD©a
+.
+size
+),
+
+197 
+VÆid©i⁄Sètus
+: 
+d©a
+}, 
+nû
+
+
+198 
+	}
+}
+
+200 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	$SídAndWaôPro˚ss
+(
+pdu
+ *
+pb
+.
+PduReque°
+, 
+°ªam
+Öb.
+SRxApi_SídAndWaôPro˚ssSîvî
+Ë
+îr‹
+ {
+
+202 
+gSåóm
+ = 
+°ªam
+
+
+203 
+˘x
+ :
+°ªam
+.
+	`C⁄ãxt
+()
+
+204 
+d⁄e
+ :
+	`make
+(
+ch™
+ 
+boﬁ
+)
+
+205 
+go
+ 
+	`func
+() {
+
+206 <-
+˘x
+.
+	`D⁄e
+()
+
+207 
+îr
+ :
+˘x
+.
+	`Eº
+();Éº !
+nû
+ {
+
+208 
+log
+.
+	`Pröén
+(
+îr
+)
+
+211 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+212 
+fmt
+.
+	`Prötf
+("+ [%d] sîvî c⁄ãxàd⁄e\n", 
+löe
++1)
+
+214 
+	`˛o£
+(
+d⁄e
+)
+
+225 
+d©a
+ :
+	`uöt32
+(0x09)
+
+227 
+fmt
+.
+	`Prötf
+("°ªam sîvî: %†%#v\n", 
+pdu
+.
+D©a
+,Ödu)
+
+229 
+fmt
+.
+	`Pröén
+("calling SRxServerÑesponseGRPC()")
+
+231 
+ªtD©a
+ :
+C
+.
+RET_DATA
+{}
+
+232 
+ªtD©a
+ = 
+C
+.
+	`ª•⁄£GRPC
+(C.(
+pdu
+.
+Lígth
+), (*C.
+uch¨
+)(
+unß„
+.
+	`Poöãr
+(&pdu.
+D©a
+[0])), 0)
+
+234 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+ªtD©a
+.
+d©a
+), C.‘ëD©a.
+size
+))
+
+235 
+fmt
+.
+	`Prötf
+("ªtu∫ size: %d \àd©a: %#v\n", 
+ªtD©a
+.
+size
+, 
+b
+)
+
+237 
+ª•
+ :
+pb
+.
+PduRe•⁄£
+{
+
+238 
+D©a
+: 
+b
+,
+
+239 
+Lígth
+: 
+	`uöt32
+(
+ªtD©a
+.
+size
+),
+
+240 
+VÆid©i⁄Sètus
+: 
+d©a
+,
+
+243 
+îr
+ :
+°ªam
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+244 
+log
+.
+	`Prötf
+("£ndÉº‹ %v", 
+îr
+)
+
+246 
+log
+.
+	`Prötf
+("sending stream data")
+
+250 <-
+d⁄e
+
+
+251 
+log
+.
+	`Prötf
+("Finished with RPC send [Send_Wait_Process] \n")
+
+253  
+nû
+
+
+254 
+	}
+}
+
+256 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	`ProxyHñlo
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+pdu
+ *
+pb
+.
+ProxyHñloReque°
+Ë(*pb.
+ProxyHñloRe•⁄£
+, 
+îr‹
+) {
+
+259 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî] sîvî: %#v\n", 
+pdu
+)
+
+260 
+fmt
+.
+	`Pröén
+("++ [grpc server] calling SRxServer server:ProxyHello()")
+
+262 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî] i≈uà: %#v\n", 
+pdu
+.
+Ty≥
+)
+
+263 
+fmt
+.
+	`Pröén
+("++ [gΩ¯£rvî] ProxyHñloReque°", 
+pdu
+)
+
+264 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî] ProxyHñloReque°: %#v", 
+pdu
+)
+
+267 
+buf
+ :
+	`make
+([]
+byã
+, 
+C
+.
+sizeof_SRXPROXY_HELLO
+)
+
+268 
+buf
+[0] = 
+	`byã
+(
+pdu
+.
+Ty≥
+)
+
+269 
+bö¨y
+.
+BigEndün
+.
+	`PutUöt16
+(
+buf
+[1:3], 
+	`uöt16
+(
+pdu
+.
+Vîsi⁄
+))
+
+270 
+bö¨y
+.
+BigEndün
+.
+	`PutUöt32
+(
+buf
+[4:8], 
+pdu
+.
+Lígth
+)
+
+271 
+bö¨y
+.
+BigEndün
+.
+	`PutUöt32
+(
+buf
+[8:12], 
+pdu
+.
+ProxyIdítifõr
+)
+
+272 
+bö¨y
+.
+BigEndün
+.
+	`PutUöt32
+(
+buf
+[12:16], 
+pdu
+.
+A¢
+)
+
+273 
+bö¨y
+.
+BigEndün
+.
+	`PutUöt32
+(
+buf
+[16:20], 
+pdu
+.
+NoPìrAS
+)
+
+275 
+gΩcClõ¡ID
+ :
+pdu
+.
+ProxyIdítifõr
+
+
+277 
+ªtD©a
+ :
+C
+.
+RET_DATA
+{}
+
+278 
+ªtD©a
+ = 
+C
+.
+	`ª•⁄£GRPC
+(C.(C.
+sizeof_SRXPROXY_HELLO
+), (*C.
+uch¨
+)(
+unß„
+.
+	`Poöãr
+(&
+buf
+[0])),
+
+279 
+C
+.
+	`uöt
+(
+gΩcClõ¡ID
+))
+
+281 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+ªtD©a
+.
+d©a
+), C.‘ëD©a.
+size
+))
+
+282 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî][ProxyHñlo]Ñëu∫ size: %d \àd©a: %#v\n", 
+ªtD©a
+.
+size
+, 
+b
+)
+
+284  &
+pb
+.
+ProxyHñloRe•⁄£
+{
+
+285 
+Ty≥
+: 
+	`uöt32
+(
+b
+[0]),
+
+286 
+Vîsi⁄
+: 
+	`uöt32
+(
+bö¨y
+.
+BigEndün
+.
+	`Uöt16
+(
+b
+[1:3])),
+
+287 
+Zîo
+: 
+	`uöt32
+(
+b
+[3]),
+
+288 
+Lígth
+: 
+bö¨y
+.
+BigEndün
+.
+	`Uöt32
+(
+b
+[4:8]),
+
+289 
+ProxyIdítifõr
+: 
+bö¨y
+.
+BigEndün
+.
+	`Uöt32
+(
+b
+[8:12]),
+
+290 }, 
+nû
+
+
+291 
+	}
+}
+
+293 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	`ProxyGoodBye
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+pdu
+ *
+pb
+.
+ProxyGoodByeReque°
+Ë(*pb.
+ProxyGoodByeRe•⁄£
+, 
+îr‹
+) {
+
+295 
+fmt
+.
+	`Pröén
+("++ [grpc server] calling SRxServer server:ProxyGoodBye()")
+
+296 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî] i≈uà: %#v\n", 
+pdu
+.
+Ty≥
+)
+
+297 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî] ProxyGoodByêReque°: %#v \n", 
+pdu
+)
+
+300 
+buf
+ :
+	`make
+([]
+byã
+, 
+C
+.
+sizeof_SRXPROXY_GOODBYE
+)
+
+301 
+buf
+[0] = 
+	`byã
+(
+pdu
+.
+Ty≥
+)
+
+302 
+bö¨y
+.
+BigEndün
+.
+	`PutUöt16
+(
+buf
+[1:3], 
+	`uöt16
+(
+pdu
+.
+KìpWödow
+))
+
+303 
+buf
+[3] = 
+	`byã
+(
+pdu
+.
+Zîo
+)
+
+304 
+bö¨y
+.
+BigEndün
+.
+	`PutUöt32
+(
+buf
+[4:8], 
+pdu
+.
+Lígth
+)
+
+306 
+gΩcClõ¡ID
+ :
+pdu
+.
+GΩcClõ¡ID
+
+
+307 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî] ProxyGoodByêgΩcClõ¡ID : %02x \n", 
+gΩcClõ¡ID
+)
+
+309 
+ªtD©a
+ :
+C
+.
+RET_DATA
+{}
+
+310 
+ªtD©a
+ = 
+C
+.
+	`ª•⁄£GRPC
+(C.(C.
+sizeof_SRXPROXY_GOODBYE
+), (*C.
+uch¨
+)(
+unß„
+.
+	`Poöãr
+(&
+buf
+[0])),
+
+311 
+C
+.
+	`uöt
+(
+gΩcClõ¡ID
+))
+
+313 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+ªtD©a
+.
+d©a
+), C.‘ëD©a.
+size
+))
+
+314 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî][ProxyGoodBye]Ñëu∫ size: %d \àd©a: %#v\n", 
+ªtD©a
+.
+size
+, 
+b
+)
+
+316  &
+pb
+.
+ProxyGoodByeRe•⁄£
+{
+
+317 
+Sètus
+: 
+åue
+,
+
+318 }, 
+nû
+
+
+319 
+	}
+}
+
+321 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	$ProxyGoodByeSåóm
+(
+pdu
+ *
+pb
+.
+PduReque°
+, 
+°ªam
+Öb.
+SRxApi_ProxyGoodByeSåómSîvî
+Ë
+îr‹
+ {
+
+322 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî][ProxyGoodByeSåóm]ÖduÅy≥: %02x \n", 
+pdu
+.
+D©a
+[0])
+
+323 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî][ProxyGoodByeSåóm]Ñe˚ived d©a: %#v\n", 
+pdu
+)
+
+325 
+˘x
+ :
+°ªam
+.
+	`C⁄ãxt
+()
+
+326 
+go
+ 
+	`func
+() {
+
+327 <-
+˘x
+.
+	`D⁄e
+()
+
+328 
+îr
+ :
+˘x
+.
+	`Eº
+();Éº !
+nû
+ {
+
+329 
+log
+.
+	`Pröén
+(
+îr
+)
+
+332 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+333 
+fmt
+.
+	`Prötf
+("+ [%d] sîvî Proxy_GoodBye_Såóm c⁄ãxàd⁄e\n", 
+löe
++1)
+
+339 
+fmt
+.
+	`Prötf
+("++ [grpc server][ProxyGoodByeStream] Waiting Channel Event ...\n")
+
+341 
+£À˘
+ {
+
+342 
+m
+, 
+ok
+ :<-
+chGbsD©a
+:
+
+343 
+ok
+ {
+
+344 
+fmt
+.
+	`Prötf
+("ch™√»evíàmesßgê: %#v\n", 
+m
+)
+
+345 
+ª•
+ :
+pb
+.
+PduRe•⁄£
+{
+
+346 
+D©a
+: 
+m
+.
+d©a
+,
+
+347 
+Lígth
+: 
+	`uöt32
+(
+	`Àn
+(
+m
+.
+d©a
+)),
+
+350 
+îr
+ :
+°ªam
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+351 
+log
+.
+	`Prötf
+("£ndÉº‹ %v", 
+îr
+)
+
+352  
+îr
+
+
+355 
+fmt
+.
+	`Prötf
+("++ [grpc server][ProxyGoodByeStream] Channel Closed\n")
+
+356  
+nû
+
+
+361  
+nû
+
+
+362 
+	}
+}
+
+364 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	$ProxySåóm
+(
+pdu
+ *
+pb
+.
+PduReque°
+, 
+°ªam
+Öb.
+SRxApi_ProxySåómSîvî
+Ë
+îr‹
+ {
+
+365 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî][ProxySåóm]ÖduÅy≥: %02x \n", 
+pdu
+.
+D©a
+[0])
+
+366 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî][ProxySåóm]Ñe˚ived d©a: %#v\n", 
+pdu
+)
+
+368 
+˘x
+ :
+°ªam
+.
+	`C⁄ãxt
+()
+
+369 
+go
+ 
+	`func
+() {
+
+370 <-
+˘x
+.
+	`D⁄e
+()
+
+371 
+îr
+ :
+˘x
+.
+	`Eº
+();Éº !
+nû
+ {
+
+372 
+log
+.
+	`Pröén
+(
+îr
+)
+
+375 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+376 
+fmt
+.
+	`Prötf
+("+ [%d] sîvî Proxy_Såóm c⁄ãxàd⁄e\n", 
+löe
++1)
+
+380 
+fmt
+.
+	`Prötf
+("++ [grpc server][ProxyStream] Waiting Channel Event ...\n")
+
+382 
+£À˘
+ {
+
+383 
+m
+, 
+ok
+ :<-
+chProxySåómD©a
+:
+
+384 
+ok
+ {
+
+385 
+fmt
+.
+	`Prötf
+("ch™√»evíàmesßgê: %#v\n", 
+m
+)
+
+386 
+ª•
+ :
+pb
+.
+PduRe•⁄£
+{
+
+387 
+D©a
+: 
+m
+.
+d©a
+,
+
+388 
+Lígth
+: 
+	`uöt32
+(
+	`Àn
+(
+m
+.
+d©a
+)),
+
+391 
+îr
+ :
+°ªam
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+392 
+log
+.
+	`Prötf
+("£ndÉº‹ %v", 
+îr
+)
+
+393  
+îr
+
+
+396 
+fmt
+.
+	`Prötf
+("++ [grpc server][ProxyGoodByeStream] Channel Closed\n")
+
+397  
+nû
+
+
+402  
+nû
+
+
+403 
+	}
+}
+
+406 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	$ProxyVîify
+(
+pdu
+ *
+pb
+.
+ProxyVîifyV4Reque°
+, 
+°ªam
+Öb.
+SRxApi_ProxyVîifySîvî
+Ë
+îr‹
+ {
+
+407 
+fmt
+.
+	`Pröén
+("calling SRxServer server:ProxyVerify()")
+
+409 
+gSåóm_vîify
+ = 
+°ªam
+
+
+410 
+˘x
+ :
+°ªam
+.
+	`C⁄ãxt
+()
+
+411 
+d⁄e
+ :
+	`make
+(
+ch™
+ 
+boﬁ
+)
+
+412 
+go
+ 
+	`func
+() {
+
+413 <-
+˘x
+.
+	`D⁄e
+()
+
+414 
+îr
+ :
+˘x
+.
+	`Eº
+();Éº !
+nû
+ {
+
+415 
+log
+.
+	`Pröén
+(
+îr
+)
+
+417 
+	`˛o£
+(
+d⁄e
+)
+
+420 
+fmt
+.
+	`Prötf
+("°ªam sîvî: %#v\n", 
+pdu
+)
+
+422 
+ªtD©a
+ :
+C
+.
+RET_DATA
+{}
+
+423 
+ªtD©a
+ = 
+C
+.
+	`ª•⁄£GRPC
+(C.(0), (*C.
+uch¨
+)(
+unß„
+.
+	`Poöãr
+(
+nû
+)), 0)
+
+425 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+ªtD©a
+.
+d©a
+), C.‘ëD©a.
+size
+))
+
+426 
+fmt
+.
+	`Prötf
+("ªtu∫ size: %d \àd©a: %#v\n", 
+ªtD©a
+.
+size
+, 
+b
+)
+
+428 
+ª•
+ :
+pb
+.
+ProxyVîifyNŸify
+{
+
+429 
+Ty≥
+: 0,
+
+430 
+Resu…Ty≥
+: 0,
+
+431 
+RﬂResu…
+: 0,
+
+434 
+îr
+ :
+°ªam
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+435 
+log
+.
+	`Prötf
+("£ndÉº‹ %v", 
+îr
+)
+
+437 
+log
+.
+	`Prötf
+("sending stream data")
+
+441 <-
+d⁄e
+
+
+442 
+log
+.
+	`Prötf
+("Finished with RPC send \n")
+
+444  
+nû
+
+
+445 
+	}
+}
+
+447 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	$ProxyVîifySåóm
+(
+pdu
+ *
+pb
+.
+ProxyVîifyReque°
+, 
+°ªam
+Öb.
+SRxApi_ProxyVîifySåómSîvî
+Ë
+îr‹
+ {
+
+448 
+fmt
+.
+	`Pröén
+("++ [grpc server] calling SRxServer server:ProxyVerifyStream()")
+
+450 
+gSåóm_vîify
+ = 
+°ªam
+
+
+451 
+˘x
+ :
+°ªam
+.
+	`C⁄ãxt
+()
+
+452 
+˘x
+, 
+ˇn˚l
+ :
+c⁄ãxt
+.
+	`WôhTimeout
+(˘x, 10*
+time
+.
+Sec⁄d
+)
+
+453 
+de„r
+ 
+	`ˇn˚l
+()
+
+454 
+d⁄e
+ :
+	`make
+(
+ch™
+ 
+boﬁ
+)
+
+455 
+go
+ 
+	`func
+() {
+
+456 <-
+˘x
+.
+	`D⁄e
+()
+
+457 
+îr
+ :
+˘x
+.
+	`Eº
+();Éº !
+nû
+ {
+
+458 
+log
+.
+	`Pröén
+(
+îr
+)
+
+460 
+_
+, _, 
+löe
+, _ :
+ru¡ime
+.
+	`CÆÀr
+(0)
+
+461 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî][:%d] sîvî Proxy_Vîify_Såóm c⁄ãxàd⁄e\n", 
+löe
++1)
+
+462 
+	`˛o£
+(
+d⁄e
+)
+
+464 
+fmt
+.
+	`Prötf
+("++ [grpc server] grpc Client ID: %02x, dataÜength: %d, \n Data: %#v\n",
+
+465 
+pdu
+.
+GΩcClõ¡ID
+,Ödu.
+Lígth
+,Ödu)
+
+467 
+fmt
+.
+	`Pröén
+("++ [grpc server] calling SRxServerÑesponseGRPC()")
+
+468 
+ªtD©a
+ :
+C
+.
+RET_DATA
+{}
+
+469 
+ªtD©a
+ = 
+C
+.
+	`ª•⁄£GRPC
+(C.(
+pdu
+.
+Lígth
+), (*C.
+uch¨
+)(
+unß„
+.
+	`Poöãr
+(&pdu.
+D©a
+[0])),
+
+470 
+C
+.
+	`uöt
+(
+pdu
+.
+GΩcClõ¡ID
+))
+
+472 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+ªtD©a
+.
+d©a
+), C.‘ëD©a.
+size
+))
+
+473 
+fmt
+.
+	`Prötf
+("++ [gΩ¯£rvî][ProxyVîifySåóm]Ñëu∫ size: %d \àd©a: %#v\n", 
+ªtD©a
+.
+size
+, 
+b
+)
+
+475 
+ªtD©a
+.
+size
+ == 0 {
+
+476  
+nû
+
+
+479 
+ª•
+ :
+pb
+.
+ProxyVîifyNŸify
+{
+
+480 
+Ty≥
+: 
+	`uöt32
+(
+b
+[0]),
+
+481 
+Resu…Ty≥
+: 
+	`uöt32
+(
+b
+[1]),
+
+482 
+RﬂResu…
+: 
+	`uöt32
+(
+b
+[2]),
+
+483 
+Bgp£cResu…
+: 
+	`uöt32
+(
+b
+[3]),
+
+484 
+Lígth
+: *((*
+uöt32
+)(
+unß„
+.
+	`Poöãr
+(&
+b
+[4]))),
+
+485 
+Reque°Tokí
+: *((*
+uöt32
+)(
+unß„
+.
+	`Poöãr
+(&
+b
+[8]))),
+
+486 
+Upd©eID
+: *((*
+uöt32
+)(
+unß„
+.
+	`Poöãr
+(&
+b
+[12]))),
+
+489 
+îr
+ :
+°ªam
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+490 
+log
+.
+	`Prötf
+("£ndÉº‹ %v", 
+îr
+)
+
+492 
+log
+.
+	`Prötf
+("++ [grpc server] sending stream data")
+
+494 <-
+d⁄e
+
+
+495 
+log
+.
+	`Prötf
+("++ [grpc server] [ProxyVerifyStream] Finished with RPC send \n")
+
+497  
+nû
+
+
+499 
+	}
+}
+
+501 
+func
+ 
+NewSîvî
+(
+g
+ *
+gΩc
+.
+Sîvî
+Ë*
+	gSîvî
+ {
+
+502 
+	ggΩc
+.
+	gE«bÀTøcög
+ = 
+Ál£
+
+
+503 
+£rvî
+ :&
+Sîvî
+{
+
+504 
+gΩcSîvî
+: 
+g
+,
+
+506 
+pb
+.
+Regi°îSRxApiSîvî
+(
+g
+, 
+£rvî
+)
+
+507  
+	g£rvî
+
+
+511 
+func
+ 
+	$Sîve
+() {
+
+514 
+chGbsD©a
+ = 
+	`make
+(
+ch™
+ 
+SåómD©a
+)
+
+515 
+chProxySåómD©a
+ = 
+	`make
+(
+ch™
+ 
+SåómD©a
+)
+
+517 
+Êag
+.
+	`P¨£
+()
+
+518 
+lis
+, 
+îr
+ :
+√t
+.
+	`Li°í
+("t˝", 
+fmt
+.
+	`S¥ötf
+("loˇlho°:%d", *
+p‹t
+))
+
+519 
+îr
+ !
+nû
+ {
+
+520 
+log
+.
+	`Prötf
+("ÁûedÅÿli°í: %v", 
+îr
+)
+
+524 
+log
+.
+	`SëFœgs
+(0)
+
+525 
+log
+.
+	`SëOuçut
+(
+ioutû
+.
+Disˇrd
+)
+
+526 
+os
+.
+Stdout
+ = 
+nû
+
+
+528 
+£rvî
+ :
+	`NewSîvî
+(
+gΩc
+.NewServer())
+
+529 
+îr
+ :
+£rvî
+.
+gΩcSîvî
+.
+	`Sîve
+(
+lis
+);Éº !
+nû
+ {
+
+530 
+log
+.
+	`Prötf
+("ÁûedÅÿ£rve: %v", 
+îr
+)
+
+532 
+	}
+}
+
+534 
+func
+ 
+	$maö
+() {
+
+536 
+	`Sîve
+()
+
+537 
+	}
+}
+
+	@/opt/project/gobgp_test/gowork/src/srx_grpc/server/srx_grpc_server_callback.go
+
+1 
+∑ckage
+ 
+maö
+
+
+16 
+	gimp‹t
+ "C"
+
+18 
+imp‹t
+ (
+
+23 
+pb
+ "srx_grpc"
+
+28 
+_
+ "bytes"
+
+33 
+v¨
+ 
+	gp‹t
+ = 
+Êag
+.
+I¡
+("port", 50000, "The serverÖort")
+
+35 
+ty≥
+ 
+Sîvî
+ struct {
+
+36 
+gΩcSîvî
+ *
+	mgΩc
+.
+	mSîvî
+
+
+40 
+func
+ 
+	$cb_¥oxy
+(
+f
+ 
+C
+.) {
+
+42 
+fmt
+.
+	`Prötf
+("proxy callback function \n")
+
+45 
+	`MyCÆlback
+()
+
+46 
+	}
+}
+
+48 
+func
+ 
+	$MyCÆlback
+() {
+
+50 
+fmt
+.
+	`Prötf
+("My callback function \n")
+
+51 
+	}
+}
+
+53 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	`SídPackëToSRxSîvî
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+pdu
+ *
+pb
+.
+PduReque°
+Ë(*pb.
+PduRe•⁄£
+, 
+îr‹
+) {
+
+54 
+d©a
+ :
+	`uöt32
+(0x07)
+
+55 
+fmt
+.
+	`Prötf
+("£rvî: %†%#v\n", 
+pdu
+.
+D©a
+,Ödu)
+
+57 
+go°r
+ := "12345ABCD SendPacketToSRxServer"
+
+58 
+c°r
+ :
+C
+.
+	`CSåög
+(
+go°r
+)
+
+60 
+ªtD©a
+ :
+C
+.
+RET_DATA
+{
+
+61 
+size
+: 
+C
+.
+	`uöt
+(
+	`Àn
+(
+go°r
+)),
+
+62 
+d©a
+: (*
+C
+.
+uch¨
+)(
+unß„
+.
+	`Poöãr
+(
+c°r
+)),
+
+64 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+ªtD©a
+.
+d©a
+), C.‘ëD©a.
+size
+))
+
+65 
+fmt
+.
+	`Prötf
+("ªtu∫ size: %d \àd©a: %#v\n", 
+ªtD©a
+.
+size
+, 
+b
+)
+
+67  &
+pb
+.
+PduRe•⁄£
+{
+
+68 
+D©a
+: 
+b
+,
+
+69 
+Lígth
+: 
+	`uöt32
+(
+ªtD©a
+.
+size
+),
+
+70 
+VÆid©i⁄Sètus
+: 
+d©a
+}, 
+nû
+
+
+71 
+	}
+}
+
+73 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	$SídAndWaôPro˚ss
+(
+pdu
+ *
+pb
+.
+PduReque°
+, 
+°ªam
+Öb.
+SRxApi_SídAndWaôPro˚ssSîvî
+Ë
+îr‹
+ {
+
+75 
+d©a
+ :
+	`uöt32
+(0x09)
+
+76 
+fmt
+.
+	`Prötf
+("°ªam sîvî: %†%#v\n", 
+pdu
+.
+D©a
+,Ödu)
+
+78 
+go°r
+ := "sS 123456789ábcdef - SendAndWaitProcess"
+
+79 
+c°r
+ :
+C
+.
+	`CSåög
+(
+go°r
+)
+
+81 
+ªtD©a
+ :
+C
+.
+RET_DATA
+{
+
+82 
+size
+: 
+C
+.
+	`uöt
+(
+	`Àn
+(
+go°r
+)),
+
+83 
+d©a
+: (*
+C
+.
+uch¨
+)(
+unß„
+.
+	`Poöãr
+(
+c°r
+)),
+
+86 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+ªtD©a
+.
+d©a
+), C.‘ëD©a.
+size
+))
+
+87 
+fmt
+.
+	`Prötf
+("ªtu∫ size: %d \àd©a: %#v\n", 
+ªtD©a
+.
+size
+, 
+b
+)
+
+89 
+ª•
+ :
+pb
+.
+PduRe•⁄£
+{
+
+90 
+D©a
+: 
+b
+,
+
+91 
+Lígth
+: 
+	`uöt32
+(
+ªtD©a
+.
+size
+),
+
+92 
+VÆid©i⁄Sètus
+: 
+d©a
+,
+
+96 
+îr
+ :
+°ªam
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+97 
+log
+.
+	`Prötf
+("£ndÉº‹ %v", 
+îr
+)
+
+99 
+log
+.
+	`Prötf
+("+ send stream data")
+
+101 
+time
+.
+	`SÀï
+(2 *Åime.
+Sec⁄d
+)
+
+104 
+îr
+ :
+°ªam
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+105 
+log
+.
+	`Prötf
+("£ndÉº‹ %v", 
+îr
+)
+
+107 
+log
+.
+	`Prötf
+("++ send stream data - one moreÅime")
+
+109  
+nû
+
+
+110 
+	}
+}
+
+112 
+func
+ 
+NewSîvî
+(
+g
+ *
+gΩc
+.
+Sîvî
+Ë*
+	gSîvî
+ {
+
+113 
+	ggΩc
+.
+	gE«bÀTøcög
+ = 
+Ál£
+
+
+114 
+£rvî
+ :&
+Sîvî
+{
+
+115 
+gΩcSîvî
+: 
+g
+,
+
+117 
+pb
+.
+Regi°îSRxApiSîvî
+(
+g
+, 
+£rvî
+)
+
+118  
+	g£rvî
+
+
+122 
+func
+ 
+	$Sîve
+() {
+
+124 
+Êag
+.
+	`P¨£
+()
+
+125 
+lis
+, 
+îr
+ :
+√t
+.
+	`Li°í
+("t˝", 
+fmt
+.
+	`S¥ötf
+("loˇlho°:%d", *
+p‹t
+))
+
+126 
+îr
+ !
+nû
+ {
+
+127 
+log
+.
+	`F©Æf
+("ÁûedÅÿli°í: %v", 
+îr
+)
+
+130 
+£rvî
+ :
+	`NewSîvî
+(
+gΩc
+.NewServer())
+
+131 
+îr
+ :
+£rvî
+.
+gΩcSîvî
+.
+	`Sîve
+(
+lis
+);Éº !
+nû
+ {
+
+132 
+log
+.
+	`F©Æf
+("ÁûedÅÿ£rve: %v", 
+îr
+)
+
+134 
+	}
+}
+
+136 
+func
+ 
+	$maö
+() {
+
+137 
+	`Sîve
+()
+
+138 
+	}
+}
+
+	@/opt/project/gobgp_test/gowork/src/srx_grpc/server/srx_grpc_server_stream.go
+
+1 
+∑ckage
+ 
+maö
+
+
+13 
+	gimp‹t
+ "C"
+
+15 
+imp‹t
+ (
+
+20 
+pb
+ "srx_grpc"
+
+25 
+_
+ "bytes"
+
+30 
+v¨
+ 
+	gp‹t
+ = 
+Êag
+.
+I¡
+("port", 50000, "The serverÖort")
+
+32 
+ty≥
+ 
+Sîvî
+ struct {
+
+33 
+gΩcSîvî
+ *
+	mgΩc
+.
+	mSîvî
+
+
+36 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	`SídPackëToSRxSîvî
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+pdu
+ *
+pb
+.
+PduReque°
+Ë(*pb.
+PduRe•⁄£
+, 
+îr‹
+) {
+
+37 
+d©a
+ :
+	`uöt32
+(0x07)
+
+38 
+fmt
+.
+	`Prötf
+("£rvî: %†%#v\n", 
+pdu
+.
+D©a
+,Ödu)
+
+40 
+go°r
+ := "12345ABCD SendPacketToSRxServer"
+
+41 
+c°r
+ :
+C
+.
+	`CSåög
+(
+go°r
+)
+
+43 
+ªtD©a
+ :
+C
+.
+RET_DATA
+{
+
+44 
+size
+: 
+C
+.
+	`uöt
+(
+	`Àn
+(
+go°r
+)),
+
+45 
+d©a
+: (*
+C
+.
+uch¨
+)(
+unß„
+.
+	`Poöãr
+(
+c°r
+)),
+
+47 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+ªtD©a
+.
+d©a
+), C.‘ëD©a.
+size
+))
+
+48 
+fmt
+.
+	`Prötf
+("ªtu∫ size: %d \àd©a: %#v\n", 
+ªtD©a
+.
+size
+, 
+b
+)
+
+50  &
+pb
+.
+PduRe•⁄£
+{
+
+51 
+D©a
+: 
+b
+,
+
+52 
+Lígth
+: 
+	`uöt32
+(
+ªtD©a
+.
+size
+),
+
+53 
+VÆid©i⁄Sètus
+: 
+d©a
+}, 
+nû
+
+
+54 
+	}
+}
+
+56 
+	$func
+ (
+s
+ *
+Sîvî
+Ë
+	$SídAndWaôPro˚ss
+(
+pdu
+ *
+pb
+.
+PduReque°
+, 
+°ªam
+Öb.
+SRxApi_SídAndWaôPro˚ssSîvî
+Ë
+îr‹
+ {
+
+58 
+d©a
+ :
+	`uöt32
+(0x09)
+
+59 
+fmt
+.
+	`Prötf
+("°ªam sîvî: %†%#v\n", 
+pdu
+.
+D©a
+,Ödu)
+
+61 
+go°r
+ := "sS 123456789ábcdef - SendAndWaitProcess"
+
+62 
+c°r
+ :
+C
+.
+	`CSåög
+(
+go°r
+)
+
+64 
+ªtD©a
+ :
+C
+.
+RET_DATA
+{
+
+65 
+size
+: 
+C
+.
+	`uöt
+(
+	`Àn
+(
+go°r
+)),
+
+66 
+d©a
+: (*
+C
+.
+uch¨
+)(
+unß„
+.
+	`Poöãr
+(
+c°r
+)),
+
+69 
+b
+ :
+C
+.
+	`GoByãs
+(
+unß„
+.
+	`Poöãr
+(
+ªtD©a
+.
+d©a
+), C.‘ëD©a.
+size
+))
+
+70 
+fmt
+.
+	`Prötf
+("ªtu∫ size: %d \àd©a: %#v\n", 
+ªtD©a
+.
+size
+, 
+b
+)
+
+72 
+ª•
+ :
+pb
+.
+PduRe•⁄£
+{
+
+73 
+D©a
+: 
+b
+,
+
+74 
+Lígth
+: 
+	`uöt32
+(
+ªtD©a
+.
+size
+),
+
+75 
+VÆid©i⁄Sètus
+: 
+d©a
+,
+
+79 
+îr
+ :
+°ªam
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+80 
+log
+.
+	`Prötf
+("£ndÉº‹ %v", 
+îr
+)
+
+82 
+log
+.
+	`Prötf
+("+ send stream data")
+
+84 
+time
+.
+	`SÀï
+(2 *Åime.
+Sec⁄d
+)
+
+87 
+îr
+ :
+°ªam
+.
+	`Síd
+(&
+ª•
+);Éº !
+nû
+ {
+
+88 
+log
+.
+	`Prötf
+("£ndÉº‹ %v", 
+îr
+)
+
+90 
+log
+.
+	`Prötf
+("++ send stream data - one moreÅime")
+
+92  
+nû
+
+
+93 
+	}
+}
+
+95 
+func
+ 
+NewSîvî
+(
+g
+ *
+gΩc
+.
+Sîvî
+Ë*
+	gSîvî
+ {
+
+96 
+	ggΩc
+.
+	gE«bÀTøcög
+ = 
+Ál£
+
+
+97 
+£rvî
+ :&
+Sîvî
+{
+
+98 
+gΩcSîvî
+: 
+g
+,
+
+100 
+pb
+.
+Regi°îSRxApiSîvî
+(
+g
+, 
+£rvî
+)
+
+101  
+	g£rvî
+
+
+105 
+func
+ 
+	$Sîve
+() {
+
+107 
+Êag
+.
+	`P¨£
+()
+
+108 
+lis
+, 
+îr
+ :
+√t
+.
+	`Li°í
+("t˝", 
+fmt
+.
+	`S¥ötf
+("loˇlho°:%d", *
+p‹t
+))
+
+109 
+îr
+ !
+nû
+ {
+
+110 
+log
+.
+	`F©Æf
+("ÁûedÅÿli°í: %v", 
+îr
+)
+
+113 
+£rvî
+ :
+	`NewSîvî
+(
+gΩc
+.NewServer())
+
+114 
+îr
+ :
+£rvî
+.
+gΩcSîvî
+.
+	`Sîve
+(
+lis
+);Éº !
+nû
+ {
+
+115 
+log
+.
+	`F©Æf
+("ÁûedÅÿ£rve: %v", 
+îr
+)
+
+117 
+	}
+}
+
+119 
+func
+ 
+	$maö
+() {
+
+120 
+	`Sîve
+()
+
+121 
+	}
+}
+
+	@/opt/project/gobgp_test/gowork/src/srx_grpc/srx_grpc.pb.go
+
+4 
+∑ckage
+ 
+§x_gΩc
+
+
+6 
+imp‹t
+ (
+
+7 
+c⁄ãxt
+ "context"
+
+8 
+fmt
+ "fmt"
+
+9 
+¥Ÿo
+ "github.com/golang/protobuf/proto"
+
+10 
+gΩc
+ "google.golang.org/grpc"
+
+11 
+codes
+ "google.golang.org/grpc/codes"
+
+12 
+°©us
+ "google.golang.org/grpc/status"
+
+13 
+m©h
+ "math"
+
+17 
+v¨
+ 
+	g_
+ = 
+¥Ÿo
+.
+M¨shÆ
+
+
+18 
+v¨
+ 
+_
+ = 
+fmt
+.
+Eº‹f
+
+
+19 
+v¨
+ 
+_
+ = 
+m©h
+.
+Inf
+
+
+25 c⁄° 
+_
+ = 
+¥Ÿo
+.
+PrŸoPackageIsVîsi⁄3
+
+
+27 
+ty≥
+ 
+PduReque°
+ struct {
+
+28 
+D©a
+ []
+byã
+ `
+¥Ÿobuf
+:"byãs,1,›t,«me=d©a,¥Ÿo3" 
+js⁄
+:"data,omitempty"`
+
+29 
+Lígth
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,2,›t,«meˆígth,¥Ÿo3" 
+js⁄
+:"length,omitempty"`
+
+30 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+31 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+32 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+35 
+	$func
+ (
+m
+ *
+PduReque°
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+PduReque°
+{} 
+	}
+}
+
+36 
+	$func
+ (
+m
+ *
+PduReque°
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+37 
+	$func
+ (*
+PduReque°
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+38 
+	$func
+ (*
+PduReque°
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+39  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{0}
+
+40 
+	}
+}
+
+42 
+	$func
+ (
+m
+ *
+PduReque°
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+43  
+xxx_mesßgeInfo_PduReque°
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+44 
+	}
+}
+
+45 
+	$func
+ (
+m
+ *
+PduReque°
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+46  
+xxx_mesßgeInfo_PduReque°
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+47 
+	}
+}
+
+48 
+	$func
+ (
+m
+ *
+PduReque°
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+49 
+xxx_mesßgeInfo_PduReque°
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+50 
+	}
+}
+
+51 
+	$func
+ (
+m
+ *
+PduReque°
+Ë
+	$XXX_Size
+() {
+
+52  
+xxx_mesßgeInfo_PduReque°
+.
+	`Size
+(
+m
+)
+
+53 
+	}
+}
+
+54 
+	$func
+ (
+m
+ *
+PduReque°
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+55 
+xxx_mesßgeInfo_PduReque°
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+56 
+	}
+}
+
+58 
+v¨
+ 
+xxx_mesßgeInfo_PduReque°
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+60 
+	$func
+ (
+m
+ *
+PduReque°
+Ë
+	`GëD©a
+(Ë[]
+byã
+ {
+
+61 
+m
+ !
+nû
+ {
+
+62  
+m
+.
+D©a
+
+
+64  
+nû
+
+
+65 
+	}
+}
+
+67 
+	$func
+ (
+m
+ *
+PduReque°
+Ë
+	$GëLígth
+(Ë
+uöt32
+ {
+
+68 
+m
+ !
+nû
+ {
+
+69  
+m
+.
+Lígth
+
+
+72 
+	}
+}
+
+74 
+ty≥
+ 
+PduRe•⁄£
+ struct {
+
+75 
+	mD©a
+ []
+	mbyã
+ `
+	m¥Ÿobuf
+:"byãs,1,›t,«me=d©a,¥Ÿo3" 
+js⁄
+:"data,omitempty"`
+
+76 
+Lígth
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,2,›t,«meˆígth,¥Ÿo3" 
+js⁄
+:"length,omitempty"`
+
+77 
+VÆid©i⁄Sètus
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,3,›t,«me=vÆid©i⁄_°©us,js⁄=vÆid©i⁄Sètus,¥Ÿo3" 
+js⁄
+:"validation_status,omitempty"`
+
+78 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+79 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+80 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+83 
+	$func
+ (
+m
+ *
+PduRe•⁄£
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+PduRe•⁄£
+{} 
+	}
+}
+
+84 
+	$func
+ (
+m
+ *
+PduRe•⁄£
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+85 
+	$func
+ (*
+PduRe•⁄£
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+86 
+	$func
+ (*
+PduRe•⁄£
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+87  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{1}
+
+88 
+	}
+}
+
+90 
+	$func
+ (
+m
+ *
+PduRe•⁄£
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+91  
+xxx_mesßgeInfo_PduRe•⁄£
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+92 
+	}
+}
+
+93 
+	$func
+ (
+m
+ *
+PduRe•⁄£
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+94  
+xxx_mesßgeInfo_PduRe•⁄£
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+95 
+	}
+}
+
+96 
+	$func
+ (
+m
+ *
+PduRe•⁄£
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+97 
+xxx_mesßgeInfo_PduRe•⁄£
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+98 
+	}
+}
+
+99 
+	$func
+ (
+m
+ *
+PduRe•⁄£
+Ë
+	$XXX_Size
+() {
+
+100  
+xxx_mesßgeInfo_PduRe•⁄£
+.
+	`Size
+(
+m
+)
+
+101 
+	}
+}
+
+102 
+	$func
+ (
+m
+ *
+PduRe•⁄£
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+103 
+xxx_mesßgeInfo_PduRe•⁄£
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+104 
+	}
+}
+
+106 
+v¨
+ 
+xxx_mesßgeInfo_PduRe•⁄£
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+108 
+	$func
+ (
+m
+ *
+PduRe•⁄£
+Ë
+	`GëD©a
+(Ë[]
+byã
+ {
+
+109 
+m
+ !
+nû
+ {
+
+110  
+m
+.
+D©a
+
+
+112  
+nû
+
+
+113 
+	}
+}
+
+115 
+	$func
+ (
+m
+ *
+PduRe•⁄£
+Ë
+	$GëLígth
+(Ë
+uöt32
+ {
+
+116 
+m
+ !
+nû
+ {
+
+117  
+m
+.
+Lígth
+
+
+120 
+	}
+}
+
+122 
+	$func
+ (
+m
+ *
+PduRe•⁄£
+Ë
+	$GëVÆid©i⁄Sètus
+(Ë
+uöt32
+ {
+
+123 
+m
+ !
+nû
+ {
+
+124  
+m
+.
+VÆid©i⁄Sètus
+
+
+127 
+	}
+}
+
+129 
+ty≥
+ 
+ProxyHñloReque°
+ struct {
+
+130 
+Ty≥
+ 
+	muöt32
+ `
+	m¥Ÿobuf
+:"v¨öt,1,›t,«meÒy≥,¥Ÿo3" 
+js⁄
+:"type,omitempty"`
+
+131 
+Vîsi⁄
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,2,›t,«me=vîsi⁄,¥Ÿo3" 
+js⁄
+:"version,omitempty"`
+
+132 
+Zîo
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,3,›t,«me=zîo,¥Ÿo3" 
+js⁄
+:"zero,omitempty"`
+
+133 
+Lígth
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,4,›t,«meˆígth,¥Ÿo3" 
+js⁄
+:"length,omitempty"`
+
+134 
+ProxyIdítifõr
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,5,›t,«meıroxyIdítifõr,¥Ÿo3" 
+js⁄
+:"proxyIdentifier,omitempty"`
+
+135 
+A¢
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,6,›t,«me˜¢,¥Ÿo3" 
+js⁄
+:"asn,omitempty"`
+
+136 
+NoPìrAS
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,7,›t,«meÚoPìrAS,¥Ÿo3" 
+js⁄
+:"noPeerAS,omitempty"`
+
+137 
+PìrAS
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,8,›t,«meıìrAS,¥Ÿo3" 
+js⁄
+:"peerAS,omitempty"`
+
+138 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+139 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+140 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+143 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+ProxyHñloReque°
+{} 
+	}
+}
+
+144 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+145 
+	$func
+ (*
+ProxyHñloReque°
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+146 
+	$func
+ (*
+ProxyHñloReque°
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+147  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{2}
+
+148 
+	}
+}
+
+150 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+151  
+xxx_mesßgeInfo_ProxyHñloReque°
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+152 
+	}
+}
+
+153 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+154  
+xxx_mesßgeInfo_ProxyHñloReque°
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+155 
+	}
+}
+
+156 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+157 
+xxx_mesßgeInfo_ProxyHñloReque°
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+158 
+	}
+}
+
+159 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$XXX_Size
+() {
+
+160  
+xxx_mesßgeInfo_ProxyHñloReque°
+.
+	`Size
+(
+m
+)
+
+161 
+	}
+}
+
+162 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+163 
+xxx_mesßgeInfo_ProxyHñloReque°
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+164 
+	}
+}
+
+166 
+v¨
+ 
+xxx_mesßgeInfo_ProxyHñloReque°
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+168 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$GëTy≥
+(Ë
+uöt32
+ {
+
+169 
+m
+ !
+nû
+ {
+
+170  
+m
+.
+Ty≥
+
+
+173 
+	}
+}
+
+175 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$GëVîsi⁄
+(Ë
+uöt32
+ {
+
+176 
+m
+ !
+nû
+ {
+
+177  
+m
+.
+Vîsi⁄
+
+
+180 
+	}
+}
+
+182 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$GëZîo
+(Ë
+uöt32
+ {
+
+183 
+m
+ !
+nû
+ {
+
+184  
+m
+.
+Zîo
+
+
+187 
+	}
+}
+
+189 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$GëLígth
+(Ë
+uöt32
+ {
+
+190 
+m
+ !
+nû
+ {
+
+191  
+m
+.
+Lígth
+
+
+194 
+	}
+}
+
+196 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$GëProxyIdítifõr
+(Ë
+uöt32
+ {
+
+197 
+m
+ !
+nû
+ {
+
+198  
+m
+.
+ProxyIdítifõr
+
+
+201 
+	}
+}
+
+203 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$GëA¢
+(Ë
+uöt32
+ {
+
+204 
+m
+ !
+nû
+ {
+
+205  
+m
+.
+A¢
+
+
+208 
+	}
+}
+
+210 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$GëNoPìrAS
+(Ë
+uöt32
+ {
+
+211 
+m
+ !
+nû
+ {
+
+212  
+m
+.
+NoPìrAS
+
+
+215 
+	}
+}
+
+217 
+	$func
+ (
+m
+ *
+ProxyHñloReque°
+Ë
+	$GëPìrAS
+(Ë
+uöt32
+ {
+
+218 
+m
+ !
+nû
+ {
+
+219  
+m
+.
+PìrAS
+
+
+222 
+	}
+}
+
+224 
+ty≥
+ 
+ProxyHñloRe•⁄£
+ struct {
+
+225 
+Ty≥
+ 
+	muöt32
+ `
+	m¥Ÿobuf
+:"v¨öt,1,›t,«meÒy≥,¥Ÿo3" 
+js⁄
+:"type,omitempty"`
+
+226 
+Vîsi⁄
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,2,›t,«me=vîsi⁄,¥Ÿo3" 
+js⁄
+:"version,omitempty"`
+
+227 
+Zîo
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,3,›t,«me=zîo,¥Ÿo3" 
+js⁄
+:"zero,omitempty"`
+
+228 
+Lígth
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,4,›t,«meˆígth,¥Ÿo3" 
+js⁄
+:"length,omitempty"`
+
+229 
+ProxyIdítifõr
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,5,›t,«meıroxyIdítifõr,¥Ÿo3" 
+js⁄
+:"proxyIdentifier,omitempty"`
+
+230 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+231 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+232 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+235 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+ProxyHñloRe•⁄£
+{} 
+	}
+}
+
+236 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+237 
+	$func
+ (*
+ProxyHñloRe•⁄£
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+238 
+	$func
+ (*
+ProxyHñloRe•⁄£
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+239  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{3}
+
+240 
+	}
+}
+
+242 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+243  
+xxx_mesßgeInfo_ProxyHñloRe•⁄£
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+244 
+	}
+}
+
+245 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+246  
+xxx_mesßgeInfo_ProxyHñloRe•⁄£
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+247 
+	}
+}
+
+248 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+249 
+xxx_mesßgeInfo_ProxyHñloRe•⁄£
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+250 
+	}
+}
+
+251 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$XXX_Size
+() {
+
+252  
+xxx_mesßgeInfo_ProxyHñloRe•⁄£
+.
+	`Size
+(
+m
+)
+
+253 
+	}
+}
+
+254 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+255 
+xxx_mesßgeInfo_ProxyHñloRe•⁄£
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+256 
+	}
+}
+
+258 
+v¨
+ 
+xxx_mesßgeInfo_ProxyHñloRe•⁄£
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+260 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$GëTy≥
+(Ë
+uöt32
+ {
+
+261 
+m
+ !
+nû
+ {
+
+262  
+m
+.
+Ty≥
+
+
+265 
+	}
+}
+
+267 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$GëVîsi⁄
+(Ë
+uöt32
+ {
+
+268 
+m
+ !
+nû
+ {
+
+269  
+m
+.
+Vîsi⁄
+
+
+272 
+	}
+}
+
+274 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$GëZîo
+(Ë
+uöt32
+ {
+
+275 
+m
+ !
+nû
+ {
+
+276  
+m
+.
+Zîo
+
+
+279 
+	}
+}
+
+281 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$GëLígth
+(Ë
+uöt32
+ {
+
+282 
+m
+ !
+nû
+ {
+
+283  
+m
+.
+Lígth
+
+
+286 
+	}
+}
+
+288 
+	$func
+ (
+m
+ *
+ProxyHñloRe•⁄£
+Ë
+	$GëProxyIdítifõr
+(Ë
+uöt32
+ {
+
+289 
+m
+ !
+nû
+ {
+
+290  
+m
+.
+ProxyIdítifõr
+
+
+293 
+	}
+}
+
+295 
+ty≥
+ 
+ProxyGoodByeReque°
+ struct {
+
+296 
+Ty≥
+ 
+	muöt32
+ `
+	m¥Ÿobuf
+:"v¨öt,1,›t,«meÒy≥,¥Ÿo3" 
+js⁄
+:"type,omitempty"`
+
+297 
+KìpWödow
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,2,›t,«me=kìpWödow,¥Ÿo3" 
+js⁄
+:"keepWindow,omitempty"`
+
+298 
+Zîo
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,3,›t,«me=zîo,¥Ÿo3" 
+js⁄
+:"zero,omitempty"`
+
+299 
+Lígth
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,4,›t,«meˆígth,¥Ÿo3" 
+js⁄
+:"length,omitempty"`
+
+300 
+GΩcClõ¡ID
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,5,›t,«me=gΩcClõ¡ID,¥Ÿo3" 
+js⁄
+:"grpcClientID,omitempty"`
+
+301 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+302 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+303 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+306 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+ProxyGoodByeReque°
+{} 
+	}
+}
+
+307 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+308 
+	$func
+ (*
+ProxyGoodByeReque°
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+309 
+	$func
+ (*
+ProxyGoodByeReque°
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+310  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{4}
+
+311 
+	}
+}
+
+313 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+314  
+xxx_mesßgeInfo_ProxyGoodByeReque°
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+315 
+	}
+}
+
+316 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+317  
+xxx_mesßgeInfo_ProxyGoodByeReque°
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+318 
+	}
+}
+
+319 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+320 
+xxx_mesßgeInfo_ProxyGoodByeReque°
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+321 
+	}
+}
+
+322 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$XXX_Size
+() {
+
+323  
+xxx_mesßgeInfo_ProxyGoodByeReque°
+.
+	`Size
+(
+m
+)
+
+324 
+	}
+}
+
+325 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+326 
+xxx_mesßgeInfo_ProxyGoodByeReque°
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+327 
+	}
+}
+
+329 
+v¨
+ 
+xxx_mesßgeInfo_ProxyGoodByeReque°
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+331 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$GëTy≥
+(Ë
+uöt32
+ {
+
+332 
+m
+ !
+nû
+ {
+
+333  
+m
+.
+Ty≥
+
+
+336 
+	}
+}
+
+338 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$GëKìpWödow
+(Ë
+uöt32
+ {
+
+339 
+m
+ !
+nû
+ {
+
+340  
+m
+.
+KìpWödow
+
+
+343 
+	}
+}
+
+345 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$GëZîo
+(Ë
+uöt32
+ {
+
+346 
+m
+ !
+nû
+ {
+
+347  
+m
+.
+Zîo
+
+
+350 
+	}
+}
+
+352 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$GëLígth
+(Ë
+uöt32
+ {
+
+353 
+m
+ !
+nû
+ {
+
+354  
+m
+.
+Lígth
+
+
+357 
+	}
+}
+
+359 
+	$func
+ (
+m
+ *
+ProxyGoodByeReque°
+Ë
+	$GëGΩcClõ¡ID
+(Ë
+uöt32
+ {
+
+360 
+m
+ !
+nû
+ {
+
+361  
+m
+.
+GΩcClõ¡ID
+
+
+364 
+	}
+}
+
+366 
+ty≥
+ 
+ProxyGoodByeRe•⁄£
+ struct {
+
+367 
+Sètus
+ 
+	mboﬁ
+ `
+	m¥Ÿobuf
+:"v¨öt,1,›t,«me=°©us,¥Ÿo3" 
+js⁄
+:"status,omitempty"`
+
+368 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+369 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+370 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+373 
+	$func
+ (
+m
+ *
+ProxyGoodByeRe•⁄£
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+ProxyGoodByeRe•⁄£
+{} 
+	}
+}
+
+374 
+	$func
+ (
+m
+ *
+ProxyGoodByeRe•⁄£
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+375 
+	$func
+ (*
+ProxyGoodByeRe•⁄£
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+376 
+	$func
+ (*
+ProxyGoodByeRe•⁄£
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+377  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{5}
+
+378 
+	}
+}
+
+380 
+	$func
+ (
+m
+ *
+ProxyGoodByeRe•⁄£
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+381  
+xxx_mesßgeInfo_ProxyGoodByeRe•⁄£
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+382 
+	}
+}
+
+383 
+	$func
+ (
+m
+ *
+ProxyGoodByeRe•⁄£
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+384  
+xxx_mesßgeInfo_ProxyGoodByeRe•⁄£
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+385 
+	}
+}
+
+386 
+	$func
+ (
+m
+ *
+ProxyGoodByeRe•⁄£
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+387 
+xxx_mesßgeInfo_ProxyGoodByeRe•⁄£
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+388 
+	}
+}
+
+389 
+	$func
+ (
+m
+ *
+ProxyGoodByeRe•⁄£
+Ë
+	$XXX_Size
+() {
+
+390  
+xxx_mesßgeInfo_ProxyGoodByeRe•⁄£
+.
+	`Size
+(
+m
+)
+
+391 
+	}
+}
+
+392 
+	$func
+ (
+m
+ *
+ProxyGoodByeRe•⁄£
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+393 
+xxx_mesßgeInfo_ProxyGoodByeRe•⁄£
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+394 
+	}
+}
+
+396 
+v¨
+ 
+xxx_mesßgeInfo_ProxyGoodByeRe•⁄£
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+398 
+	$func
+ (
+m
+ *
+ProxyGoodByeRe•⁄£
+Ë
+	$GëSètus
+(Ë
+boﬁ
+ {
+
+399 
+m
+ !
+nû
+ {
+
+400  
+m
+.
+Sètus
+
+
+402  
+Ál£
+
+
+403 
+	}
+}
+
+405 
+ty≥
+ 
+ProxyBasicHódî
+ struct {
+
+406 
+Ty≥
+ 
+	muöt32
+ `
+	m¥Ÿobuf
+:"v¨öt,1,›t,«meÒy≥,¥Ÿo3" 
+js⁄
+:"type,omitempty"`
+
+407 
+Fœgs
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,2,›t,«me=Êags,¥Ÿo3" 
+js⁄
+:"flags,omitempty"`
+
+408 
+RﬂResSrc
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,3,›t,«meÙﬂResSrc,¥Ÿo3" 
+js⁄
+:"roaResSrc,omitempty"`
+
+409 
+Bgp£cResSrc
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,4,›t,«me=bgp£cResSrc,¥Ÿo3" 
+js⁄
+:"bgpsecResSrc,omitempty"`
+
+410 
+Lígth
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,5,›t,«meˆígth,¥Ÿo3" 
+js⁄
+:"length,omitempty"`
+
+411 
+RﬂDefRes
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,6,›t,«meÙﬂDefRes,¥Ÿo3" 
+js⁄
+:"roaDefRes,omitempty"`
+
+412 
+Bgp£cDefRes
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,7,›t,«me=bgp£cDefRes,¥Ÿo3" 
+js⁄
+:"bgpsecDefRes,omitempty"`
+
+413 
+Zîo
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,8,›t,«me=zîo,¥Ÿo3" 
+js⁄
+:"zero,omitempty"`
+
+414 
+PªfixLí
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,9,›t,«meıªfixLí,¥Ÿo3" 
+js⁄
+:"prefixLen,omitempty"`
+
+415 
+Reque°Tokí
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,10,›t,«meÙeque°Tokí,¥Ÿo3" 
+js⁄
+:"requestToken,omitempty"`
+
+416 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+417 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+418 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+421 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+ProxyBasicHódî
+{} 
+	}
+}
+
+422 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+423 
+	$func
+ (*
+ProxyBasicHódî
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+424 
+	$func
+ (*
+ProxyBasicHódî
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+425  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{6}
+
+426 
+	}
+}
+
+428 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+429  
+xxx_mesßgeInfo_ProxyBasicHódî
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+430 
+	}
+}
+
+431 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+432  
+xxx_mesßgeInfo_ProxyBasicHódî
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+433 
+	}
+}
+
+434 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+435 
+xxx_mesßgeInfo_ProxyBasicHódî
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+436 
+	}
+}
+
+437 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$XXX_Size
+() {
+
+438  
+xxx_mesßgeInfo_ProxyBasicHódî
+.
+	`Size
+(
+m
+)
+
+439 
+	}
+}
+
+440 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+441 
+xxx_mesßgeInfo_ProxyBasicHódî
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+442 
+	}
+}
+
+444 
+v¨
+ 
+xxx_mesßgeInfo_ProxyBasicHódî
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+446 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$GëTy≥
+(Ë
+uöt32
+ {
+
+447 
+m
+ !
+nû
+ {
+
+448  
+m
+.
+Ty≥
+
+
+451 
+	}
+}
+
+453 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$GëFœgs
+(Ë
+uöt32
+ {
+
+454 
+m
+ !
+nû
+ {
+
+455  
+m
+.
+Fœgs
+
+
+458 
+	}
+}
+
+460 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$GëRﬂResSrc
+(Ë
+uöt32
+ {
+
+461 
+m
+ !
+nû
+ {
+
+462  
+m
+.
+RﬂResSrc
+
+
+465 
+	}
+}
+
+467 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$GëBgp£cResSrc
+(Ë
+uöt32
+ {
+
+468 
+m
+ !
+nû
+ {
+
+469  
+m
+.
+Bgp£cResSrc
+
+
+472 
+	}
+}
+
+474 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$GëLígth
+(Ë
+uöt32
+ {
+
+475 
+m
+ !
+nû
+ {
+
+476  
+m
+.
+Lígth
+
+
+479 
+	}
+}
+
+481 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$GëRﬂDefRes
+(Ë
+uöt32
+ {
+
+482 
+m
+ !
+nû
+ {
+
+483  
+m
+.
+RﬂDefRes
+
+
+486 
+	}
+}
+
+488 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$GëBgp£cDefRes
+(Ë
+uöt32
+ {
+
+489 
+m
+ !
+nû
+ {
+
+490  
+m
+.
+Bgp£cDefRes
+
+
+493 
+	}
+}
+
+495 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$GëZîo
+(Ë
+uöt32
+ {
+
+496 
+m
+ !
+nû
+ {
+
+497  
+m
+.
+Zîo
+
+
+500 
+	}
+}
+
+502 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$GëPªfixLí
+(Ë
+uöt32
+ {
+
+503 
+m
+ !
+nû
+ {
+
+504  
+m
+.
+PªfixLí
+
+
+507 
+	}
+}
+
+509 
+	$func
+ (
+m
+ *
+ProxyBasicHódî
+Ë
+	$GëReque°Tokí
+(Ë
+uöt32
+ {
+
+510 
+m
+ !
+nû
+ {
+
+511  
+m
+.
+Reque°Tokí
+
+
+514 
+	}
+}
+
+516 
+ty≥
+ 
+IPv4Addªss
+ struct {
+
+520 
+AddªssO√of
+ 
+	misIPv4Addªss_AddªssO√of
+ `
+	m¥Ÿobuf_⁄eof
+:"address_oneof"`
+
+521 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+522 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+523 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+526 
+	$func
+ (
+m
+ *
+IPv4Addªss
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+IPv4Addªss
+{} 
+	}
+}
+
+527 
+	$func
+ (
+m
+ *
+IPv4Addªss
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+528 
+	$func
+ (*
+IPv4Addªss
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+529 
+	$func
+ (*
+IPv4Addªss
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+530  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{7}
+
+531 
+	}
+}
+
+533 
+	$func
+ (
+m
+ *
+IPv4Addªss
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+534  
+xxx_mesßgeInfo_IPv4Addªss
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+535 
+	}
+}
+
+536 
+	$func
+ (
+m
+ *
+IPv4Addªss
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+537  
+xxx_mesßgeInfo_IPv4Addªss
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+538 
+	}
+}
+
+539 
+	$func
+ (
+m
+ *
+IPv4Addªss
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+540 
+xxx_mesßgeInfo_IPv4Addªss
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+541 
+	}
+}
+
+542 
+	$func
+ (
+m
+ *
+IPv4Addªss
+Ë
+	$XXX_Size
+() {
+
+543  
+xxx_mesßgeInfo_IPv4Addªss
+.
+	`Size
+(
+m
+)
+
+544 
+	}
+}
+
+545 
+	$func
+ (
+m
+ *
+IPv4Addªss
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+546 
+xxx_mesßgeInfo_IPv4Addªss
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+547 
+	}
+}
+
+549 
+v¨
+ 
+xxx_mesßgeInfo_IPv4Addªss
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+551 
+ty≥
+ 
+isIPv4Addªss_AddªssO√of
+ 
+	göãrÁ˚
+ {
+
+552 
+isIPv4Addªss_AddªssO√of
+()
+
+555 
+ty≥
+ 
+IPv4Addªss_U32
+ struct {
+
+556 
+U32
+ 
+	muöt32
+ `
+	m¥Ÿobuf
+:"varint,1,opt,name=u32,proto3,oneof"`
+
+559 
+ty≥
+ 
+IPv4Addªss_U8
+ struct {
+
+560 
+U8
+ []
+byã
+ `
+¥Ÿobuf
+:"bytes,2,opt,name=u8,proto3,oneof"`
+
+563 
+	$func
+ (*
+IPv4Addªss_U32
+Ë
+	$isIPv4Addªss_AddªssO√of
+(Ë{
+	}
+}
+
+565 
+	$func
+ (*
+IPv4Addªss_U8
+Ë
+	$isIPv4Addªss_AddªssO√of
+(Ë{
+	}
+}
+
+567 
+	$func
+ (
+m
+ *
+IPv4Addªss
+Ë
+	$GëAddªssO√of
+(Ë
+isIPv4Addªss_AddªssO√of
+ {
+
+568 
+m
+ !
+nû
+ {
+
+569  
+m
+.
+AddªssO√of
+
+
+571  
+nû
+
+
+572 
+	}
+}
+
+574 
+	$func
+ (
+m
+ *
+IPv4Addªss
+Ë
+	$GëU32
+(Ë
+uöt32
+ {
+
+575 
+x
+, 
+ok
+ :
+m
+.
+	`GëAddªssO√of
+().(*
+IPv4Addªss_U32
+); ok {
+
+576  
+x
+.
+U32
+
+
+579 
+	}
+}
+
+581 
+	$func
+ (
+m
+ *
+IPv4Addªss
+Ë
+	`GëU8
+(Ë[]
+byã
+ {
+
+582 
+x
+, 
+ok
+ :
+m
+.
+	`GëAddªssO√of
+().(*
+IPv4Addªss_U8
+); ok {
+
+583  
+x
+.
+U8
+
+
+585  
+nû
+
+
+586 
+	}
+}
+
+589 
+	$func
+ (*
+IPv4Addªss
+Ë
+	`XXX_O√ofWøµîs
+(Ë[]
+öãrÁ˚
+{
+	}
+} {
+
+590  []
+	göãrÁ˚
+{}{
+
+591 (*
+	gIPv4Addªss_U32
+)(
+	gnû
+),
+
+592 (*
+	gIPv4Addªss_U8
+)(
+	gnû
+),
+
+596 
+ty≥
+ 
+SCA_Pªfix
+ struct {
+
+597 
+Afi
+ 
+	muöt32
+ `
+	m¥Ÿobuf
+:"v¨öt,1,›t,«me˜fi,¥Ÿo3" 
+js⁄
+:"afi,omitempty"`
+
+598 
+Safi
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,2,›t,«me=ßfi,¥Ÿo3" 
+js⁄
+:"safi,omitempty"`
+
+599 
+Lígth
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,3,›t,«meˆígth,¥Ÿo3" 
+js⁄
+:"length,omitempty"`
+
+604 
+Addr
+ 
+isSCA_Pªfix_Addr
+ `
+¥Ÿobuf_⁄eof
+:"addr"`
+
+605 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+606 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+607 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+610 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+SCA_Pªfix
+{} 
+	}
+}
+
+611 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+612 
+	$func
+ (*
+SCA_Pªfix
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+613 
+	$func
+ (*
+SCA_Pªfix
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+614  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{8}
+
+615 
+	}
+}
+
+617 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+618  
+xxx_mesßgeInfo_SCA_Pªfix
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+619 
+	}
+}
+
+620 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+621  
+xxx_mesßgeInfo_SCA_Pªfix
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+622 
+	}
+}
+
+623 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+624 
+xxx_mesßgeInfo_SCA_Pªfix
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+625 
+	}
+}
+
+626 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$XXX_Size
+() {
+
+627  
+xxx_mesßgeInfo_SCA_Pªfix
+.
+	`Size
+(
+m
+)
+
+628 
+	}
+}
+
+629 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+630 
+xxx_mesßgeInfo_SCA_Pªfix
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+631 
+	}
+}
+
+633 
+v¨
+ 
+xxx_mesßgeInfo_SCA_Pªfix
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+635 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$GëAfi
+(Ë
+uöt32
+ {
+
+636 
+m
+ !
+nû
+ {
+
+637  
+m
+.
+Afi
+
+
+640 
+	}
+}
+
+642 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$GëSafi
+(Ë
+uöt32
+ {
+
+643 
+m
+ !
+nû
+ {
+
+644  
+m
+.
+Safi
+
+
+647 
+	}
+}
+
+649 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$GëLígth
+(Ë
+uöt32
+ {
+
+650 
+m
+ !
+nû
+ {
+
+651  
+m
+.
+Lígth
+
+
+654 
+	}
+}
+
+656 
+ty≥
+ 
+isSCA_Pªfix_Addr
+ 
+	göãrÁ˚
+ {
+
+657 
+isSCA_Pªfix_Addr
+()
+
+660 
+ty≥
+ 
+SCA_Pªfix_IpV4
+ struct {
+
+661 
+IpV4
+ 
+	muöt32
+ `
+	m¥Ÿobuf
+:"varint,4,opt,name=ipV4,proto3,oneof"`
+
+664 
+ty≥
+ 
+SCA_Pªfix_IpV6
+ struct {
+
+665 
+IpV6
+ 
+uöt64
+ `
+¥Ÿobuf
+:"varint,5,opt,name=ipV6,proto3,oneof"`
+
+668 
+ty≥
+ 
+SCA_Pªfix_Ip
+ struct {
+
+669 
+Ip
+ []
+byã
+ `
+¥Ÿobuf
+:"bytes,6,opt,name=ip,proto3,oneof"`
+
+672 
+	$func
+ (*
+SCA_Pªfix_IpV4
+Ë
+	$isSCA_Pªfix_Addr
+(Ë{
+	}
+}
+
+674 
+	$func
+ (*
+SCA_Pªfix_IpV6
+Ë
+	$isSCA_Pªfix_Addr
+(Ë{
+	}
+}
+
+676 
+	$func
+ (*
+SCA_Pªfix_Ip
+Ë
+	$isSCA_Pªfix_Addr
+(Ë{
+	}
+}
+
+678 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$GëAddr
+(Ë
+isSCA_Pªfix_Addr
+ {
+
+679 
+m
+ !
+nû
+ {
+
+680  
+m
+.
+Addr
+
+
+682  
+nû
+
+
+683 
+	}
+}
+
+685 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$GëIpV4
+(Ë
+uöt32
+ {
+
+686 
+x
+, 
+ok
+ :
+m
+.
+	`GëAddr
+().(*
+SCA_Pªfix_IpV4
+); ok {
+
+687  
+x
+.
+IpV4
+
+
+690 
+	}
+}
+
+692 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	$GëIpV6
+(Ë
+uöt64
+ {
+
+693 
+x
+, 
+ok
+ :
+m
+.
+	`GëAddr
+().(*
+SCA_Pªfix_IpV6
+); ok {
+
+694  
+x
+.
+IpV6
+
+
+697 
+	}
+}
+
+699 
+	$func
+ (
+m
+ *
+SCA_Pªfix
+Ë
+	`GëIp
+(Ë[]
+byã
+ {
+
+700 
+x
+, 
+ok
+ :
+m
+.
+	`GëAddr
+().(*
+SCA_Pªfix_Ip
+); ok {
+
+701  
+x
+.
+Ip
+
+
+703  
+nû
+
+
+704 
+	}
+}
+
+707 
+	$func
+ (*
+SCA_Pªfix
+Ë
+	`XXX_O√ofWøµîs
+(Ë[]
+öãrÁ˚
+{
+	}
+} {
+
+708  []
+	göãrÁ˚
+{}{
+
+709 (*
+	gSCA_Pªfix_IpV4
+)(
+	gnû
+),
+
+710 (*
+	gSCA_Pªfix_IpV6
+)(
+	gnû
+),
+
+711 (*
+	gSCA_Pªfix_Ip
+)(
+	gnû
+),
+
+715 
+ty≥
+ 
+BGPSEC_DATA_PTR
+ struct {
+
+716 
+LoˇlAs
+ 
+	muöt32
+ `
+	m¥Ÿobuf
+:"v¨öt,1,›t,«meˆoˇl_as,js⁄ˆoˇlAs,¥Ÿo3" 
+js⁄
+:"local_as,omitempty"`
+
+717 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+718 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+719 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+722 
+	$func
+ (
+m
+ *
+BGPSEC_DATA_PTR
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+BGPSEC_DATA_PTR
+{} 
+	}
+}
+
+723 
+	$func
+ (
+m
+ *
+BGPSEC_DATA_PTR
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+724 
+	$func
+ (*
+BGPSEC_DATA_PTR
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+725 
+	$func
+ (*
+BGPSEC_DATA_PTR
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+726  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{9}
+
+727 
+	}
+}
+
+729 
+	$func
+ (
+m
+ *
+BGPSEC_DATA_PTR
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+730  
+xxx_mesßgeInfo_BGPSEC_DATA_PTR
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+731 
+	}
+}
+
+732 
+	$func
+ (
+m
+ *
+BGPSEC_DATA_PTR
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+733  
+xxx_mesßgeInfo_BGPSEC_DATA_PTR
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+734 
+	}
+}
+
+735 
+	$func
+ (
+m
+ *
+BGPSEC_DATA_PTR
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+736 
+xxx_mesßgeInfo_BGPSEC_DATA_PTR
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+737 
+	}
+}
+
+738 
+	$func
+ (
+m
+ *
+BGPSEC_DATA_PTR
+Ë
+	$XXX_Size
+() {
+
+739  
+xxx_mesßgeInfo_BGPSEC_DATA_PTR
+.
+	`Size
+(
+m
+)
+
+740 
+	}
+}
+
+741 
+	$func
+ (
+m
+ *
+BGPSEC_DATA_PTR
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+742 
+xxx_mesßgeInfo_BGPSEC_DATA_PTR
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+743 
+	}
+}
+
+745 
+v¨
+ 
+xxx_mesßgeInfo_BGPSEC_DATA_PTR
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+747 
+	$func
+ (
+m
+ *
+BGPSEC_DATA_PTR
+Ë
+	$GëLoˇlAs
+(Ë
+uöt32
+ {
+
+748 
+m
+ !
+nû
+ {
+
+749  
+m
+.
+LoˇlAs
+
+
+752 
+	}
+}
+
+754 
+ty≥
+ 
+BGPSECVÆReqD©a
+ struct {
+
+755 
+NumH›s
+ 
+	muöt32
+ `
+	m¥Ÿobuf
+:"v¨öt,1,›t,«meÚumH›s,¥Ÿo3" 
+js⁄
+:"numHops,omitempty"`
+
+756 
+AârLí
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,2,›t,«me˜ârLí,¥Ÿo3" 
+js⁄
+:"attrLen,omitempty"`
+
+757 
+VÆPªfix
+ *
+SCA_Pªfix
+ `
+¥Ÿobuf
+:"byãs,3,›t,«me=vÆPªfix,¥Ÿo3" 
+js⁄
+:"valPrefix,omitempty"`
+
+758 
+VÆD©a
+ *
+BGPSEC_DATA_PTR
+ `
+¥Ÿobuf
+:"byãs,4,›t,«me=vÆD©a,¥Ÿo3" 
+js⁄
+:"valData,omitempty"`
+
+759 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+760 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+761 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+764 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+BGPSECVÆReqD©a
+{} 
+	}
+}
+
+765 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+766 
+	$func
+ (*
+BGPSECVÆReqD©a
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+767 
+	$func
+ (*
+BGPSECVÆReqD©a
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+768  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{10}
+
+769 
+	}
+}
+
+771 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+772  
+xxx_mesßgeInfo_BGPSECVÆReqD©a
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+773 
+	}
+}
+
+774 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+775  
+xxx_mesßgeInfo_BGPSECVÆReqD©a
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+776 
+	}
+}
+
+777 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+778 
+xxx_mesßgeInfo_BGPSECVÆReqD©a
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+779 
+	}
+}
+
+780 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	$XXX_Size
+() {
+
+781  
+xxx_mesßgeInfo_BGPSECVÆReqD©a
+.
+	`Size
+(
+m
+)
+
+782 
+	}
+}
+
+783 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+784 
+xxx_mesßgeInfo_BGPSECVÆReqD©a
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+785 
+	}
+}
+
+787 
+v¨
+ 
+xxx_mesßgeInfo_BGPSECVÆReqD©a
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+789 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	$GëNumH›s
+(Ë
+uöt32
+ {
+
+790 
+m
+ !
+nû
+ {
+
+791  
+m
+.
+NumH›s
+
+
+794 
+	}
+}
+
+796 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	$GëAârLí
+(Ë
+uöt32
+ {
+
+797 
+m
+ !
+nû
+ {
+
+798  
+m
+.
+AârLí
+
+
+801 
+	}
+}
+
+803 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	`GëVÆPªfix
+(Ë*
+SCA_Pªfix
+ {
+
+804 
+m
+ !
+nû
+ {
+
+805  
+m
+.
+VÆPªfix
+
+
+807  
+nû
+
+
+808 
+	}
+}
+
+810 
+	$func
+ (
+m
+ *
+BGPSECVÆReqD©a
+Ë
+	`GëVÆD©a
+(Ë*
+BGPSEC_DATA_PTR
+ {
+
+811 
+m
+ !
+nû
+ {
+
+812  
+m
+.
+VÆD©a
+
+
+814  
+nû
+
+
+815 
+	}
+}
+
+817 
+ty≥
+ 
+ProxyVîifyV4Reque°
+ struct {
+
+818 
+Comm⁄
+ *
+	mProxyBasicHódî
+ `
+	m¥Ÿobuf
+:"byãs,1,›t,«me=comm⁄,¥Ÿo3" 
+js⁄
+:"common,omitempty"`
+
+819 
+PªfixAddªss
+ *
+IPv4Addªss
+ `
+¥Ÿobuf
+:"byãs,2,›t,«meıªfixAddªss,¥Ÿo3" 
+js⁄
+:"prefixAddress,omitempty"`
+
+820 
+OrigöAS
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,3,›t,«me=‹igöAS,¥Ÿo3" 
+js⁄
+:"originAS,omitempty"`
+
+821 
+Bgp£cLígth
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,4,›t,«me=bgp£cLígth,¥Ÿo3" 
+js⁄
+:"bgpsecLength,omitempty"`
+
+822 
+Bgp£cVÆReqD©a
+ *
+BGPSECVÆReqD©a
+ `
+¥Ÿobuf
+:"byãs,5,›t,«me=bgp£cVÆReqD©a,¥Ÿo3" 
+js⁄
+:"bgpsecValReqData,omitempty"`
+
+823 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+824 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+825 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+828 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+ProxyVîifyV4Reque°
+{} 
+	}
+}
+
+829 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+830 
+	$func
+ (*
+ProxyVîifyV4Reque°
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+831 
+	$func
+ (*
+ProxyVîifyV4Reque°
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+832  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{11}
+
+833 
+	}
+}
+
+835 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+836  
+xxx_mesßgeInfo_ProxyVîifyV4Reque°
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+837 
+	}
+}
+
+838 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+839  
+xxx_mesßgeInfo_ProxyVîifyV4Reque°
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+840 
+	}
+}
+
+841 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+842 
+xxx_mesßgeInfo_ProxyVîifyV4Reque°
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+843 
+	}
+}
+
+844 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	$XXX_Size
+() {
+
+845  
+xxx_mesßgeInfo_ProxyVîifyV4Reque°
+.
+	`Size
+(
+m
+)
+
+846 
+	}
+}
+
+847 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+848 
+xxx_mesßgeInfo_ProxyVîifyV4Reque°
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+849 
+	}
+}
+
+851 
+v¨
+ 
+xxx_mesßgeInfo_ProxyVîifyV4Reque°
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+853 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	`GëComm⁄
+(Ë*
+ProxyBasicHódî
+ {
+
+854 
+m
+ !
+nû
+ {
+
+855  
+m
+.
+Comm⁄
+
+
+857  
+nû
+
+
+858 
+	}
+}
+
+860 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	`GëPªfixAddªss
+(Ë*
+IPv4Addªss
+ {
+
+861 
+m
+ !
+nû
+ {
+
+862  
+m
+.
+PªfixAddªss
+
+
+864  
+nû
+
+
+865 
+	}
+}
+
+867 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	$GëOrigöAS
+(Ë
+uöt32
+ {
+
+868 
+m
+ !
+nû
+ {
+
+869  
+m
+.
+OrigöAS
+
+
+872 
+	}
+}
+
+874 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	$GëBgp£cLígth
+(Ë
+uöt32
+ {
+
+875 
+m
+ !
+nû
+ {
+
+876  
+m
+.
+Bgp£cLígth
+
+
+879 
+	}
+}
+
+881 
+	$func
+ (
+m
+ *
+ProxyVîifyV4Reque°
+Ë
+	`GëBgp£cVÆReqD©a
+(Ë*
+BGPSECVÆReqD©a
+ {
+
+882 
+m
+ !
+nû
+ {
+
+883  
+m
+.
+Bgp£cVÆReqD©a
+
+
+885  
+nû
+
+
+886 
+	}
+}
+
+888 
+ty≥
+ 
+ProxyVîifyNŸify
+ struct {
+
+889 
+Ty≥
+ 
+	muöt32
+ `
+	m¥Ÿobuf
+:"v¨öt,1,›t,«meÒy≥,¥Ÿo3" 
+js⁄
+:"type,omitempty"`
+
+890 
+Resu…Ty≥
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,2,›t,«meÙesu…Ty≥,¥Ÿo3" 
+js⁄
+:"resultType,omitempty"`
+
+891 
+RﬂResu…
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,3,›t,«meÙﬂResu…,¥Ÿo3" 
+js⁄
+:"roaResult,omitempty"`
+
+892 
+Bgp£cResu…
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,4,›t,«me=bgp£cResu…,¥Ÿo3" 
+js⁄
+:"bgpsecResult,omitempty"`
+
+893 
+Lígth
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,5,›t,«meˆígth,¥Ÿo3" 
+js⁄
+:"length,omitempty"`
+
+894 
+Reque°Tokí
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,6,›t,«meÙeque°Tokí,¥Ÿo3" 
+js⁄
+:"requestToken,omitempty"`
+
+895 
+Upd©eID
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,7,›t,«me=upd©eID,¥Ÿo3" 
+js⁄
+:"updateID,omitempty"`
+
+896 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+897 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+898 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+901 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+ProxyVîifyNŸify
+{} 
+	}
+}
+
+902 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+903 
+	$func
+ (*
+ProxyVîifyNŸify
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+904 
+	$func
+ (*
+ProxyVîifyNŸify
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+905  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{12}
+
+906 
+	}
+}
+
+908 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+909  
+xxx_mesßgeInfo_ProxyVîifyNŸify
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+910 
+	}
+}
+
+911 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+912  
+xxx_mesßgeInfo_ProxyVîifyNŸify
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+913 
+	}
+}
+
+914 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+915 
+xxx_mesßgeInfo_ProxyVîifyNŸify
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+916 
+	}
+}
+
+917 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$XXX_Size
+() {
+
+918  
+xxx_mesßgeInfo_ProxyVîifyNŸify
+.
+	`Size
+(
+m
+)
+
+919 
+	}
+}
+
+920 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+921 
+xxx_mesßgeInfo_ProxyVîifyNŸify
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+922 
+	}
+}
+
+924 
+v¨
+ 
+xxx_mesßgeInfo_ProxyVîifyNŸify
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+926 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$GëTy≥
+(Ë
+uöt32
+ {
+
+927 
+m
+ !
+nû
+ {
+
+928  
+m
+.
+Ty≥
+
+
+931 
+	}
+}
+
+933 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$GëResu…Ty≥
+(Ë
+uöt32
+ {
+
+934 
+m
+ !
+nû
+ {
+
+935  
+m
+.
+Resu…Ty≥
+
+
+938 
+	}
+}
+
+940 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$GëRﬂResu…
+(Ë
+uöt32
+ {
+
+941 
+m
+ !
+nû
+ {
+
+942  
+m
+.
+RﬂResu…
+
+
+945 
+	}
+}
+
+947 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$GëBgp£cResu…
+(Ë
+uöt32
+ {
+
+948 
+m
+ !
+nû
+ {
+
+949  
+m
+.
+Bgp£cResu…
+
+
+952 
+	}
+}
+
+954 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$GëLígth
+(Ë
+uöt32
+ {
+
+955 
+m
+ !
+nû
+ {
+
+956  
+m
+.
+Lígth
+
+
+959 
+	}
+}
+
+961 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$GëReque°Tokí
+(Ë
+uöt32
+ {
+
+962 
+m
+ !
+nû
+ {
+
+963  
+m
+.
+Reque°Tokí
+
+
+966 
+	}
+}
+
+968 
+	$func
+ (
+m
+ *
+ProxyVîifyNŸify
+Ë
+	$GëUpd©eID
+(Ë
+uöt32
+ {
+
+969 
+m
+ !
+nû
+ {
+
+970  
+m
+.
+Upd©eID
+
+
+973 
+	}
+}
+
+975 
+ty≥
+ 
+ProxyVîifyReque°
+ struct {
+
+976 
+	mD©a
+ []
+	mbyã
+ `
+	m¥Ÿobuf
+:"byãs,1,›t,«me=d©a,¥Ÿo3" 
+js⁄
+:"data,omitempty"`
+
+977 
+Lígth
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,2,›t,«meˆígth,¥Ÿo3" 
+js⁄
+:"length,omitempty"`
+
+978 
+GΩcClõ¡ID
+ 
+uöt32
+ `
+¥Ÿobuf
+:"v¨öt,3,›t,«me=gΩcClõ¡ID,¥Ÿo3" 
+js⁄
+:"grpcClientID,omitempty"`
+
+979 
+XXX_NoUnkeyedLôîÆ
+ såu˘{} `
+js⁄
+:"-"`
+
+980 
+XXX_uƒecognized
+ []
+byã
+ `
+js⁄
+:"-"`
+
+981 
+XXX_sizeˇche
+ 
+öt32
+ `
+js⁄
+:"-"`
+
+984 
+	$func
+ (
+m
+ *
+ProxyVîifyReque°
+Ë
+	$Re£t
+(Ë{ *
+m
+ = 
+ProxyVîifyReque°
+{} 
+	}
+}
+
+985 
+	$func
+ (
+m
+ *
+ProxyVîifyReque°
+Ë
+	$Såög
+(Ë
+°rög
+ {  
+¥Ÿo
+.
+	`Com∑˘TextSåög
+(
+m
+Ë
+	}
+}
+
+986 
+	$func
+ (*
+ProxyVîifyReque°
+Ë
+	$PrŸoMesßge
+(Ë{
+	}
+}
+
+987 
+	$func
+ (*
+ProxyVîifyReque°
+Ë
+	`Des¸ùt‹
+(Ë([]
+byã
+, []) {
+
+988  
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+, []{13}
+
+989 
+	}
+}
+
+991 
+	$func
+ (
+m
+ *
+ProxyVîifyReque°
+Ë
+	$XXX_Unm¨shÆ
+(
+b
+ []
+byã
+Ë
+îr‹
+ {
+
+992  
+xxx_mesßgeInfo_ProxyVîifyReque°
+.
+	`Unm¨shÆ
+(
+m
+, 
+b
+)
+
+993 
+	}
+}
+
+994 
+	$func
+ (
+m
+ *
+ProxyVîifyReque°
+Ë
+	`XXX_M¨shÆ
+(
+b
+ []
+byã
+, 
+dëîmöi°ic
+ 
+boﬁ
+Ë([]byã, 
+îr‹
+) {
+
+995  
+xxx_mesßgeInfo_ProxyVîifyReque°
+.
+	`M¨shÆ
+(
+b
+, 
+m
+, 
+dëîmöi°ic
+)
+
+996 
+	}
+}
+
+997 
+	$func
+ (
+m
+ *
+ProxyVîifyReque°
+Ë
+	$XXX_Mîge
+(
+§c
+ 
+¥Ÿo
+.
+Mesßge
+) {
+
+998 
+xxx_mesßgeInfo_ProxyVîifyReque°
+.
+	`Mîge
+(
+m
+, 
+§c
+)
+
+999 
+	}
+}
+
+1000 
+	$func
+ (
+m
+ *
+ProxyVîifyReque°
+Ë
+	$XXX_Size
+() {
+
+1001  
+xxx_mesßgeInfo_ProxyVîifyReque°
+.
+	`Size
+(
+m
+)
+
+1002 
+	}
+}
+
+1003 
+	$func
+ (
+m
+ *
+ProxyVîifyReque°
+Ë
+	$XXX_DisˇrdUnknown
+() {
+
+1004 
+xxx_mesßgeInfo_ProxyVîifyReque°
+.
+	`DisˇrdUnknown
+(
+m
+)
+
+1005 
+	}
+}
+
+1007 
+v¨
+ 
+xxx_mesßgeInfo_ProxyVîifyReque°
+ 
+	g¥Ÿo
+.
+I¡î«lMesßgeInfo
+
+
+1009 
+	$func
+ (
+m
+ *
+ProxyVîifyReque°
+Ë
+	`GëD©a
+(Ë[]
+byã
+ {
+
+1010 
+m
+ !
+nû
+ {
+
+1011  
+m
+.
+D©a
+
+
+1013  
+nû
+
+
+1014 
+	}
+}
+
+1016 
+	$func
+ (
+m
+ *
+ProxyVîifyReque°
+Ë
+	$GëLígth
+(Ë
+uöt32
+ {
+
+1017 
+m
+ !
+nû
+ {
+
+1018  
+m
+.
+Lígth
+
+
+1021 
+	}
+}
+
+1023 
+	$func
+ (
+m
+ *
+ProxyVîifyReque°
+Ë
+	$GëGΩcClõ¡ID
+(Ë
+uöt32
+ {
+
+1024 
+m
+ !
+nû
+ {
+
+1025  
+m
+.
+GΩcClõ¡ID
+
+
+1028 
+	}
+}
+
+1030 
+func
+ 
+	$öô
+() {
+
+1031 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+PduReque°
+)(
+nû
+), "srx_grpc.PduRequest")
+
+1032 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+PduRe•⁄£
+)(
+nû
+), "srx_grpc.PduResponse")
+
+1033 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+ProxyHñloReque°
+)(
+nû
+), "srx_grpc.ProxyHelloRequest")
+
+1034 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+ProxyHñloRe•⁄£
+)(
+nû
+), "srx_grpc.ProxyHelloResponse")
+
+1035 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+ProxyGoodByeReque°
+)(
+nû
+), "srx_grpc.ProxyGoodByeRequest")
+
+1036 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+ProxyGoodByeRe•⁄£
+)(
+nû
+), "srx_grpc.ProxyGoodByeResponse")
+
+1037 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+ProxyBasicHódî
+)(
+nû
+), "srx_grpc.ProxyBasicHeader")
+
+1038 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+IPv4Addªss
+)(
+nû
+), "srx_grpc.IPv4Address")
+
+1039 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+SCA_Pªfix
+)(
+nû
+), "srx_grpc.SCA_Prefix")
+
+1040 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+BGPSEC_DATA_PTR
+)(
+nû
+), "srx_grpc.BGPSEC_DATA_PTR")
+
+1041 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+BGPSECVÆReqD©a
+)(
+nû
+), "srx_grpc.BGPSECValReqData")
+
+1042 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+ProxyVîifyV4Reque°
+)(
+nû
+), "srx_grpc.ProxyVerifyV4Request")
+
+1043 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+ProxyVîifyNŸify
+)(
+nû
+), "srx_grpc.ProxyVerifyNotify")
+
+1044 
+¥Ÿo
+.
+	`Regi°îTy≥
+((*
+ProxyVîifyReque°
+)(
+nû
+), "srx_grpc.ProxyVerifyRequest")
+
+1045 
+	}
+}
+
+1047 
+func
+ 
+	$öô
+(Ë{ 
+¥Ÿo
+.
+	`Regi°îFûe
+("§x_gΩc.¥Ÿo", 
+fûeDes¸ùt‹_f9bˇ48d3cf478ó
+Ë
+	}
+}
+
+1049 
+v¨
+ 
+	gfûeDes¸ùt‹_f9bˇ48d3cf478ó
+ = []
+byã
+{
+
+1116 
+v¨
+ 
+_
+ 
+c⁄ãxt
+.
+C⁄ãxt
+
+
+1117 
+v¨
+ 
+_
+ 
+gΩc
+.
+Clõ¡C⁄n
+
+
+1121 c⁄° 
+_
+ = 
+gΩc
+.
+Suµ‹tPackageIsVîsi⁄4
+
+
+1126 
+ty≥
+ 
+SRxApiClõ¡
+ 
+öãrÁ˚
+ {
+
+1127 
+SídPackëToSRxSîvî
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+PduReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(*
+PduRe•⁄£
+, 
+îr‹
+)
+
+1128 
+SídAndWaôPro˚ss
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+PduReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(
+SRxApi_SídAndWaôPro˚ssClõ¡
+, 
+îr‹
+)
+
+1129 
+ProxyHñlo
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+ProxyHñloReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(*
+ProxyHñloRe•⁄£
+, 
+îr‹
+)
+
+1130 
+ProxyGoodBye
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+ProxyGoodByeReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(*
+ProxyGoodByeRe•⁄£
+, 
+îr‹
+)
+
+1131 
+ProxyGoodByeSåóm
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+PduReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(
+SRxApi_ProxyGoodByeSåómClõ¡
+, 
+îr‹
+)
+
+1132 
+ProxyVîify
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+ProxyVîifyV4Reque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(
+SRxApi_ProxyVîifyClõ¡
+, 
+îr‹
+)
+
+1133 
+ProxyVîifySåóm
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+ProxyVîifyReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(
+SRxApi_ProxyVîifySåómClõ¡
+, 
+îr‹
+)
+
+1134 
+ProxySåóm
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+PduReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(
+SRxApi_ProxySåómClõ¡
+, 
+îr‹
+)
+
+1137 
+ty≥
+ 
+sRxApiClõ¡
+ struct {
+
+1138 
+cc
+ *
+gΩc
+.
+Clõ¡C⁄n
+
+
+1141 
+func
+ 
+	$NewSRxApiClõ¡
+(
+cc
+ *
+gΩc
+.
+Clõ¡C⁄n
+Ë
+SRxApiClõ¡
+ {
+
+1142  &
+sRxApiClõ¡
+{
+cc
+}
+
+1143 
+	}
+}
+
+1145 
+	$func
+ (
+c
+ *
+sRxApiClõ¡
+Ë
+	`SídPackëToSRxSîvî
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+PduReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(*
+PduRe•⁄£
+, 
+îr‹
+) {
+
+1146 
+out
+ :
+	`√w
+(
+PduRe•⁄£
+)
+
+1147 
+îr
+ :
+c
+.
+cc
+.
+	`Invoke
+(
+˘x
+, "/§x_gΩc.SRxApi/SídPackëToSRxSîvî", 
+ö
+, 
+out
+, 
+›ts
+...)
+
+1148 
+îr
+ !
+nû
+ {
+
+1149  
+nû
+, 
+îr
+
+
+1151  
+out
+, 
+nû
+
+
+1152 
+	}
+}
+
+1154 
+	$func
+ (
+c
+ *
+sRxApiClõ¡
+Ë
+	$SídAndWaôPro˚ss
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+PduReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(
+SRxApi_SídAndWaôPro˚ssClõ¡
+, 
+îr‹
+) {
+
+1155 
+°ªam
+, 
+îr
+ :
+c
+.
+cc
+.
+	`NewSåóm
+(
+˘x
+, &
+_SRxApi_£rvi˚Desc
+.
+Såóms
+[0], "/§x_gΩc.SRxApi/SídAndWaôPro˚ss", 
+›ts
+...)
+
+1156 
+îr
+ !
+nû
+ {
+
+1157  
+nû
+, 
+îr
+
+
+1159 
+x
+ :&
+sRxApiSídAndWaôPro˚ssClõ¡
+{
+°ªam
+}
+
+1160 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`SídMsg
+(
+ö
+);Éº !
+nû
+ {
+
+1161  
+nû
+, 
+îr
+
+
+1163 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`Clo£Síd
+();Éº !
+nû
+ {
+
+1164  
+nû
+, 
+îr
+
+
+1166  
+x
+, 
+nû
+
+
+1167 
+	}
+}
+
+1169 
+ty≥
+ 
+SRxApi_SídAndWaôPro˚ssClõ¡
+ 
+	göãrÁ˚
+ {
+
+1170 
+Recv
+(Ë(*
+	gPduRe•⁄£
+, 
+	gîr‹
+)
+
+1171 
+	ggΩc
+.
+	gClõ¡Såóm
+
+
+1174 
+ty≥
+ 
+sRxApiSídAndWaôPro˚ssClõ¡
+ struct {
+
+1175 
+	mgΩc
+.
+	mClõ¡Såóm
+
+
+1178 
+	$func
+ (
+x
+ *
+sRxApiSídAndWaôPro˚ssClõ¡
+Ë
+	`Recv
+(Ë(*
+PduRe•⁄£
+, 
+îr‹
+) {
+
+1179 
+m
+ :
+	`√w
+(
+PduRe•⁄£
+)
+
+1180 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`RecvMsg
+(
+m
+);Éº !
+nû
+ {
+
+1181  
+nû
+, 
+îr
+
+
+1183  
+m
+, 
+nû
+
+
+1184 
+	}
+}
+
+1186 
+	$func
+ (
+c
+ *
+sRxApiClõ¡
+Ë
+	`ProxyHñlo
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+ProxyHñloReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(*
+ProxyHñloRe•⁄£
+, 
+îr‹
+) {
+
+1187 
+out
+ :
+	`√w
+(
+ProxyHñloRe•⁄£
+)
+
+1188 
+îr
+ :
+c
+.
+cc
+.
+	`Invoke
+(
+˘x
+, "/§x_gΩc.SRxApi/ProxyHñlo", 
+ö
+, 
+out
+, 
+›ts
+...)
+
+1189 
+îr
+ !
+nû
+ {
+
+1190  
+nû
+, 
+îr
+
+
+1192  
+out
+, 
+nû
+
+
+1193 
+	}
+}
+
+1195 
+	$func
+ (
+c
+ *
+sRxApiClõ¡
+Ë
+	`ProxyGoodBye
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+ProxyGoodByeReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(*
+ProxyGoodByeRe•⁄£
+, 
+îr‹
+) {
+
+1196 
+out
+ :
+	`√w
+(
+ProxyGoodByeRe•⁄£
+)
+
+1197 
+îr
+ :
+c
+.
+cc
+.
+	`Invoke
+(
+˘x
+, "/§x_gΩc.SRxApi/ProxyGoodBye", 
+ö
+, 
+out
+, 
+›ts
+...)
+
+1198 
+îr
+ !
+nû
+ {
+
+1199  
+nû
+, 
+îr
+
+
+1201  
+out
+, 
+nû
+
+
+1202 
+	}
+}
+
+1204 
+	$func
+ (
+c
+ *
+sRxApiClõ¡
+Ë
+	$ProxyGoodByeSåóm
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+PduReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(
+SRxApi_ProxyGoodByeSåómClõ¡
+, 
+îr‹
+) {
+
+1205 
+°ªam
+, 
+îr
+ :
+c
+.
+cc
+.
+	`NewSåóm
+(
+˘x
+, &
+_SRxApi_£rvi˚Desc
+.
+Såóms
+[1], "/§x_gΩc.SRxApi/ProxyGoodByeSåóm", 
+›ts
+...)
+
+1206 
+îr
+ !
+nû
+ {
+
+1207  
+nû
+, 
+îr
+
+
+1209 
+x
+ :&
+sRxApiProxyGoodByeSåómClõ¡
+{
+°ªam
+}
+
+1210 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`SídMsg
+(
+ö
+);Éº !
+nû
+ {
+
+1211  
+nû
+, 
+îr
+
+
+1213 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`Clo£Síd
+();Éº !
+nû
+ {
+
+1214  
+nû
+, 
+îr
+
+
+1216  
+x
+, 
+nû
+
+
+1217 
+	}
+}
+
+1219 
+ty≥
+ 
+SRxApi_ProxyGoodByeSåómClõ¡
+ 
+	göãrÁ˚
+ {
+
+1220 
+Recv
+(Ë(*
+	gPduRe•⁄£
+, 
+	gîr‹
+)
+
+1221 
+	ggΩc
+.
+	gClõ¡Såóm
+
+
+1224 
+ty≥
+ 
+sRxApiProxyGoodByeSåómClõ¡
+ struct {
+
+1225 
+	mgΩc
+.
+	mClõ¡Såóm
+
+
+1228 
+	$func
+ (
+x
+ *
+sRxApiProxyGoodByeSåómClõ¡
+Ë
+	`Recv
+(Ë(*
+PduRe•⁄£
+, 
+îr‹
+) {
+
+1229 
+m
+ :
+	`√w
+(
+PduRe•⁄£
+)
+
+1230 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`RecvMsg
+(
+m
+);Éº !
+nû
+ {
+
+1231  
+nû
+, 
+îr
+
+
+1233  
+m
+, 
+nû
+
+
+1234 
+	}
+}
+
+1236 
+	$func
+ (
+c
+ *
+sRxApiClõ¡
+Ë
+	$ProxyVîify
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+ProxyVîifyV4Reque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(
+SRxApi_ProxyVîifyClõ¡
+, 
+îr‹
+) {
+
+1237 
+°ªam
+, 
+îr
+ :
+c
+.
+cc
+.
+	`NewSåóm
+(
+˘x
+, &
+_SRxApi_£rvi˚Desc
+.
+Såóms
+[2], "/§x_gΩc.SRxApi/ProxyVîify", 
+›ts
+...)
+
+1238 
+îr
+ !
+nû
+ {
+
+1239  
+nû
+, 
+îr
+
+
+1241 
+x
+ :&
+sRxApiProxyVîifyClõ¡
+{
+°ªam
+}
+
+1242 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`SídMsg
+(
+ö
+);Éº !
+nû
+ {
+
+1243  
+nû
+, 
+îr
+
+
+1245 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`Clo£Síd
+();Éº !
+nû
+ {
+
+1246  
+nû
+, 
+îr
+
+
+1248  
+x
+, 
+nû
+
+
+1249 
+	}
+}
+
+1251 
+ty≥
+ 
+SRxApi_ProxyVîifyClõ¡
+ 
+	göãrÁ˚
+ {
+
+1252 
+Recv
+(Ë(*
+	gProxyVîifyNŸify
+, 
+	gîr‹
+)
+
+1253 
+	ggΩc
+.
+	gClõ¡Såóm
+
+
+1256 
+ty≥
+ 
+sRxApiProxyVîifyClõ¡
+ struct {
+
+1257 
+	mgΩc
+.
+	mClõ¡Såóm
+
+
+1260 
+	$func
+ (
+x
+ *
+sRxApiProxyVîifyClõ¡
+Ë
+	`Recv
+(Ë(*
+ProxyVîifyNŸify
+, 
+îr‹
+) {
+
+1261 
+m
+ :
+	`√w
+(
+ProxyVîifyNŸify
+)
+
+1262 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`RecvMsg
+(
+m
+);Éº !
+nû
+ {
+
+1263  
+nû
+, 
+îr
+
+
+1265  
+m
+, 
+nû
+
+
+1266 
+	}
+}
+
+1268 
+	$func
+ (
+c
+ *
+sRxApiClõ¡
+Ë
+	$ProxyVîifySåóm
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+ProxyVîifyReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(
+SRxApi_ProxyVîifySåómClõ¡
+, 
+îr‹
+) {
+
+1269 
+°ªam
+, 
+îr
+ :
+c
+.
+cc
+.
+	`NewSåóm
+(
+˘x
+, &
+_SRxApi_£rvi˚Desc
+.
+Såóms
+[3], "/§x_gΩc.SRxApi/ProxyVîifySåóm", 
+›ts
+...)
+
+1270 
+îr
+ !
+nû
+ {
+
+1271  
+nû
+, 
+îr
+
+
+1273 
+x
+ :&
+sRxApiProxyVîifySåómClõ¡
+{
+°ªam
+}
+
+1274 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`SídMsg
+(
+ö
+);Éº !
+nû
+ {
+
+1275  
+nû
+, 
+îr
+
+
+1277 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`Clo£Síd
+();Éº !
+nû
+ {
+
+1278  
+nû
+, 
+îr
+
+
+1280  
+x
+, 
+nû
+
+
+1281 
+	}
+}
+
+1283 
+ty≥
+ 
+SRxApi_ProxyVîifySåómClõ¡
+ 
+	göãrÁ˚
+ {
+
+1284 
+Recv
+(Ë(*
+	gProxyVîifyNŸify
+, 
+	gîr‹
+)
+
+1285 
+	ggΩc
+.
+	gClõ¡Såóm
+
+
+1288 
+ty≥
+ 
+sRxApiProxyVîifySåómClõ¡
+ struct {
+
+1289 
+	mgΩc
+.
+	mClõ¡Såóm
+
+
+1292 
+	$func
+ (
+x
+ *
+sRxApiProxyVîifySåómClõ¡
+Ë
+	`Recv
+(Ë(*
+ProxyVîifyNŸify
+, 
+îr‹
+) {
+
+1293 
+m
+ :
+	`√w
+(
+ProxyVîifyNŸify
+)
+
+1294 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`RecvMsg
+(
+m
+);Éº !
+nû
+ {
+
+1295  
+nû
+, 
+îr
+
+
+1297  
+m
+, 
+nû
+
+
+1298 
+	}
+}
+
+1300 
+	$func
+ (
+c
+ *
+sRxApiClõ¡
+Ë
+	$ProxySåóm
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ö
+ *
+PduReque°
+, 
+›ts
+ ...
+gΩc
+.
+CÆlO±i⁄
+Ë(
+SRxApi_ProxySåómClõ¡
+, 
+îr‹
+) {
+
+1301 
+°ªam
+, 
+îr
+ :
+c
+.
+cc
+.
+	`NewSåóm
+(
+˘x
+, &
+_SRxApi_£rvi˚Desc
+.
+Såóms
+[4], "/§x_gΩc.SRxApi/ProxySåóm", 
+›ts
+...)
+
+1302 
+îr
+ !
+nû
+ {
+
+1303  
+nû
+, 
+îr
+
+
+1305 
+x
+ :&
+sRxApiProxySåómClõ¡
+{
+°ªam
+}
+
+1306 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`SídMsg
+(
+ö
+);Éº !
+nû
+ {
+
+1307  
+nû
+, 
+îr
+
+
+1309 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`Clo£Síd
+();Éº !
+nû
+ {
+
+1310  
+nû
+, 
+îr
+
+
+1312  
+x
+, 
+nû
+
+
+1313 
+	}
+}
+
+1315 
+ty≥
+ 
+SRxApi_ProxySåómClõ¡
+ 
+	göãrÁ˚
+ {
+
+1316 
+Recv
+(Ë(*
+	gPduRe•⁄£
+, 
+	gîr‹
+)
+
+1317 
+	ggΩc
+.
+	gClõ¡Såóm
+
+
+1320 
+ty≥
+ 
+sRxApiProxySåómClõ¡
+ struct {
+
+1321 
+	mgΩc
+.
+	mClõ¡Såóm
+
+
+1324 
+	$func
+ (
+x
+ *
+sRxApiProxySåómClõ¡
+Ë
+	`Recv
+(Ë(*
+PduRe•⁄£
+, 
+îr‹
+) {
+
+1325 
+m
+ :
+	`√w
+(
+PduRe•⁄£
+)
+
+1326 
+îr
+ :
+x
+.
+Clõ¡Såóm
+.
+	`RecvMsg
+(
+m
+);Éº !
+nû
+ {
+
+1327  
+nû
+, 
+îr
+
+
+1329  
+m
+, 
+nû
+
+
+1330 
+	}
+}
+
+1333 
+ty≥
+ 
+SRxApiSîvî
+ 
+	göãrÁ˚
+ {
+
+1334 
+SídPackëToSRxSîvî
+(
+c⁄ãxt
+.
+C⁄ãxt
+, *
+PduReque°
+Ë(*
+	gPduRe•⁄£
+, 
+	gîr‹
+)
+
+1335 
+SídAndWaôPro˚ss
+(*
+PduReque°
+, 
+SRxApi_SídAndWaôPro˚ssSîvî
+Ë
+îr‹
+
+
+1336 
+ProxyHñlo
+(
+c⁄ãxt
+.
+C⁄ãxt
+, *
+ProxyHñloReque°
+Ë(*
+	gProxyHñloRe•⁄£
+, 
+	gîr‹
+)
+
+1337 
+ProxyGoodBye
+(
+c⁄ãxt
+.
+C⁄ãxt
+, *
+ProxyGoodByeReque°
+Ë(*
+	gProxyGoodByeRe•⁄£
+, 
+	gîr‹
+)
+
+1338 
+ProxyGoodByeSåóm
+(*
+PduReque°
+, 
+SRxApi_ProxyGoodByeSåómSîvî
+Ë
+îr‹
+
+
+1339 
+ProxyVîify
+(*
+ProxyVîifyV4Reque°
+, 
+SRxApi_ProxyVîifySîvî
+Ë
+îr‹
+
+
+1340 
+ProxyVîifySåóm
+(*
+ProxyVîifyReque°
+, 
+SRxApi_ProxyVîifySåómSîvî
+Ë
+îr‹
+
+
+1341 
+ProxySåóm
+(*
+PduReque°
+, 
+SRxApi_ProxySåómSîvî
+Ë
+	gîr‹
+
+
+1345 
+ty≥
+ 
+Unim∂emíãdSRxApiSîvî
+ struct {
+
+1348 
+	$func
+ (*
+Unim∂emíãdSRxApiSîvî
+Ë
+	`SídPackëToSRxSîvî
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ªq
+ *
+PduReque°
+Ë(*
+PduRe•⁄£
+, 
+îr‹
+) {
+
+1349  
+nû
+, 
+°©us
+.
+	`Eº‹f
+(
+codes
+.
+Unim∂emíãd
+, "method SendPacketToSRxServerÇot implemented")
+
+1350 
+	}
+}
+
+1351 
+	$func
+ (*
+Unim∂emíãdSRxApiSîvî
+Ë
+	$SídAndWaôPro˚ss
+(
+ªq
+ *
+PduReque°
+, 
+§v
+ 
+SRxApi_SídAndWaôPro˚ssSîvî
+Ë
+îr‹
+ {
+
+1352  
+°©us
+.
+	`Eº‹f
+(
+codes
+.
+Unim∂emíãd
+, "method SendAndWaitProcessÇot implemented")
+
+1353 
+	}
+}
+
+1354 
+	$func
+ (*
+Unim∂emíãdSRxApiSîvî
+Ë
+	`ProxyHñlo
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ªq
+ *
+ProxyHñloReque°
+Ë(*
+ProxyHñloRe•⁄£
+, 
+îr‹
+) {
+
+1355  
+nû
+, 
+°©us
+.
+	`Eº‹f
+(
+codes
+.
+Unim∂emíãd
+, "method ProxyHelloÇot implemented")
+
+1356 
+	}
+}
+
+1357 
+	$func
+ (*
+Unim∂emíãdSRxApiSîvî
+Ë
+	`ProxyGoodBye
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ªq
+ *
+ProxyGoodByeReque°
+Ë(*
+ProxyGoodByeRe•⁄£
+, 
+îr‹
+) {
+
+1358  
+nû
+, 
+°©us
+.
+	`Eº‹f
+(
+codes
+.
+Unim∂emíãd
+, "method ProxyGoodByeÇot implemented")
+
+1359 
+	}
+}
+
+1360 
+	$func
+ (*
+Unim∂emíãdSRxApiSîvî
+Ë
+	$ProxyGoodByeSåóm
+(
+ªq
+ *
+PduReque°
+, 
+§v
+ 
+SRxApi_ProxyGoodByeSåómSîvî
+Ë
+îr‹
+ {
+
+1361  
+°©us
+.
+	`Eº‹f
+(
+codes
+.
+Unim∂emíãd
+, "method ProxyGoodByeStreamÇot implemented")
+
+1362 
+	}
+}
+
+1363 
+	$func
+ (*
+Unim∂emíãdSRxApiSîvî
+Ë
+	$ProxyVîify
+(
+ªq
+ *
+ProxyVîifyV4Reque°
+, 
+§v
+ 
+SRxApi_ProxyVîifySîvî
+Ë
+îr‹
+ {
+
+1364  
+°©us
+.
+	`Eº‹f
+(
+codes
+.
+Unim∂emíãd
+, "method ProxyVerifyÇot implemented")
+
+1365 
+	}
+}
+
+1366 
+	$func
+ (*
+Unim∂emíãdSRxApiSîvî
+Ë
+	$ProxyVîifySåóm
+(
+ªq
+ *
+ProxyVîifyReque°
+, 
+§v
+ 
+SRxApi_ProxyVîifySåómSîvî
+Ë
+îr‹
+ {
+
+1367  
+°©us
+.
+	`Eº‹f
+(
+codes
+.
+Unim∂emíãd
+, "method ProxyVerifyStreamÇot implemented")
+
+1368 
+	}
+}
+
+1369 
+	$func
+ (*
+Unim∂emíãdSRxApiSîvî
+Ë
+	$ProxySåóm
+(
+ªq
+ *
+PduReque°
+, 
+§v
+ 
+SRxApi_ProxySåómSîvî
+Ë
+îr‹
+ {
+
+1370  
+°©us
+.
+	`Eº‹f
+(
+codes
+.
+Unim∂emíãd
+, "method ProxyStreamÇot implemented")
+
+1371 
+	}
+}
+
+1373 
+func
+ 
+	$Regi°îSRxApiSîvî
+(
+s
+ *
+gΩc
+.
+Sîvî
+, 
+§v
+ 
+SRxApiSîvî
+) {
+
+1374 
+s
+.
+	`Regi°îSîvi˚
+(&
+_SRxApi_£rvi˚Desc
+, 
+§v
+)
+
+1375 
+	}
+}
+
+1377 
+func
+ 
+_SRxApi_SídPackëToSRxSîvî_H™dÀr
+(
+§v
+ 
+öãrÁ˚
+{}, 
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+dec
+ func(öãrÁ˚{}Ë
+îr‹
+, 
+öãr˚±‹
+ 
+gΩc
+.
+U«rySîvîI¡î˚±‹
+Ë(
+	göãrÁ˚
+{}, 
+	gîr‹
+) {
+
+1378 
+	gö
+ :
+√w
+(
+PduReque°
+)
+
+1379 
+îr
+ :
+dec
+(
+ö
+); 
+	gîr
+ !
+nû
+ {
+
+1380  
+nû
+, 
+îr
+
+
+1382 
+öãr˚±‹
+ =
+nû
+ {
+
+1383  
+§v
+.(
+SRxApiSîvî
+).
+SídPackëToSRxSîvî
+(
+˘x
+, 
+ö
+)
+
+1385 
+öfo
+ :&
+gΩc
+.
+U«rySîvîInfo
+{
+
+1386 
+Sîvî
+: 
+§v
+,
+
+1387 
+FuŒMëhod
+: "/srx_grpc.SRxApi/SendPacketToSRxServer",
+
+1389 
+h™dÀr
+ :
+func
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ªq
+ 
+öãrÁ˚
+{}Ë(
+	göãrÁ˚
+{}, 
+	gîr‹
+) {
+
+1390  
+	g§v
+.(
+	gSRxApiSîvî
+).
+SídPackëToSRxSîvî
+(
+˘x
+, 
+ªq
+.(*
+PduReque°
+))
+
+1392  
+öãr˚±‹
+(
+˘x
+, 
+ö
+, 
+öfo
+, 
+h™dÀr
+)
+
+1395 
+func
+ 
+_SRxApi_SídAndWaôPro˚ss_H™dÀr
+(
+§v
+ 
+öãrÁ˚
+{}, 
+°ªam
+ 
+gΩc
+.
+SîvîSåóm
+Ë
+	gîr‹
+ {
+
+1396 
+	gm
+ :
+√w
+(
+PduReque°
+)
+
+1397 
+îr
+ :
+°ªam
+.
+RecvMsg
+(
+m
+); 
+	gîr
+ !
+nû
+ {
+
+1398  
+îr
+
+
+1400  
+§v
+.(
+SRxApiSîvî
+).
+SídAndWaôPro˚ss
+(
+m
+, &
+sRxApiSídAndWaôPro˚ssSîvî
+{
+°ªam
+})
+
+1403 
+ty≥
+ 
+SRxApi_SídAndWaôPro˚ssSîvî
+ 
+	göãrÁ˚
+ {
+
+1404 
+Síd
+(*
+PduRe•⁄£
+Ë
+îr‹
+
+
+1405 
+	ggΩc
+.
+	gSîvîSåóm
+
+
+1408 
+ty≥
+ 
+sRxApiSídAndWaôPro˚ssSîvî
+ struct {
+
+1409 
+	mgΩc
+.
+	mSîvîSåóm
+
+
+1412 
+	$func
+ (
+x
+ *
+sRxApiSídAndWaôPro˚ssSîvî
+Ë
+	$Síd
+(
+m
+ *
+PduRe•⁄£
+Ë
+îr‹
+ {
+
+1413  
+x
+.
+SîvîSåóm
+.
+	`SídMsg
+(
+m
+)
+
+1414 
+	}
+}
+
+1416 
+func
+ 
+_SRxApi_ProxyHñlo_H™dÀr
+(
+§v
+ 
+öãrÁ˚
+{}, 
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+dec
+ func(öãrÁ˚{}Ë
+îr‹
+, 
+öãr˚±‹
+ 
+gΩc
+.
+U«rySîvîI¡î˚±‹
+Ë(
+	göãrÁ˚
+{}, 
+	gîr‹
+) {
+
+1417 
+	gö
+ :
+√w
+(
+ProxyHñloReque°
+)
+
+1418 
+îr
+ :
+dec
+(
+ö
+); 
+	gîr
+ !
+nû
+ {
+
+1419  
+nû
+, 
+îr
+
+
+1421 
+öãr˚±‹
+ =
+nû
+ {
+
+1422  
+§v
+.(
+SRxApiSîvî
+).
+ProxyHñlo
+(
+˘x
+, 
+ö
+)
+
+1424 
+öfo
+ :&
+gΩc
+.
+U«rySîvîInfo
+{
+
+1425 
+Sîvî
+: 
+§v
+,
+
+1426 
+FuŒMëhod
+: "/srx_grpc.SRxApi/ProxyHello",
+
+1428 
+h™dÀr
+ :
+func
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ªq
+ 
+öãrÁ˚
+{}Ë(
+	göãrÁ˚
+{}, 
+	gîr‹
+) {
+
+1429  
+	g§v
+.(
+	gSRxApiSîvî
+).
+ProxyHñlo
+(
+˘x
+, 
+ªq
+.(*
+ProxyHñloReque°
+))
+
+1431  
+öãr˚±‹
+(
+˘x
+, 
+ö
+, 
+öfo
+, 
+h™dÀr
+)
+
+1434 
+func
+ 
+_SRxApi_ProxyGoodBye_H™dÀr
+(
+§v
+ 
+öãrÁ˚
+{}, 
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+dec
+ func(öãrÁ˚{}Ë
+îr‹
+, 
+öãr˚±‹
+ 
+gΩc
+.
+U«rySîvîI¡î˚±‹
+Ë(
+	göãrÁ˚
+{}, 
+	gîr‹
+) {
+
+1435 
+	gö
+ :
+√w
+(
+ProxyGoodByeReque°
+)
+
+1436 
+îr
+ :
+dec
+(
+ö
+); 
+	gîr
+ !
+nû
+ {
+
+1437  
+nû
+, 
+îr
+
+
+1439 
+öãr˚±‹
+ =
+nû
+ {
+
+1440  
+§v
+.(
+SRxApiSîvî
+).
+ProxyGoodBye
+(
+˘x
+, 
+ö
+)
+
+1442 
+öfo
+ :&
+gΩc
+.
+U«rySîvîInfo
+{
+
+1443 
+Sîvî
+: 
+§v
+,
+
+1444 
+FuŒMëhod
+: "/srx_grpc.SRxApi/ProxyGoodBye",
+
+1446 
+h™dÀr
+ :
+func
+(
+˘x
+ 
+c⁄ãxt
+.
+C⁄ãxt
+, 
+ªq
+ 
+öãrÁ˚
+{}Ë(
+	göãrÁ˚
+{}, 
+	gîr‹
+) {
+
+1447  
+	g§v
+.(
+	gSRxApiSîvî
+).
+ProxyGoodBye
+(
+˘x
+, 
+ªq
+.(*
+ProxyGoodByeReque°
+))
+
+1449  
+öãr˚±‹
+(
+˘x
+, 
+ö
+, 
+öfo
+, 
+h™dÀr
+)
+
+1452 
+func
+ 
+_SRxApi_ProxyGoodByeSåóm_H™dÀr
+(
+§v
+ 
+öãrÁ˚
+{}, 
+°ªam
+ 
+gΩc
+.
+SîvîSåóm
+Ë
+	gîr‹
+ {
+
+1453 
+	gm
+ :
+√w
+(
+PduReque°
+)
+
+1454 
+îr
+ :
+°ªam
+.
+RecvMsg
+(
+m
+); 
+	gîr
+ !
+nû
+ {
+
+1455  
+îr
+
+
+1457  
+§v
+.(
+SRxApiSîvî
+).
+ProxyGoodByeSåóm
+(
+m
+, &
+sRxApiProxyGoodByeSåómSîvî
+{
+°ªam
+})
+
+1460 
+ty≥
+ 
+SRxApi_ProxyGoodByeSåómSîvî
+ 
+	göãrÁ˚
+ {
+
+1461 
+Síd
+(*
+PduRe•⁄£
+Ë
+îr‹
+
+
+1462 
+	ggΩc
+.
+	gSîvîSåóm
+
+
+1465 
+ty≥
+ 
+sRxApiProxyGoodByeSåómSîvî
+ struct {
+
+1466 
+	mgΩc
+.
+	mSîvîSåóm
+
+
+1469 
+	$func
+ (
+x
+ *
+sRxApiProxyGoodByeSåómSîvî
+Ë
+	$Síd
+(
+m
+ *
+PduRe•⁄£
+Ë
+îr‹
+ {
+
+1470  
+x
+.
+SîvîSåóm
+.
+	`SídMsg
+(
+m
+)
+
+1471 
+	}
+}
+
+1473 
+func
+ 
+_SRxApi_ProxyVîify_H™dÀr
+(
+§v
+ 
+öãrÁ˚
+{}, 
+°ªam
+ 
+gΩc
+.
+SîvîSåóm
+Ë
+	gîr‹
+ {
+
+1474 
+	gm
+ :
+√w
+(
+ProxyVîifyV4Reque°
+)
+
+1475 
+îr
+ :
+°ªam
+.
+RecvMsg
+(
+m
+); 
+	gîr
+ !
+nû
+ {
+
+1476  
+îr
+
+
+1478  
+§v
+.(
+SRxApiSîvî
+).
+ProxyVîify
+(
+m
+, &
+sRxApiProxyVîifySîvî
+{
+°ªam
+})
+
+1481 
+ty≥
+ 
+SRxApi_ProxyVîifySîvî
+ 
+	göãrÁ˚
+ {
+
+1482 
+Síd
+(*
+ProxyVîifyNŸify
+Ë
+îr‹
+
+
+1483 
+	ggΩc
+.
+	gSîvîSåóm
+
+
+1486 
+ty≥
+ 
+sRxApiProxyVîifySîvî
+ struct {
+
+1487 
+	mgΩc
+.
+	mSîvîSåóm
+
+
+1490 
+	$func
+ (
+x
+ *
+sRxApiProxyVîifySîvî
+Ë
+	$Síd
+(
+m
+ *
+ProxyVîifyNŸify
+Ë
+îr‹
+ {
+
+1491  
+x
+.
+SîvîSåóm
+.
+	`SídMsg
+(
+m
+)
+
+1492 
+	}
+}
+
+1494 
+func
+ 
+_SRxApi_ProxyVîifySåóm_H™dÀr
+(
+§v
+ 
+öãrÁ˚
+{}, 
+°ªam
+ 
+gΩc
+.
+SîvîSåóm
+Ë
+	gîr‹
+ {
+
+1495 
+	gm
+ :
+√w
+(
+ProxyVîifyReque°
+)
+
+1496 
+îr
+ :
+°ªam
+.
+RecvMsg
+(
+m
+); 
+	gîr
+ !
+nû
+ {
+
+1497  
+îr
+
+
+1499  
+§v
+.(
+SRxApiSîvî
+).
+ProxyVîifySåóm
+(
+m
+, &
+sRxApiProxyVîifySåómSîvî
+{
+°ªam
+})
+
+1502 
+ty≥
+ 
+SRxApi_ProxyVîifySåómSîvî
+ 
+	göãrÁ˚
+ {
+
+1503 
+Síd
+(*
+ProxyVîifyNŸify
+Ë
+îr‹
+
+
+1504 
+	ggΩc
+.
+	gSîvîSåóm
+
+
+1507 
+ty≥
+ 
+sRxApiProxyVîifySåómSîvî
+ struct {
+
+1508 
+	mgΩc
+.
+	mSîvîSåóm
+
+
+1511 
+	$func
+ (
+x
+ *
+sRxApiProxyVîifySåómSîvî
+Ë
+	$Síd
+(
+m
+ *
+ProxyVîifyNŸify
+Ë
+îr‹
+ {
+
+1512  
+x
+.
+SîvîSåóm
+.
+	`SídMsg
+(
+m
+)
+
+1513 
+	}
+}
+
+1515 
+func
+ 
+_SRxApi_ProxySåóm_H™dÀr
+(
+§v
+ 
+öãrÁ˚
+{}, 
+°ªam
+ 
+gΩc
+.
+SîvîSåóm
+Ë
+	gîr‹
+ {
+
+1516 
+	gm
+ :
+√w
+(
+PduReque°
+)
+
+1517 
+îr
+ :
+°ªam
+.
+RecvMsg
+(
+m
+); 
+	gîr
+ !
+nû
+ {
+
+1518  
+îr
+
+
+1520  
+§v
+.(
+SRxApiSîvî
+).
+ProxySåóm
+(
+m
+, &
+sRxApiProxySåómSîvî
+{
+°ªam
+})
+
+1523 
+ty≥
+ 
+SRxApi_ProxySåómSîvî
+ 
+	göãrÁ˚
+ {
+
+1524 
+Síd
+(*
+PduRe•⁄£
+Ë
+îr‹
+
+
+1525 
+	ggΩc
+.
+	gSîvîSåóm
+
+
+1528 
+ty≥
+ 
+sRxApiProxySåómSîvî
+ struct {
+
+1529 
+	mgΩc
+.
+	mSîvîSåóm
+
+
+1532 
+	$func
+ (
+x
+ *
+sRxApiProxySåómSîvî
+Ë
+	$Síd
+(
+m
+ *
+PduRe•⁄£
+Ë
+îr‹
+ {
+
+1533  
+x
+.
+SîvîSåóm
+.
+	`SídMsg
+(
+m
+)
+
+1534 
+	}
+}
+
+1536 
+v¨
+ 
+	g_SRxApi_£rvi˚Desc
+ = 
+gΩc
+.
+Sîvi˚Desc
+{
+
+1537 
+Sîvi˚Name
+: "srx_grpc.SRxApi",
+
+1538 
+H™dÀrTy≥
+: (*
+SRxApiSîvî
+)(
+nû
+),
+
+1539 
+Mëhods
+: []
+gΩc
+.
+MëhodDesc
+{
+
+1541 
+MëhodName
+: "SendPacketToSRxServer",
+
+1542 
+H™dÀr
+: 
+_SRxApi_SídPackëToSRxSîvî_H™dÀr
+,
+
+1545 
+MëhodName
+: "ProxyHello",
+
+1546 
+H™dÀr
+: 
+_SRxApi_ProxyHñlo_H™dÀr
+,
+
+1549 
+MëhodName
+: "ProxyGoodBye",
+
+1550 
+H™dÀr
+: 
+_SRxApi_ProxyGoodBye_H™dÀr
+,
+
+1553 
+Såóms
+: []
+gΩc
+.
+SåómDesc
+{
+
+1555 
+SåómName
+: "SendAndWaitProcess",
+
+1556 
+H™dÀr
+: 
+_SRxApi_SídAndWaôPro˚ss_H™dÀr
+,
+
+1557 
+SîvîSåóms
+: 
+åue
+,
+
+1560 
+SåómName
+: "ProxyGoodByeStream",
+
+1561 
+H™dÀr
+: 
+_SRxApi_ProxyGoodByeSåóm_H™dÀr
+,
+
+1562 
+SîvîSåóms
+: 
+åue
+,
+
+1565 
+SåómName
+: "ProxyVerify",
+
+1566 
+H™dÀr
+: 
+_SRxApi_ProxyVîify_H™dÀr
+,
+
+1567 
+SîvîSåóms
+: 
+åue
+,
+
+1570 
+SåómName
+: "ProxyVerifyStream",
+
+1571 
+H™dÀr
+: 
+_SRxApi_ProxyVîifySåóm_H™dÀr
+,
+
+1572 
+SîvîSåóms
+: 
+åue
+,
+
+1575 
+SåómName
+: "ProxyStream",
+
+1576 
+H™dÀr
+: 
+_SRxApi_ProxySåóm_H™dÀr
+,
+
+1577 
+SîvîSåóms
+: 
+åue
+,
+
+1580 
+Mëad©a
+: "srx_grpc.proto",
+
+	@/opt/project/gobgp_test/gowork/src/srx_grpc/test/test1.go
+
+1 
+∑ckage
+ 
+maö
+
+
+7 
+	gimp‹t
+ "C"
+
+8 
+	gimp‹t
+ "fmt"
+
+10 
+func
+ 
+	$maö
+() {
+
+11 
+fmt
+.
+	`Pröén
+("testing...")
+
+12 
+C
+.
+	`PrötI¡î«lCÆl
+(12)
+
+13 
+	}
+}
+
+	@/opt/project/gobgp_test/gowork/src/srx_grpc/test/test2.go
+
+1 
+∑ckage
+ 
+maö
+
+
+15 
+	gimp‹t
+ "C"
+
+16 
+	gimp‹t
+ "fmt"
+
+18 
+func
+ 
+	$maö
+() {
+
+19 
+f
+ :
+C
+.
+	`ötFunc
+(C.
+f‹tytwo
+)
+
+20 
+fmt
+.
+	`Pröén
+((
+C
+.
+	`bridge_öt_func
+(
+f
+)))
+
+22 
+	}
+}
+
+	@/opt/project/gobgp_test/gowork/src/srx_grpc/test/test3.go
+
+1 
+∑ckage
+ 
+maö
+
+
+14 
+	gimp‹t
+ "C"
+
+16 
+imp‹t
+ (
+
+21 
+ty≥
+ 
+Sîvî
+ struct {
+
+22 
+gΩcSîvî
+ *
+	mgΩc
+.
+	mSîvî
+
+
+25 
+func
+ 
+NewSîvî
+(
+g
+ *
+gΩc
+.
+Sîvî
+Ë*
+	gSîvî
+ {
+
+26 
+	ggΩc
+.
+	gE«bÀTøcög
+ = 
+Ál£
+
+
+27 
+£rvî
+ :&
+Sîvî
+{
+
+28 
+gΩcSîvî
+: 
+g
+,
+
+30  
+£rvî
+
+
+34 
+func
+ 
+	$Sîve
+() {
+
+36 
+	}
+}
+
+38 
+func
+ 
+	$maö
+() {
+
+40 
+fmt
+.
+	`Pröén
+("test")
+
+42 
+	`Sîve
+()
+
+43 
+	}
+}
+
+	@
+1
+.
+1
+/usr/include
+8
+529
+/opt/project/gobgp_test/gowork/src/srx_grpc/client/srx_grpc_client.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/server/srx_grpc_server.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/server/srx_grpc_server_callback.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/server/srx_grpc_server_stream.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/srx_grpc.pb.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/test/test1.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/test/test2.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/test/test3.go

@@ -1,0 +1,4 @@
+docker run --rm -it -p 179:179 \ 
+    -v /opt/project/srx_test1/keys:/var/lib/bgpsec-keys \ 
+    -v /opt/project/gobgp_test/gowork/src/srx_grpc/exabgp.docker.grpc.conf:/etc/exabgp.conf \
+      exabgpsec_src

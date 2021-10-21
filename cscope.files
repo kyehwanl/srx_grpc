@@ -1,0 +1,8 @@
+/opt/project/gobgp_test/gowork/src/srx_grpc/server/srx_grpc_server.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/server/srx_grpc_server_stream.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/server/srx_grpc_server_callback.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/client/srx_grpc_client.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/test/test2.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/test/test1.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/test/test3.go
+/opt/project/gobgp_test/gowork/src/srx_grpc/srx_grpc.pb.go

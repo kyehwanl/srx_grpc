@@ -154,14 +154,19 @@ Compilation Orders for grpc enabled srx development
 
   (2) QuaggaSRx
 
-      ./configure --prefix=$PWD/../_inst --disable-snmp --disable-ospfapi --disable-ospfd --disable-ospf6d --disable-babeld --disable-doc --disable-tests --enable-user=root --enable-group=root --enable-configfile-mask=0644 --enable-logfile-mask=0644 --enable-srxcryptoapi srx_dir=$PWD/../_inst sca_dir=$PWD/../_inst --enable-grpc grpc_dir=${GOPATH}/src/srx_grpc
+      ./configure --prefix=$PWD/../_inst --disable-snmp --disable-ospfapi --disable-ospfd \
+                           --disable-ospf6d --disable-babeld --disable-doc --disable-tests \
+                           --enable-user=root --enable-group=root --enable-configfile-mask=0644 \
+                           --enable-logfile-mask=0644 \
+                           --enable-srxcryptoapi srx_dir=$PWD/../_inst sca_dir=$PWD/../_inst \
+                           --enable-grpc grpc_dir=${GOPATH}/src/srx_grpc
 
       make all install
 
 
 
 
-7. Running
+7. Running logs
 
   (1) client - srxsvr_client
 
@@ -197,6 +202,7 @@ Compilation Orders for grpc enabled srx development
 
 
   (2) run srx_server first
+
       [SRxCryptoAPI - INFO] The internal key initialized storage holds (11 private and 6 public keys)!
       WARNING [10/15/21 02:54.05] The loaded srx-crypto-api plug-in does not support remote control of LOGING configuration - Use API configuration to do so!
          INFO [10/15/21 02:54.05] - SRx Caches and RPKI Queue created

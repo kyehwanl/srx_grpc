@@ -133,7 +133,7 @@ BUILD_TESTS =
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/include -I/opt/project/srx_test1/srx/../_inst//include -Os -fno-omit-frame-pointer -g -std=gnu99 -Wall -Wsign-compare -Wpointer-arith -Wbad-function-cast -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wchar-subscripts -Wcast-qual
-CONFDATE = 20191230
+CONFDATE = 20211021
 CPP = gcc -E
 CPPFLAGS = 
 CURSES = 
@@ -234,10 +234,10 @@ WATCHQUAGGA = watchquagga
 WEAK_ALIAS = attribute
 WEAK_ALIAS_CROSSFILE = yes
 ZEBRA = zebra
-abs_builddir = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/solaris
-abs_srcdir = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/solaris
-abs_top_builddir = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx
-abs_top_srcdir = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx
+abs_builddir = /tmp/srx_grpc/qsrx/solaris
+abs_srcdir = /tmp/srx_grpc/qsrx/solaris
+abs_top_builddir = /tmp/srx_grpc/qsrx
+abs_top_srcdir = /tmp/srx_grpc/qsrx
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
@@ -271,7 +271,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/install-sh
+install_sh = ${SHELL} /tmp/srx_grpc/qsrx/install-sh
 libdir = ${exec_prefix}/lib64
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -282,10 +282,10 @@ oldincludedir = /usr/include
 pdfdir = ${docdir}
 pkgsrcdir = 
 pkgsrcrcdir = 
-prefix = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/test_install
+prefix = /tmp/srx_grpc/qsrx/test_install
 program_transform_name = s,x,x,
 psdir = ${docdir}
-quagga_statedir = /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/test_install/etc
+quagga_statedir = /var/run
 sbindir = ${exec_prefix}/sbin
 sca_dir = /opt/project/srx_test1/srx/../_inst/
 sharedstatedir = ${prefix}/com
@@ -305,7 +305,7 @@ top_srcdir = ..
 # derived variables.
 pkg_names = daemons dev doc libs smf
 pkg_quagga_daemons = zebra bgpd ospfd ospf6d ripd ripngd
-pkg_name_rev = 0.4.2.7-20191230-linux-gnu-x86_64
+pkg_name_rev = 0.4.2.7-20211021-linux-gnu-x86_64
 pkg_depends = $(pkg_names:%=depend.%)
 pkg_packages = $(pkg_names:%=quaggasrx-%-$(pkg_name_rev).pkg)
 pkg_pkginfos = $(pkg_names:%=pkginfo.%.full)
@@ -337,28 +337,28 @@ edit = $(SED) \
  	-e 's,[@]PACKAGE_TARNAME[@],quaggasrx,g' \
  	-e 's,[@]PACKAGE_VERSION[@],0.4.2.7,g' \
  	-e 's,[@]PACKAGE_BUGREPORT[@],http://bgpsrx.antd.nist.gov,g' \
-  	-e 's,[@]CONFDATE[@],20191230,g' \
+  	-e 's,[@]CONFDATE[@],20211021,g' \
  	-e 's,[@]target_cpu[@],$(target_cpu),g' \
  	-e 's,[@]target_host[@],$(target_host),g' \
  	-e 's,[@]target_os[@],$(target_os),g'
 
 
 # common options for pkgmk
-pkg_make_vars = exec_prefix=${prefix} prefix=/opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/test_install \
+pkg_make_vars = exec_prefix=${prefix} prefix=/tmp/srx_grpc/qsrx/test_install \
 	builddir=. srcdir=. \
 	top_builddir=.. top_srcdir=.. \
-	abs_builddir=/opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/solaris abs_srcdir=/opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/solaris \
-	abs_top_builddir=/opt/project/gobgp_test/gowork/src/srx_grpc/qsrx abs_top_srcdir=/opt/project/gobgp_test/gowork/src/srx_grpc/qsrx
+	abs_builddir=/tmp/srx_grpc/qsrx/solaris abs_srcdir=/tmp/srx_grpc/qsrx/solaris \
+	abs_top_builddir=/tmp/srx_grpc/qsrx abs_top_srcdir=/tmp/srx_grpc/qsrx
 
 
 # pkgmk: write the package to spool in build dir, to avoid root dependencies
-pkg_make = pkgmk -o -d /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/solaris \
+pkg_make = pkgmk -o -d /tmp/srx_grpc/qsrx/solaris \
 	-f $< DESTDIR="$(DESTDIR)/" $(pkg_make_vars)
 
 
 # pkgtrans: write a pkg file stream, shame we cant pipe directly to it from
 # pkgmk..
-pkg_trans = pkgtrans -s /opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/solaris "/opt/project/gobgp_test/gowork/src/srx_grpc/qsrx/solaris/$@"
+pkg_trans = pkgtrans -s /tmp/srx_grpc/qsrx/solaris "/tmp/srx_grpc/qsrx/solaris/$@"
 
 # pkginfo.package and prototype.package are all built sources
 #BUILT_SOURCES = pkginfo.daemons pkginfo.dev pkginfo.doc pkginfo.libs \

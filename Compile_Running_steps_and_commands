@@ -66,12 +66,21 @@ Compilation Orders for grpc enabled srx development
           -I${GOPATH}/src/srx_grpc/srx/../_inst/include 
 
 
-      (*) Error : 
+      (*) Possible Errors : 
+
       A. /root/go/src/srx_grpc/srx/../_inst/include/srx/srxcryptoapi.h:107:20: fatal error: config.h: No such file or directory
         --> do temporarily configure in srx server with #6.(1)
 
+
       B. bash: ./configure: No such file or directory  
         --> "autoreconf -i" needed
+
+
+      C. <dir>/srx_grpc/srx/src/server/prefix_cache.h:59:22: fatal error: patricia.h: No such file or directory
+        --> need to run 'make-lp.sh' in <dir>/srx_grpc/srx/extras', then it will make 'local' directory under 
+            srx_grpc/srx/extras/local/include as well as patricia.h will be fetched. 
+            (might ignore warning './make-lp.sh: line 34: ../../../../libtool: No such file or directory' )
+
 
 
   (3) srx client (at grpc/srx/src/) --> libgrpc_client_service.so
@@ -142,31 +151,152 @@ Compilation Orders for grpc enabled srx development
 
 
 
-6. compile for srx server and QuaggaSrx
+
+
+6. Using Go Module (#4,5 didn't use module)
+
+    - in case of separately placing srx_grpc source code out of GOPATH
+
+    (1) in the srx_grpc root directory, <dir>/srx_grpc
+
+
+        idac.server02-antd [2003]{.../test1/srx_grpc}-> go mod init srx_grpc                          
+        go: creating new go.mod: module srx_grpc                                                      
+
+    (2) go build in client
+
+        test1/srx_grpc}-> cd client/                                    
+        srx_grpc/client}-> go build -gcflags '-N -l' srx_grpc_client.go 
+        go: finding github.com/golang/protobuf v1.5.2                                                 
+        go: finding golang.org/x/net latest                                                           
+        go: downloading github.com/golang/protobuf v1.5.2                                             
+        go: extracting github.com/golang/protobuf v1.5.2                                              
+        go: downloading google.golang.org/protobuf v1.26.0                                            
+        go: extracting google.golang.org/protobuf v1.26.0                                             
+        go: finding google.golang.org/protobuf v1.26.0                                                
+
+        srx_grpc/client}-> go build -gcflags '-N -l' -buildmode=c-shared -o libsrx_grpc_client.so  srx_grpc_client.go
+
+
+    (3) go build in server
+    
+        srx_grpc/server}-> go build -gcflags '-N -l' srx_grpc_server.go 
+        srx_grpc/server}-> go build -gcflags '-N -l' -buildmode=c-shared -o libsrx_grpc_server.so  srx_grpc_server.go
+
+
+
+
+
+7. compile for srx server and QuaggaSrx
 
   (1) srx server compile and make
-      ./configure --disable-option-checking --prefix=$PWD/../_inst sca_dir=$PWD/../_inst/ \
-       --cache-file=/dev/null --srcdir=. --enable-grpc grpc_dir=/root/go/src/srx_grpc
-
-      make all install
+      a. autoreconf -i
+      b. configure --disable-option-checking --prefix=$PWD/../_inst sca_dir=$PWD/../_inst/ \
+         --cache-file=/dev/null --srcdir=. --enable-grpc grpc_dir=$PWD/../ 
+                                      (OR, --enable-grpc grpc_dir=/root/go/src/srx_grpc)
+      c. make all install
 
 
 
   (2) QuaggaSRx
 
-      ./configure --prefix=$PWD/../_inst --disable-snmp --disable-ospfapi --disable-ospfd \
+      a. autoreconf -i
+      b. configure --prefix=$PWD/../_inst --disable-snmp --disable-ospfapi --disable-ospfd \
                            --disable-ospf6d --disable-babeld --disable-doc --disable-tests \
                            --enable-user=root --enable-group=root --enable-configfile-mask=0644 \
                            --enable-logfile-mask=0644 \
                            --enable-srxcryptoapi srx_dir=$PWD/../_inst sca_dir=$PWD/../_inst \
-                           --enable-grpc grpc_dir=${GOPATH}/src/srx_grpc
-
-      make all install
-
-
+                           --enable-grpc grpc_dir=$PWD/../
+                      (OR, --enable-grpc grpc_dir=${GOPATH}/src/srx_grpc)
+      c. make all install
 
 
-7. Running logs
+
+
+
+
+8. Summary of compile build steps
+
+    (1) download soruce files from https://github.com/kyehwanl/srx_grpc.git into /opt/project/gobgp_test/test1/
+        git clone https://github.com/kyehwanl/srx_grpc.git
+
+    (2) srx crypto api preparation
+        in /opt/project/srx_test1/_inst/ 
+
+    (3) srx_grpc/srx/extras/make-lp.sh
+        
+    (4) mkdir -p /opt/project/gobgp_test/test1/srx_grpc/srx/src/.libs/
+
+    (5) gcc -DHAVE_CONFIG_H -fPIC -shared -o .libs/libgrpc_client_service.so client/grpc_client_service.c \
+        -I/opt/project/gobgp_test/test1/srx_grpc/srx/src \ 
+        -I/opt/project/gobgp_test/test1/srx_grpc/srx/src/../extras/local/include \
+        -I/opt/project/srx_test1/_inst/include
+
+    (6) gcc -DHAVE_CONFIG_H -fPIC -shared -o .libs/libgrpc_service.so server/grpc_service.c \
+        -I/opt/project/gobgp_test/test1/srx_grpc/srx/src \
+        -I/opt/project/gobgp_test/test1/srx_grpc/srx/src/../extras/local/include \
+        -I/opt/project/srx_test1/_inst/include 
+
+
+    (7) client go file CGO env variable modification
+       #cgo CFLAGS: -I/opt/project/gobgp_test/test1/srx_grpc/srx/../_inst/include/ \
+        -I/opt/project/gobgp_test/test1/srx_grpc/srx/src/ \
+        -I/opt/project/gobgp_test/test1/srx_grpc/srx/src/../extras/local/include \
+        -I/opt/project/srx_test1/srx/../_inst//include
+       #cgo LDFLAGS: -L/opt/project/gobgp_test/test1/srx_grpc/srx/src/.libs -lgrpc_client_service \
+         -Wl,-rpath -Wl,/opt/project/gobgp_test/test1/srx_grpc/srx/src/.libs -Wl,--unresolved-symbols=ignore-all
+
+
+    (8) server go file CGO env variable modification
+       #cgo CFLAGS: -I/opt/project/gobgp_test/test1/srx_grpc/srx/../_inst/include/ \
+        -I/opt/project/gobgp_test/test1/srx_grpc/srx/src/ \
+        -I/opt/project/gobgp_test/test1/srx_grpc/srx/src/../extras/local/include \
+        -I/opt/project/srx_test1/srx/../_inst//include
+       #cgo LDFLAGS: -L/opt/project/gobgp_test/test1/srx_grpc/srx/src/.libs -lgrpc_service \
+        -Wl,-rpath -Wl,/opt/project/gobgp_test/test1/srx_grpc/srx/src/.libs -Wl,--unresolved-symbols=ignore-all
+
+
+    (9) module build 
+  
+        test1/srx_grpc}-> go mod init srx_grpc                          
+
+        srx_grpc/client}-> go build -gcflags '-N -l' srx_grpc_client.go 
+        srx_grpc/client}-> go build -gcflags '-N -l' -buildmode=c-shared -o libsrx_grpc_client.so  srx_grpc_client.go
+
+        srx_grpc/server}-> go build -gcflags '-N -l' srx_grpc_server.go 
+        srx_grpc/server}-> go build -gcflags '-N -l' -buildmode=c-shared -o libsrx_grpc_server.so  srx_grpc_server.go
+
+
+
+    (10) compile for srx server and QuaggaSrx
+
+        <SRx Server>
+        autoreconf -i
+        configure --disable-option-checking --prefix=$PWD/../_inst sca_dir=/opt/project/srx_test1/_inst/ \
+                    --cache-file=/dev/null --srcdir=. --enable-grpc grpc_dir=$PWD/../
+        make all install
+
+
+        <QuaggaSRx>
+        autoreconf -i
+        configure --prefix=$PWD/../_inst --disable-snmp --disable-ospfapi --disable-ospfd \
+                           --disable-ospf6d --disable-babeld --disable-doc --disable-tests \
+                           --enable-user=root --enable-group=root --enable-configfile-mask=0644 \
+                           --enable-logfile-mask=0644 \
+                           --enable-srxcryptoapi \ 
+                           srx_dir=$PWD/../_inst  sca_dir=/opt/project/srx_test1/_inst  \
+                           --enable-grpc grpc_dir=$PWD/../
+        make all install
+
+
+
+
+
+
+
+
+
+9. Running logs
 
   (1) client - srxsvr_client
 

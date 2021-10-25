@@ -75,6 +75,7 @@ config.h
 */pkgsrc/*.sh
 */tests/[a-z]*
 temp-*/
+temp*/
 *.private
 *.pub
 bgpsec-keys/

@@ -126,3 +126,5 @@ Makefile_*
 srx/src/.rpkirtr_svr.history
 gotags
 making_grpc_client_service_lib.txt
+_inst/
+repo/

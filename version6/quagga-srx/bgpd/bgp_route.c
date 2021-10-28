@@ -3531,8 +3531,8 @@ void verify_update (struct bgp *bgp, struct bgp_info *info,
 #endif /* __TIME_MEASURE__ */
 
       //printf("prefix: %s \/%d \n", inet_ntoa(prefix->ip.addr.v4.in_addr), prefix->length);
-      verifyUpdate_grpc(bgp->srxProxy, info->localID, true, usePathVal, defResult,
-          prefix, oas, bgpsec);
+      verifyUpdate_grpc(bgp->srxProxy, info->localID, useOriginVal, usePathVal,
+                    useAspaVal, defResult, prefix, oas, bgpsec, asPathList);
 #if defined (__TIME_MEASURE__) 
       valCount++;
       //printf("[%d] ", valCount);

@@ -6,7 +6,7 @@
 # REQUIRE: zebra
 ##
 
-PATH=/sbin:/bin:/usr/sbin:/usr/bin:/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst/sbin:/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst/bin
+PATH=/sbin:/bin:/usr/sbin:/usr/bin:/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst/sbin:/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst/bin
 export PATH
 
 if [ -f /etc/rc.subr ]
@@ -17,7 +17,7 @@ fi
 name="bgpd"
 rcvar=$name
 required_files="${prefix}/etc/${name}.conf"
-command="/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst/sbin/${name}"
+command="/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst/sbin/${name}"
 command_args="-d"
 
 start_precmd="zebra_precmd"

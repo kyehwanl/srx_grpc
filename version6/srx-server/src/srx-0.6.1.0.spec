@@ -49,7 +49,7 @@ using the rtr-to-cache protocol (RFC8210).
 %setup -q
 
 %build
-%configure --prefix=/usr --sysconfdir=/etc sca_dir=/opt/project/gobgp_test/gowork/src/srx_grpc/srx-server-v6/../_inst patricia_dir= 
+%configure --prefix=/usr --sysconfdir=/etc sca_dir=/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/../_inst patricia_dir= 
 make %{?_smp_mflags}
 
 %install

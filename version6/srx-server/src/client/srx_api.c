@@ -1488,6 +1488,7 @@ void verifyUpdate_grpc(SRxProxy* proxy, uint32_t localID,
                   IPPrefix* prefix, uint32_t as32,
                   BGPSecData* bgpsec, SRxASPathList asPathList)
 {
+  LOG(LEVEL_INFO, "[SRx Client] calling verify Update grpc  [%u]...", proxy->proxyID);
   if (!isConnected(proxy))
   {
     RAISE_ERROR(HDR "Abort verify, not connected to SRx server!" ,
@@ -1534,6 +1535,7 @@ void verifyUpdate_grpc(SRxProxy* proxy, uint32_t localID,
 
   GoSlice verify_pdu = {(void*)pdu, (GoInt)length, (GoInt)length};
   //int32_t result = RunStream(verify_pdu);
+  printf("================== RunProxyVerify calling===============\n");
   int32_t result = RunProxyVerify(verify_pdu, connHandler->grpcClientID);
   //LOG(LEVEL_INFO, HDR "[SRx Client] Validation Result: %02x\n", result);
 

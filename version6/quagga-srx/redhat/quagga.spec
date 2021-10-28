@@ -104,7 +104,7 @@ Summary:  Routing daemon
 Name:		  %{name}
 Version:	%{version}
 Release:  22%{?dist}
-#Release: 20211026%{release_rev}
+#Release: 20211027%{release_rev}
 License:  GPL
 Group:    System Environment/Daemons
 Source0:  %{name}-%{version}.tar.gz
@@ -245,7 +245,7 @@ developing OSPF-API and quagga applications.
 --enable-netlink --enable-gcc-rdynamic \
 --disable-babeld \
 sca_dir= srx_dir=
-#sca_dir=/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst srx_dir=/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst
+#sca_dir=/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst/ srx_dir=/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst
 
 make %{?_smp_mflags} MAKEINFO="makeinfo --no-split"
 

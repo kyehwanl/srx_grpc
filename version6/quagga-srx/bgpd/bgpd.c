@@ -632,9 +632,10 @@ int srx_connect_proxy(struct bgp *bgp)
 
     if (connected)
     {
-      if ( CHECK_FLAG(bgp->srx_config, SRX_CONFIG_EVAL_DISTR))
+      if ( CHECK_FLAG(bgp->srx_config, SRX_CONFIG_EVAL_PATH_DISTR))
         zlog_info ("\033[92m""Enabled Distributed Evaluation on SRx server <GRPC>""\033[0m" );
     }
+    // TODO: XXX GRPC XXX - consider the way of respawning like the one  below using tcp socket
 
 #else
     // The last parameter (true) stands for external socket control

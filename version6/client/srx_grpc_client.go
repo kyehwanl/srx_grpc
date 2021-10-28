@@ -1,9 +1,11 @@
 package main
 
 /*
-#cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/../extras/local/include -I/opt/project/srx_test1/srx/../_inst//include
+#cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/../_inst/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/../extras/local/include
+
 //#cgo LDFLAGS: /opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs/log.o -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -lgrpc_client_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -Wl,--unresolved-symbols=ignore-all
-#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -lgrpc_client_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -Wl,--unresolved-symbols=ignore-all
+
+#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/.libs -lgrpc_client_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/version6//srx-server//src/.libs -Wl,--unresolved-symbols=ignore-all
 
 #include <stdlib.h>
 #include "shared/srx_packets.h"
@@ -536,9 +538,9 @@ func RunStream(data []byte) uint32 {
 //export RunProxyVerify
 func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 
-	//fmt.Printf("++ data: %#v, clientID: %d\n", data, grpcClientID)
+	fmt.Printf("++ data: %#v, clientID: %d\n", data, grpcClientID)
 	job := NewJob(data, grpcClientID)
-	//fmt.Printf("++ job: %#v\n", job)
+	fmt.Printf("++ job: %#v\n", job)
 
 	select {
 	case jobChan <- *job:
@@ -552,21 +554,20 @@ func RunProxyVerify(data []byte, grpcClientID uint32) uint32 {
 
 func ProxyVerify(data []byte, grpcClientID uint32, jobDone chan bool, workerId int32) uint32 {
 
-	//fmt.Printf("[WorkerID: %d] ProxyVerify Count : %d\n", workerId, g_count)
+	fmt.Printf("[WorkerID: %d] ProxyVerify Count : %d\n", workerId, g_count)
 	if g_count == 0 {
 		start = time.Now()
 	}
 	g_count++
 
 	cli := client.cli
-	//fmt.Printf("[WorkerID: %d] client data: %#v\n", workerId, client)
+	fmt.Printf("[WorkerID: %d] client data: %#v\n", workerId, client)
 
 	if data == nil {
 		data = []byte(defaultName)
 	}
-	/*
-		fmt.Printf("input data for stream response: %#v\n", data)
-	*/
+	fmt.Printf("input data for stream response: %#v\n", data)
+
 	stream, err := cli.ProxyVerifyStream(context.Background(),
 		&pb.ProxyVerifyRequest{
 			Data:         data,
@@ -577,7 +578,7 @@ func ProxyVerify(data []byte, grpcClientID uint32, jobDone chan bool, workerId i
 	if err != nil {
 		log.Printf("open stream error %v", err)
 	}
-	//fmt.Printf("[WorkerID: %d] (before go func) stream: %#v\n", workerId, stream)
+	fmt.Printf("[WorkerID: %d] (before go func) stream: %#v\n", workerId, stream)
 
 	ctx := stream.Context()
 	ctx, cancel := context.WithTimeout(ctx, 10*time.Second)
@@ -598,12 +599,12 @@ func ProxyVerify(data []byte, grpcClientID uint32, jobDone chan bool, workerId i
 				log.Printf("can not receive %v", err)
 			}
 
-			//fmt.Printf("[WorkerID: %d] (in go func, after Recv) stream: %#v\n", workerId, stream)
-			/*
-				fmt.Println()
-				fmt.Printf("[WorkerID: %d, update count: %d] data : %#v\n", workerId, g_count, resp)
-				fmt.Printf("[WorkerID: %d] size : %#v\n", workerId, resp.Length)
-			*/
+			fmt.Printf("[WorkerID: %d] (in go func, after Recv) stream: %#v\n", workerId, stream)
+
+			fmt.Println()
+			fmt.Printf("[WorkerID: %d, update count: %d] data : %#v\n", workerId, g_count, resp)
+			fmt.Printf("[WorkerID: %d] size : %#v\n", workerId, resp.Length)
+
 			if resp.Type == 0 && resp.Length == 0 {
 				_, _, line, _ := runtime.Caller(0)
 				log.Printf("[WorkerID: %d] [client line:%d] close stream \n", workerId, line+1)

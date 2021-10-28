@@ -43,7 +43,7 @@ Additionally this package provides an srxsrv_client
 %setup -q -n %{core_name}-%{version}
 
 %build
-%configure --prefix=/usr --sysconfdir=/etc sca_dir=/opt/project/gobgp_test/gowork/src/srx_grpc/srx-server-v6/../_inst patricia_dir= 
+%configure --prefix=/usr --sysconfdir=/etc sca_dir=/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/../_inst patricia_dir= 
 make %{?_smp_mflags}
 
 %install

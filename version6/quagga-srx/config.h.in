@@ -741,6 +741,9 @@
 /* Enable IS-IS topology generator code */
 #undef TOPOLOGY_GENERATE
 
+/* SRX GRPC */
+#undef USE_GRPC
+
 /* Use PAM for authentication */
 #undef USE_PAM
 

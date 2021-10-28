@@ -119,21 +119,21 @@ am__can_run_installinfo = \
   esac
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/missing aclocal-1.13
+ACLOCAL = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/missing aclocal-1.13
 AMTAR = $${TAR-tar}
 AM_DEFAULT_VERBOSITY = 1
 AR = ar
-AUTOCONF = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/missing autoconf
-AUTOHEADER = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/missing autoheader
-AUTOMAKE = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/missing automake-1.13
+AUTOCONF = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/missing autoconf
+AUTOHEADER = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/missing autoheader
+AUTOMAKE = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/missing automake-1.13
 AWK = gawk
 BABELD = 
 BGPD = bgpd
 BUILD_TESTS = 
 CC = gcc
 CCDEPMODE = depmode=gcc3
-CFLAGS = -I/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst/include -Os -fno-omit-frame-pointer -g -Wall -Wsign-compare -Wpointer-arith -Wbad-function-cast -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wchar-subscripts -Wcast-qual
-CONFDATE = 20211026
+CFLAGS = -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst/include -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst//include -Os -fno-omit-frame-pointer -g -Wall -Wsign-compare -Wpointer-arith -Wbad-function-cast -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wchar-subscripts -Wcast-qual
+CONFDATE = 20211027
 CPP = gcc -E
 CPPFLAGS = 
 CURSES = 
@@ -172,7 +172,7 @@ ISIS_TOPOLOGY_LIB =
 KERNEL_METHOD = 
 LATEXMK = /bin/false
 LD = /bin//ld -m elf_x86_64
-LDFLAGS = -L/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst/lib64/srx 
+LDFLAGS = -L/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst/lib64/srx -L/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst//lib64/srx 
 LIBCAP = 
 LIBM = -lm
 LIBOBJS = 
@@ -186,7 +186,7 @@ LIPO =
 LN_S = ln -s
 LTLIBOBJS = 
 MAJOR_VER = 6
-MAKEINFO = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/missing makeinfo
+MAKEINFO = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/missing makeinfo
 MANIFEST_TOOL = :
 MINOR_VER = 0
 MKDIR_P = /bin//mkdir -p
@@ -236,10 +236,10 @@ WATCHQUAGGA = watchquagga
 WEAK_ALIAS = attribute
 WEAK_ALIAS_CROSSFILE = yes
 ZEBRA = zebra
-abs_builddir = /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/solaris
-abs_srcdir = /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/solaris
-abs_top_builddir = /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6
-abs_top_srcdir = /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6
+abs_builddir = /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/solaris
+abs_srcdir = /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/solaris
+abs_top_builddir = /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx
+abs_top_srcdir = /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx
 ac_ct_AR = ar
 ac_ct_CC = gcc
 ac_ct_DUMPBIN = 
@@ -264,6 +264,7 @@ enable_user = root
 enable_vty_group = 
 exampledir = ${prefix}/etc
 exec_prefix = ${prefix}
+grpc_dir = /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../
 host = x86_64-unknown-linux-gnu
 host_alias = 
 host_cpu = x86_64
@@ -272,7 +273,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/install-sh
+install_sh = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/install-sh
 libdir = ${exec_prefix}/lib64
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -283,15 +284,15 @@ oldincludedir = /usr/include
 pdfdir = ${docdir}
 pkgsrcdir = 
 pkgsrcrcdir = 
-prefix = /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst
+prefix = /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst
 program_transform_name = s,x,x,
 psdir = ${docdir}
-quagga_statedir = /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst/etc
+quagga_statedir = /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst/etc
 sbindir = ${exec_prefix}/sbin
-sca_dir = /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst
+sca_dir = /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst/
 sharedstatedir = ${prefix}/com
 srcdir = .
-srx_dir = /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst
+srx_dir = /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst
 sysconfdir = ${prefix}/etc
 target = x86_64-unknown-linux-gnu
 target_alias = 
@@ -306,7 +307,7 @@ top_srcdir = ..
 # derived variables.
 pkg_names = daemons dev doc libs smf
 pkg_quagga_daemons = zebra bgpd ospfd ospf6d ripd ripngd
-pkg_name_rev = 0.6.0.0-20211026-linux-gnu-x86_64
+pkg_name_rev = 0.6.0.0-20211027-linux-gnu-x86_64
 pkg_depends = $(pkg_names:%=depend.%)
 pkg_packages = $(pkg_names:%=quaggasrx-%-$(pkg_name_rev).pkg)
 pkg_pkginfos = $(pkg_names:%=pkginfo.%.full)
@@ -338,28 +339,28 @@ edit = $(SED) \
  	-e 's,[@]PACKAGE_TARNAME[@],quaggasrx,g' \
  	-e 's,[@]PACKAGE_VERSION[@],0.6.0.0,g' \
  	-e 's,[@]PACKAGE_BUGREPORT[@],https://www.nist.gov/services-resources/software/bgp-secure-routing-extension-bgp-srx-prototype,g' \
-  	-e 's,[@]CONFDATE[@],20211026,g' \
+  	-e 's,[@]CONFDATE[@],20211027,g' \
  	-e 's,[@]target_cpu[@],$(target_cpu),g' \
  	-e 's,[@]target_host[@],$(target_host),g' \
  	-e 's,[@]target_os[@],$(target_os),g'
 
 
 # common options for pkgmk
-pkg_make_vars = exec_prefix=${prefix} prefix=/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/../_inst \
+pkg_make_vars = exec_prefix=${prefix} prefix=/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/../_inst \
 	builddir=. srcdir=. \
 	top_builddir=.. top_srcdir=.. \
-	abs_builddir=/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/solaris abs_srcdir=/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/solaris \
-	abs_top_builddir=/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6 abs_top_srcdir=/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6
+	abs_builddir=/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/solaris abs_srcdir=/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/solaris \
+	abs_top_builddir=/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx abs_top_srcdir=/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx
 
 
 # pkgmk: write the package to spool in build dir, to avoid root dependencies
-pkg_make = pkgmk -o -d /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/solaris \
+pkg_make = pkgmk -o -d /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/solaris \
 	-f $< DESTDIR="$(DESTDIR)/" $(pkg_make_vars)
 
 
 # pkgtrans: write a pkg file stream, shame we cant pipe directly to it from
 # pkgmk..
-pkg_trans = pkgtrans -s /opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/solaris "/opt/project/gobgp_test/gowork/src/srx_grpc/quagga-srx-v6/solaris/$@"
+pkg_trans = pkgtrans -s /opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/solaris "/opt/project/gobgp_test/gowork/src/srx_grpc/version6/quagga-srx/solaris/$@"
 
 # pkginfo.package and prototype.package are all built sources
 #BUILT_SOURCES = pkginfo.daemons pkginfo.dev pkginfo.doc pkginfo.libs \

@@ -2,13 +2,13 @@ package main
 
 /*
 
-#cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/../_inst/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/client -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/../extras/local/include
+#cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/../_inst/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/client -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/../extras/local/include
 
-#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -lgrpc_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -Wl,--unresolved-symbols=ignore-all
+#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/.libs -lgrpc_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server//src//.libs -Wl,--unresolved-symbols=ignore-all
 
-//#cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/server -lgrpc_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/server -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/lib64/srx -lSRxProxy -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/test_install/lib64/srx -Wl,--unresolved-symbols=ignore-all
 
 #include <stdio.h>
+#include "shared/srx_defs.h"
 #include "srx/srx_api.h"
 #include "server/grpc_service.h"
 
@@ -446,7 +446,7 @@ func (s *Server) ProxyVerify(pdu *pb.ProxyVerifyV4Request, stream pb.SRxApi_Prox
 }
 
 func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_ProxyVerifyStreamServer) error {
-	//fmt.Println("++ [grpc server] calling SRxServer server:ProxyVerifyStream()")
+	fmt.Println("++ [grpc server] calling SRxServer server:ProxyVerifyStream()")
 
 	gStream_verify = stream
 	ctx := stream.Context()
@@ -462,20 +462,19 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 		fmt.Printf("++ [grpc server][:%d] server Proxy_Verify_Stream context done\n", line+1)
 		close(done)
 	}()
-	/*
-		fmt.Printf("++ [grpc server] grpc Client ID: %02x, data length: %d, \n Data: %#v\n",
-			pdu.GrpcClientID, pdu.Length, pdu)
 
-		fmt.Println("++ [grpc server] calling SRxServer responseGRPC()")
-	*/
+	fmt.Printf("++ [grpc server] grpc Client ID: %02x, data length: %d, \n Data: %#v\n",
+		pdu.GrpcClientID, pdu.Length, pdu)
+
+	fmt.Println("++ [grpc server] calling SRxServer responseGRPC()")
+
 	retData := C.RET_DATA{}
 	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])),
 		C.uint(pdu.GrpcClientID))
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
-	/*
-		fmt.Printf("++ [grpc server][ProxyVerifyStream] return size: %d \t data: %#v\n", retData.size, b)
-	*/
+
+	fmt.Printf("++ [grpc server][ProxyVerifyStream] return size: %d \t data: %#v\n", retData.size, b)
 
 	if retData.size == 0 {
 		return nil

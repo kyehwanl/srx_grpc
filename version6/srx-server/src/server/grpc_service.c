@@ -519,8 +519,8 @@ static void _processPeerChange_grpc(unsigned char *data, RET_DATA *rt, unsigned 
 //int responseGRPC (int size, unsigned char* data)
 RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
 {
-    LOG(LEVEL_DEBUG, HDR "[SRx server] [%s] calling - size: %d, grpcClient ID: %02x  \n", __FUNCTION__, size, grpcClientID);
     setLogLevel(LEVEL_DEBUG);
+    LOG(LEVEL_DEBUG, HDR "[SRx server] [%s] calling - size: %d, grpcClient ID: %02x  \n", __FUNCTION__, size, grpcClientID);
 
     /*
     bool ret = _isSet(0x03, 0x01);

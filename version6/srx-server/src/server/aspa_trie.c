@@ -42,6 +42,13 @@
 #include "util/log.h"
 
 static uint32_t countTrieNode =0;
+
+static TrieNode* newAspaTrie(void);
+static TrieNode* make_trienode(char data, char* userData, ASPA_Object* );
+static void free_trienode(TrieNode* node);
+static int search_trie(TrieNode* root, char* word);
+static void emptyAspaDB(ASPA_DBManager* self);
+
 int process_ASPA_EndOfData_main(void* uc, void* handler, uint32_t uid, uint32_t pid, time_t ct);
 extern RPKI_QUEUE* getRPKIQueue();
 extern uint8_t validateASPA (PATH_LIST* asPathList, uint8_t length, AS_TYPE asType, 

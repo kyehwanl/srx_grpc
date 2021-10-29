@@ -2,7 +2,7 @@ package main
 
 /*
 
-#cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/../_inst/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/client -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/../extras/local/include
+#cgo CFLAGS: -g -Wall -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/../_inst/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/client -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/../extras/local/include
 
 #cgo LDFLAGS: -L/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/.libs -lgrpc_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server//src//.libs -Wl,--unresolved-symbols=ignore-all
 
@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"log"
 	"net"
-	pb "srx_grpc"
+	pb "srx_grpc_v6"
 
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
@@ -31,8 +31,8 @@ import (
 	_ "bytes"
 	"encoding/binary"
 	_ "io"
-	"io/ioutil"
-	"os"
+	_ "io/ioutil"
+	_ "os"
 	"runtime"
 	"time"
 	"unsafe"
@@ -261,8 +261,7 @@ func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb
 	fmt.Println("++ [grpc server] calling SRxServer server:ProxyHello()")
 
 	fmt.Printf("++ [grpc server] input :  %#v\n", pdu.Type)
-	fmt.Println("++ [grpc server] ProxyHelloRequest", pdu)
-	fmt.Printf("++ [grpc server] ProxyHelloRequest: %#v", pdu)
+	fmt.Printf("++ [grpc server] ProxyHelloRequest (size:%d): %#v", C.sizeof_SRXPROXY_HELLO, pdu)
 
 	/* serialize */
 	buf := make([]byte, C.sizeof_SRXPROXY_HELLO)
@@ -469,8 +468,8 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 	fmt.Println("++ [grpc server] calling SRxServer responseGRPC()")
 
 	retData := C.RET_DATA{}
-	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])),
-		C.uint(pdu.GrpcClientID))
+	//retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])), C.uint(pdu.GrpcClientID))
+	retData = C.responseGRPC(60, nil, 0)
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
 
@@ -525,9 +524,11 @@ func Serve() {
 	}
 
 	/* Disable Logging for performance measurement */
-	log.SetFlags(0)               // skip all formatting
-	log.SetOutput(ioutil.Discard) // using this as io.Writer to skip logging
-	os.Stdout = nil               // to suppress fmt.Print
+	/*
+		log.SetFlags(0)               // skip all formatting
+		log.SetOutput(ioutil.Discard) // using this as io.Writer to skip logging
+		os.Stdout = nil               // to suppress fmt.Print
+	*/
 
 	server := NewServer(grpc.NewServer())
 	if err := server.grpcServer.Serve(lis); err != nil {

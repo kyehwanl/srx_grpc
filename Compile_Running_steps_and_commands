@@ -258,6 +258,8 @@ Compilation Orders for grpc enabled srx development
 
     (9) module build 
         test1/srx_grpc}-> go mod init srx_grpc
+        OR 
+        go mod init ANY_NAME (ANY_NAME should be used as a package name in srx_grpc_{server|client}.go)
 
         srx_grpc/client}-> go build -gcflags '-N -l' srx_grpc_client.go 
         srx_grpc/client}-> go build -gcflags '-N -l' -buildmode=c-shared -o libsrx_grpc_client.so  srx_grpc_client.go

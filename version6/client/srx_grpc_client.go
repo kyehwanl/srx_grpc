@@ -1,7 +1,7 @@
 package main
 
 /*
-#cgo CFLAGS: -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/../_inst/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/../extras/local/include
+#cgo CFLAGS: -g -Wall -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/../_inst/include/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/ -I/opt/project/gobgp_test/gowork/src/srx_grpc/version6/srx-server/src/../extras/local/include
 
 //#cgo LDFLAGS: /opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs/log.o -L/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -lgrpc_client_service -Wl,-rpath -Wl,/opt/project/gobgp_test/gowork/src/srx_grpc/srx/src/.libs -Wl,--unresolved-symbols=ignore-all
 
@@ -24,7 +24,7 @@ import (
 	"log"
 	"os"
 	"runtime"
-	pb "srx_grpc"
+	pb "srx_grpc_v6"
 	"sync"
 	"time"
 	"unsafe"
@@ -109,10 +109,12 @@ func InitWorkerPool() bool {
 func InitSRxGrpc(addr string) bool {
 
 	/* Disable Logging */
-	log.SetFlags(0)               // skip all formatting
-	log.SetOutput(ioutil.Discard) // using this as io.Writer to skip logging. To restore, use os.Stdout
-	g_std = os.Stdout             // backup for later use
-	os.Stdout = nil               // to suppress fmt.Print
+	/*
+		log.SetFlags(0)               // skip all formatting
+		log.SetOutput(ioutil.Discard) // using this as io.Writer to skip logging. To restore, use os.Stdout
+		g_std = os.Stdout             // backup for later use
+		os.Stdout = nil               // to suppress fmt.Print
+	*/
 
 	log.Printf("InitSRxGrpc Called \n")
 	conn, err := grpc.Dial(addr, grpc.WithInsecure())

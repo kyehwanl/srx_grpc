@@ -4,4 +4,4 @@ all:
 
 
 proto:
-	protoc -I=. --go_out=plugins=grpc:. ./srx_grpc.proto
+	protoc -I=. --go_out=plugins=grpc:. ./srx_grpc_v6.proto

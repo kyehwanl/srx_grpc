@@ -189,7 +189,8 @@ SRxProxy* createSRxProxy(ValidationReady   validationReadyCallback,
   proxy->socketConfig.succsessSend = 0;
 
   //setLogLevel(LEVEL_DEBUG);
-  setLogLevel(LEVEL_ERROR);
+  //setLogLevel(LEVEL_ERROR);
+  setLogLevel(LEVEL_INFO);
 
   // By default the socket is controlled internally
   proxy->externalSocketControl = false;
@@ -1403,7 +1404,7 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
                   int handshakeTimeout, bool externalSocketControl)
 {
 
-  LOG(LEVEL_INFO, "[SRx Client] Establish connection with proxy [%u]...", proxy->proxyID);
+  LOG(LEVEL_NOTICE, "[SRx Client] Establish connection with proxy [%u]...", proxy->proxyID);
   uint32_t noPeers    = 0; //proxy->peerAS.size;
   uint32_t length     = sizeof(SRXPROXY_HELLO) + (noPeers * 4);
   uint8_t  pdu[length];
@@ -1421,16 +1422,15 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   hdr->asn             = htonl(proxy->proxyAS);
   hdr->noPeers         = htonl(noPeers);
 
-  LOG(LEVEL_INFO, HDR "\nRequest Proxy Hello:\n");
+  LOG(LEVEL_NOTICE, HDR "\nRequest Proxy Hello:\n");
 
   LogLevel lv = getLogLevel();
-  LOG(LEVEL_INFO, HDR "srx client log Level: %d\n", lv);
-  if (lv >= LEVEL_INFO) {
+  printf(" ######### Log level: %d\n", lv);
+  LOG(LEVEL_NOTICE, HDR "srx client log Level: %d\n", lv);
+  if (lv >= LEVEL_NOTICE) {
     printHex(length, pdu);
   }
     
-  printHex(length, pdu);
-
   unsigned char result[sizeof(SRXPROXY_HELLO_RESPONSE)];
   //unsigned char result[12];
 
@@ -1444,8 +1444,8 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   unsigned char* pRes = tResp.r0;
   memcpy(result, pRes, sizeof(SRXPROXY_HELLO_RESPONSE));
 
-  LOG(LEVEL_INFO, HDR "\nResponse Proxy[ID:%d] Hello Response: \n", tResp.r1);
-  if (lv >= LEVEL_INFO) {
+  LOG(LEVEL_NOTICE, HDR "\nResponse Proxy[ID:%d] Hello Response: \n", tResp.r1);
+  if (lv >= LEVEL_NOTICE) {
     printHex(sizeof(SRXPROXY_HELLO_RESPONSE), result);
   }
   printf("------- hello response ----------\n");
@@ -1469,7 +1469,7 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   {
       connHandler->grpcClientID = ntohl(((SRXPROXY_HELLO_RESPONSE*)result)->proxyIdentifier);
       proxy->grpcClientEnable = true;
-      LOG(LEVEL_INFO, HDR "[SRx Client] grpc client id: %08x\n", connHandler->grpcClientID);
+      LOG(LEVEL_NOTICE, HDR "[SRx Client] grpc client id: %08x\n", connHandler->grpcClientID);
   }
 
   // following return value will be determined by calling (fn_packetHandler --> fn_dispatchPackets)
@@ -1493,7 +1493,7 @@ void verifyUpdate_grpc(SRxProxy* proxy, uint32_t localID,
                   IPPrefix* prefix, uint32_t as32,
                   BGPSecData* bgpsec, SRxASPathList asPathList)
 {
-  LOG(LEVEL_INFO, "[SRx Client] calling verify Update grpc  [%u]...", proxy->proxyID);
+  LOG(LEVEL_NOTICE, "[SRx Client] calling verify Update grpc  [proxyID:0x%x]...", proxy->proxyID);
   if (!isConnected(proxy))
   {
     RAISE_ERROR(HDR "Abort verify, not connected to SRx server!" ,
@@ -1540,11 +1540,11 @@ void verifyUpdate_grpc(SRxProxy* proxy, uint32_t localID,
 
   GoSlice verify_pdu = {(void*)pdu, (GoInt)length, (GoInt)length};
   //int32_t result = RunStream(verify_pdu);
-  printf("============== Run ProxyVerify calling (From Client)  ===============\n");
+  printf("============== Run ProxyVerify calling (From Client ProxyAPI)  ===============\n");
   printf("---- PDU (from create V4 request) --: \n");
   printHex(length, pdu);
   int32_t result = RunProxyVerify(verify_pdu, connHandler->grpcClientID);
-  //LOG(LEVEL_INFO, HDR "[SRx Client] Validation Result: %02x\n", result);
+  LOG(LEVEL_NOTICE, HDR "[SRx Client] Validation Result: %02x\n", result);
 
 }
 
@@ -1557,7 +1557,7 @@ bool callSRxGRPC_Init(const char* addr)
     gs_addr.n = strlen((const char*)addr);
 
     bool res = InitSRxGrpc(gs_addr);
-    LOG(LEVEL_INFO, HDR  "Init SRx GRPC result: %d \n", res);
+    LOG(LEVEL_NOTICE, HDR  "Init SRx GRPC result: %d \n", res);
 
     return res;
 }

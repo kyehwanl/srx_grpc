@@ -86,7 +86,7 @@ void processVerifyNotify_grpc(SRXPROXY_VERIFY_NOTIFICATION* hdr)
 
 void processGoodbye_grpc(SRXPROXY_GOODBYE* hdr)
 {
-    LOG(LEVEL_DEBUG, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
+    LOG(LEVEL_INFO, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
     SRxProxy* proxy = g_proxy;
 
     if (proxy)

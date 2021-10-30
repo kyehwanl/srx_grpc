@@ -9,7 +9,7 @@ Based version of source files, srx(srx-server) and qsrx(quagga-srx)
 
 
 
-2. Second Development Versions (Oct. 2021)
+2. Second Development Versions (Oct. 2021)  in ./repo/ directory
 
   (1) srx-server    : v0.6.1.0, ./srx-server-v6/ 
   (2) quagga-srx    : v0.6.0.0, ./quagga-srx-v6/ 

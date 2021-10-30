@@ -615,9 +615,13 @@ typedef struct {
     uint32_t proxyID;
 } StreamThreadData;
 
+// Imple GoStreamThread called for thread process
+//
 static void* GoodByeStreamThread(void *arg)
 {
     StreamThreadData *std = (StreamThreadData*)arg;
+  
+    LOG(LEVEL_INFO, HDR "Run Proxy Good Bye Stream", pthread_self());
     printf("Run Proxy Good Bye Stream \n");
     printf("[%s:%d] arguments proxy: %p, proxyID: %08x\n", __FUNCTION__, __LINE__, std->proxy, std->proxyID);
 
@@ -626,7 +630,8 @@ static void* GoodByeStreamThread(void *arg)
         sleep(1);
     }
 
-    char buff_goodbye_stream_request[8] = {0x02, 0x03, 0x84, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0c};
+    // This is dummy data for initiating stream operation to use grpc tranortation
+    char buff_goodbye_stream_request[12] = {0x02, 0x03, 0x84, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0c};
     /* 
       typedef struct {                           
         uint8_t   type;              // 2        
@@ -683,7 +688,8 @@ static void* StreamThread(void *arg)
         sleep(1);
     }
 
-    char buff_stream_request[8] = {0x02, 0x00, 0x00, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0c};
+    // This is dummy data for initiating stream operation to use grpc tranortation
+    char buff_stream_request[12] = {0x02, 0x00, 0x00, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0c};
     GoSlice stream_pdu = {(void*)buff_stream_request, (GoInt)12, (GoInt)12};
     int result = RunProxyStream (stream_pdu, std->proxyID);
 

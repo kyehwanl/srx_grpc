@@ -38,8 +38,8 @@ gcc -DHAVE_CONFIG_H  -fPIC -shared -g  -o .libs/libgrpc_service.so server/grpc_s
         -I/opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/../_inst/include
 /usr/bin/libtool --tag=CC   --mode=link   gcc -DHAVE_CONFIG_H  -o libgrpc_service.la grpc_service.lo -rpath `pwd`/.libs \ 
         -L/opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/src/.libs/ -lsrx_util
-/usr/bin/libtool --tag=CC   --mode=install cp libgrpc_service.la $GOPATH/src/srx_grpc_v6/_inst/lib64
-/usr/bin/libtool --tag=CC   --finish $GOPATH/src/srx_grpc_v6/_inst/lib64
+/usr/bin/libtool --tag=CC   --mode=install cp libgrpc_service.la ${GOPATH}/src/srx_grpc_v6/_inst/lib64
+/usr/bin/libtool --tag=CC   --finish ${GOPATH}/src/srx_grpc_v6/_inst/lib64
 
 
 
@@ -57,5 +57,7 @@ gcc -DHAVE_CONFIG_H -fPIC -shared -g -o .libs/libgrpc_client_service.so client/g
         -I/opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/src/../extras/local/include \
         -I/opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/../_inst/include
 /usr/bin/libtool --tag=CC   --mode=link   gcc -DHAVE_CONFIG_H  -o libgrpc_client_service.la grpc_client_service.lo -rpath `pwd`/.libs 
-/usr/bin/libtool --tag=CC   --mode=install cp libgrpc_client_service.la $GOPATH/src/srx_grpc_v6/_inst/lib64
-/usr/bin/libtool --tag=CC   --finish $GOPATH/src/srx_grpc_v6/_inst/lib64
+/usr/bin/libtool --tag=CC   --mode=install cp libgrpc_client_service.la ${GOPATH}/src/srx_grpc_v6/_inst/lib64
+/usr/bin/libtool --tag=CC   --finish ${GOPATH}/src/srx_grpc_v6/_inst/lib64
+
+

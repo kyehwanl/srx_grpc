@@ -58,6 +58,7 @@ type StreamData struct {
 
 var chGbsData chan StreamData
 var chProxyStreamData chan StreamData
+var chDoneHello chan bool
 
 //export cb_proxy
 func cb_proxy(f C.int, v unsafe.Pointer) {
@@ -98,7 +99,7 @@ func cb_proxyStream(f C.int, v unsafe.Pointer) {
 		length: uint8(f),
 	}
 	log.Printf("channel callback message: %#v\n", m)
-
+	log.Printf("Feeding Sync Request data \n", m)
 	chProxyStreamData <- m
 
 }
@@ -257,6 +258,7 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 }
 
 func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb.ProxyHelloResponse, error) {
+	defer close(chDoneHello)
 	//data := uint32(0x07)
 	//C.setLogLevel(0x07)
 	log.Printf("++ [grpc server] server: %#v\n", pdu)
@@ -355,6 +357,8 @@ func (s *Server) ProxyGoodByeStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyGo
 				}
 			} else {
 				log.Printf("++ [grpc server][ProxyGoodByeStream] Channel Closed\n")
+				// TODO: instead of nil, it should have error value returned
+				//		How To define Error ?
 				return nil
 			}
 		}
@@ -390,12 +394,18 @@ func (s *Server) ProxyStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyStreamSer
 					Length: uint32(len(m.data)),
 				}
 
+				log.Printf("++ [grpc server][ProxyStream] Waiting for Proxy Hello finished ... \n", m)
+				<-chDoneHello
+
+				log.Printf("++ [grpc server][ProxyStream] Sending sync request data to client proxy ...\n")
 				if err := stream.Send(&resp); err != nil {
 					log.Printf("send error %v", err)
 					return err
 				}
 			} else {
 				log.Printf("++ [grpc server][ProxyGoodByeStream] Channel Closed\n")
+				// TODO: instead of nil, it should have error value returned
+				//		How To define Error ?
 				return nil
 			}
 		}
@@ -518,6 +528,7 @@ func Serve() {
 	// NOTE: here init handling
 	chGbsData = make(chan StreamData) // channel for Proxy GoodbyteStream
 	chProxyStreamData = make(chan StreamData)
+	chDoneHello = make(chan bool) // channel make sync request wait for Proxy hello finished
 
 	flag.Parse()
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))

@@ -5,6 +5,11 @@
 #include "server/command_handler.h"
 
 #define HDR  "(GRPC_ServiceHandler): "
+static void _processDeleteUpdate_grpc(unsigned char *data, RET_DATA *rt, unsigned int grpcClientID);
+static void _processUpdateSigning_grpc(unsigned char *data, RET_DATA *rt, unsigned int grpcClientID);
+static bool processValidationRequest_grpc(unsigned char *data, RET_DATA *rt, unsigned int grpcClientID);
+static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt);
+static bool sendSynchRequest_grpc();
 
 
 __attribute__((always_inline)) inline void printHex(int len, unsigned char* buff) 
@@ -119,9 +124,19 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
       cthread->initialized = true;
 
 
-    // TODO: send goodbye in case there is error 
+    // This proxy hello function is not stream function, so first it needs to respond
+    // with Hello REsponse value and later have to send 'send sync request' if applicable
+    // In order to do that, send SyncRequest_grpc function should enable some sort of queuing 
+    // mechanism to store 'sync request'
     //
-    // TODO: sendSynchRequest(item->serverSocket, item->client, false))
+    // NOTE : sendSynchRequest  (command_handler.c:307)
+    /*
+    if (grpcServiceHandler.cmdHandler->sysConfig->syncAfterConnEstablished)
+        sendSynchRequest_grpc();
+    */
+
+    
+    // TODO: send goodbye in case there is error 
 
   }
 
@@ -638,6 +653,22 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
 
 
 
+static bool sendSynchRequest_grpc()
+{
+  bool retVal = true;
+  uint32_t length = sizeof(SRXPROXY_SYNCH_REQUEST);
+  SRXPROXY_SYNCH_REQUEST* pdu = malloc(length);
+  memset(pdu, 0, length);
+
+  pdu->type      = PDU_SRXPROXY_SYNC_REQUEST;
+  pdu->length    = htonl(length);
+
+
+  // call cb proxyStream callback function
+  cb_proxyStream(length, pdu);
+  free(pdu);
+
+}
 
 
 

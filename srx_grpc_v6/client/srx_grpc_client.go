@@ -421,7 +421,7 @@ func RunProxyStream(data []byte, grpcClientID uint32) uint32 {
 	    PDU_SRXPROXY_SIGN_NOTIFICATION and so on
 	*/
 
-	//fmt.Printf("+ [grpc client] Stream function Started : input parameter: %#v \n", data)
+	log.Printf("+ [grpc client] Stream function Started : input parameter: %#v \n", data)
 	cli := client.cli
 	stream, err := cli.ProxyStream(context.Background(), &pb.PduRequest{Data: data, Length: uint32(len(data))})
 	ctx := stream.Context()

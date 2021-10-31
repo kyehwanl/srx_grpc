@@ -645,7 +645,7 @@ static void* GoodByeStreamThread(void *arg)
     GoSlice goodbye_stream_pdu = {(void*)buff_goodbye_stream_request, (GoInt)12, (GoInt)12};
     int result = RunProxyGoodByeStream (goodbye_stream_pdu, std->proxyID);
 
-    printf("Run Proxy Good Bye Stream terminated \n");
+    printf("Run Proxy Good Bye Stream terminated with result value: %d\n", result);
     
 
     // XXX: here general closure procedures by receiving GoodBye
@@ -676,6 +676,10 @@ typedef struct {
   BGPSECValResData bgpsecResData;                         
 } __attribute__((packed)) SRXPROXY_SIGNATURE_NOTIFICATION;
 */
+
+
+//
+// This function for Proxy SyncRequest, Sign Notification and so on
 //
 static void* StreamThread(void *arg)
 {

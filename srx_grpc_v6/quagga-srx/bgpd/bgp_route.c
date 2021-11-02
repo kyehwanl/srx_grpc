@@ -81,6 +81,7 @@ extern void handleSRxSignatures(SRxUpdateID* updateID, BGPSecData* data,
                                 void* bgpRouter);
 extern void handleSRxSynchRequest(void* bgpRouter);
 int respawnReceivePacket(struct thread *t);
+int respawn_grpc_init(struct thread *t);
 struct thread *g_current_read_thread;
 
 struct SRxThread* srx_thread_arg_new(void)
@@ -229,26 +230,71 @@ int respawnReceivePacket(struct thread *t)
     // connection error
     if (!bRetVal)
     {
-	if(g_current_read_thread)
-	{
-  	  thread_cancel(g_current_read_thread);
-	  zlog_debug ("[%s] read thread cancel ", __FUNCTION__);
-	}
-	rq->t_read = thread_add_timer (bm->master, checkClientConnection, rq,
-                                 RETRY_TIMER_SEC); // every 10 sec, try again
+      if(g_current_read_thread)
+      {
+        thread_cancel(g_current_read_thread);
+        zlog_debug ("[%s] read thread cancel ", __FUNCTION__);
+      }
+      rq->t_read = thread_add_timer (bm->master, checkClientConnection, rq,
+          RETRY_TIMER_SEC); // every 10 sec, try again
 
-	//
-	// TODO: after a certain amount time or try, clean up client connection
-	//
+      //
+      // TODO: after a certain amount time or try, clean up client connection
+      //
     }
     else
     {
       rq->t_read = thr = thread_add_read (bm->master, respawnReceivePacket, rq,
-                                          clientFD);
+          clientFD);
       g_current_read_thread = thr;
     }
     return 0;
 }
+
+#ifdef USE_GRPC
+int respawn_grpc_init(struct thread *t)
+{
+    zlog_debug("respawn_grpc_init called");
+    struct SRxThread *rq;
+    bool bRetVal = true;
+    rq = (struct SRxThread *)THREAD_ARG(t);
+    rq->t_read = NULL;
+    SRxProxy* srxProxy = rq->proxy;
+
+    bRetVal = grpc_init(srxProxy, ((SRxProxy*)(rq->proxy))->proxyID);
+
+    if (!bRetVal)
+    {
+      rq->t_read = thread_add_timer (bm->master, respawn_grpc_init, rq,
+          RETRY_TIMER_SEC/2); // every 10 sec, try again
+    }
+    else
+    {
+        
+      struct bgp* bgp = bgp_get_default();
+      bool connected = false;
+
+      if (srxProxy->grpcConnectionInit && !srxProxy->grpcClientEnable)
+      {
+        connected = connectToSRx_grpc(srxProxy, bgp->srx_host, bgp->srx_port,
+            bgp->srx_handshakeTimeout, false);  
+
+        if (connected)
+        {
+          if ( CHECK_FLAG(bgp->srx_config, SRX_CONFIG_EVAL_PATH_DISTR))
+            zlog_info ("\033[92m""Enabled Distributed Evaluation on SRx server <GRPC>""\033[0m" );
+        }
+      }
+      
+      // add timer queue for checking reconnect
+      // same as check Client connection
+      rq->t_read = thread_add_timer (bm->master, respawn_grpc_init, rq,
+          RETRY_TIMER_SEC/2); // every 10 sec, try again
+    }
+
+    return 0;
+}
+#endif
 
 int initUnSocket(struct thread *t)
 {

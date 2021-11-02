@@ -98,8 +98,8 @@ func cb_proxyStream(f C.int, v unsafe.Pointer) {
 		data:   b,
 		length: uint8(f),
 	}
-	log.Printf("channel callback message: %#v\n", m)
-	log.Printf("Feeding Sync Request data \n", m)
+	log.Printf("++ [grpc server][cb_proxyStream] channel callback message: %#v\n", m)
+	log.Printf("++ [grpc server][cb_proxyStream] Feeding Sync Request data \n")
 	chProxyStreamData <- m
 
 }
@@ -258,13 +258,15 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 }
 
 func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb.ProxyHelloResponse, error) {
-	defer close(chDoneHello)
+	defer func() {
+		chDoneHello <- true
+	}()
 	//data := uint32(0x07)
 	//C.setLogLevel(0x07)
 	log.Printf("++ [grpc server] server: %#v\n", pdu)
 	log.Println("++ [grpc server] calling SRxServer server:ProxyHello()")
 
-	log.Printf("++ [grpc server] input :  %#v\n", pdu.Type)
+	log.Printf("++ [grpc server] input type :  %#v\n", pdu.Type)
 	log.Printf("++ [grpc server] ProxyHelloRequest (size:%d): %#v \n", C.sizeof_SRXPROXY_HELLO, pdu)
 
 	/* serialize */
@@ -388,13 +390,13 @@ func (s *Server) ProxyStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyStreamSer
 		select {
 		case m, ok := <-chProxyStreamData:
 			if ok {
-				log.Printf("channel event message : %#v\n", m)
+				log.Printf("++ [grpc server][ProxyStream] channel event message : %#v\n", m)
 				resp := pb.PduResponse{
 					Data:   m.data,
 					Length: uint32(len(m.data)),
 				}
 
-				log.Printf("++ [grpc server][ProxyStream] Waiting for Proxy Hello finished ... \n", m)
+				log.Printf("++ [grpc server][ProxyStream] Waiting for Proxy Hello finished ... \n")
 				<-chDoneHello
 
 				log.Printf("++ [grpc server][ProxyStream] Sending sync request data to client proxy ...\n")

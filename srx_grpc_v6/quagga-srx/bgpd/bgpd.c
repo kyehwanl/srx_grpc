@@ -81,6 +81,8 @@ void handleSRxSynchRequest(void* bgpRouter);
 void handleSRxMessages(SRxProxyCommCode mainCode, int subCode, void* userPtr);
 void srx_set_default(struct bgp *bgp);
 int respawnReceivePacket(struct thread *t);
+int respawn_grpc_init(struct thread *t);
+bool grpc_init (SRxProxy* proxy, uint32_t proxyID);
 #endif /* USE_SRX */
 
 /* BGP process wide configuration.  */
@@ -627,15 +629,41 @@ int srx_connect_proxy(struct bgp *bgp)
   if (g_rq != NULL)
   {
 #ifdef USE_GRPC
-    connected = connectToSRx_grpc(bgp->srxProxy, bgp->srx_host, bgp->srx_port,
-        bgp->srx_handshakeTimeout, false);  
-
-    if (connected)
+    g_rq->proxy = bgp->srxProxy;
+    if (bgp->srxProxy->grpcConnectionInit)
     {
-      if ( CHECK_FLAG(bgp->srx_config, SRX_CONFIG_EVAL_PATH_DISTR))
-        zlog_info ("\033[92m""Enabled Distributed Evaluation on SRx server <GRPC>""\033[0m" );
+      connected = connectToSRx_grpc(bgp->srxProxy, bgp->srx_host, bgp->srx_port,
+          bgp->srx_handshakeTimeout, false);  
+
+      if (connected)
+      {
+        if ( CHECK_FLAG(bgp->srx_config, SRX_CONFIG_EVAL_PATH_DISTR))
+          zlog_info ("\033[92m""Enabled Distributed Evaluation on SRx server <GRPC>""\033[0m" );
+      }
     }
-    // TODO: XXX GRPC XXX - consider the way of respawning like the one  below using tcp socket
+    else
+    {
+      zlog_err ("Could not connect to SRx server at %s:%d, check if server(grpc) is "
+                "running", bgp->srx_host, bgp->srx_port);
+
+#if 1
+      // TODO: XXX GRPC XXX - consider the way of respawning like the one  below using tcp socket
+      //
+      // thread add_read uses a socket file descriptor 
+      // So, need to have another quagga timer such as thread_add_timer
+      //
+      // Necessary functions - 
+      //      1. grpc_init(bgp->srxProxy, bgp->srx_proxyID); - bgpd.c::srx_default_set
+      //          1.1 just dialing with grpc port is ok ??
+      //
+      //      2. checkClientConnection - bgp_route.c ?? --> possibly no
+      //
+
+      // t_read is thread, who has event function and times etc (defined in lib/thread.h)
+       g_rq->t_read = thread_add_timer(bm->master, respawn_grpc_init, g_rq, 5); // retry timer 5 sec
+
+#endif
+    }
 
 #else
     // The last parameter (true) stands for external socket control
@@ -6704,16 +6732,25 @@ bgp_init (void)
 extern SRxProxy *g_proxy;
 extern void ImpleGoStreamThread (SRxProxy* proxy, uint32_t proxyID);
 
-void grpc_init (SRxProxy* proxy, uint32_t proxyID)
+bool grpc_init (SRxProxy* proxy, uint32_t proxyID)
 {
     // calling to initialize GRPC on libSRxProxy
     bool initResult = callSRxGRPC_Init("localhost:50000"); 
-    printf("proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%d]\n", proxy, proxyID, initResult);
+    zlog_debug ("[grpc_init ] proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%d]\n", proxy, proxyID, initResult);
+    printf ("[grpc_init ] proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%d]\n", proxy, proxyID, initResult);
 
+    if (!initResult)
+    {
+      zlog_debug ("[grpc_init ] grpc call fail\n");
+      return false; 
+    }
+
+    proxy->grpcConnectionInit = true;
     g_proxy = proxy;
 
     // NOTE: here some stream server threads
     ImpleGoStreamThread(proxy, proxyID);
+    return true;
 }
 #endif /* USE_GRPC */
 

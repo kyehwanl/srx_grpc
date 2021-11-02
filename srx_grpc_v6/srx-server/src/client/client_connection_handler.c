@@ -567,7 +567,7 @@ bool sendGoodbye(ClientConnectionHandler* self, uint16_t keepWindow)
   SRXPROXY_GOODBYE* hdr = (SRXPROXY_GOODBYE*)pdu;
   memset(pdu, 0, length);
 
-  LOG(LEVEL_DEBUG, HDR" send Goodbye! called" );
+  LOG(LEVEL_DEBUG, HDR" send Goodbye! called", pthread_self());
   hdr->type       = PDU_SRXPROXY_GOODBYE;
   hdr->keepWindow = htons(keepWindow);
   hdr->length     = htonl(length);
@@ -596,13 +596,13 @@ bool sendGoodbye_grpc(ClientConnectionHandler* self, uint16_t keepWindow)
   SRXPROXY_GOODBYE* hdr = (SRXPROXY_GOODBYE*)pdu;
   memset(pdu, 0, length);
 
-  LOG(LEVEL_DEBUG, HDR" send Goodbye! called" );
+  LOG(LEVEL_INFO, HDR"+ send Goodbye! called", pthread_self() );
   hdr->type       = PDU_SRXPROXY_GOODBYE;
   hdr->keepWindow = htons(keepWindow);
   hdr->length     = htonl(length);
 
-  printf("\n\nsend Goodbye! called\n\n");
-  printf("+ [%s] :%d \n", __FUNCTION__, __LINE__);
+  LOG(LEVEL_INFO, HDR"+ send Goodbye! called", pthread_self());
+  LOG(LEVEL_INFO, HDR"+ [%s] :%d \n", pthread_self(), __FUNCTION__, __LINE__);
 
   RunProxyGoodBye(*hdr, self->grpcClientID);
   self->established = false;
@@ -649,36 +649,12 @@ static void* GoodByeStreamThread(void *arg)
     
 
     // XXX: here general closure procedures by receiving GoodBye
+    //  relase proxy function is blocked, because reconnect function needs to have the proxy pointer,
+    //  so it should not be removed inside release SRxProxy ()
     //
-    releaseSRxProxy(std->proxy);
+    //releaseSRxProxy(std->proxy);
 }
 
-//
-// for dealing with PDU_SRXPROXY_SYNC_REQUEST, 
-//    PDU_SRXPROXY_SIGN_NOTIFICATION and so on
-/*
-typedef struct {                                 
-  uint8_t     type;            // type: 10             
-  uint16_t    reserved16;                        
-  uint8_t     reserved8;                         
-  uint32_t    zero32;                            
-  uint32_t    length;          // 12 Bytes       
-} __attribute__((packed)) SRXPROXY_SYNCH_REQUEST;
-
-typedef struct {                                          
-  uint8_t          type;            // 7                  
-  uint16_t         reserved16;                            
-  uint8_t          reserved8;                             
-  uint32_t         zero32;                                
-  uint32_t         length;          
-  uint32_t         updateIdentifier;                      
-  uint32_t         bgpsecLength;     // 20(+) Bytes                             
-  BGPSECValResData bgpsecResData;                         
-} __attribute__((packed)) SRXPROXY_SIGNATURE_NOTIFICATION;
-*/
-
-
-//
 // This function for Proxy SyncRequest, Sign Notification and so on
 //
 static void* StreamThread(void *arg)
@@ -687,9 +663,9 @@ static void* StreamThread(void *arg)
     printf("Run Proxy Stream \n");
     printf("[%s:%d] arguments proxy: %p, proxyID: %08x\n", __FUNCTION__, __LINE__, std->proxy, std->proxyID);
 
-    while(!std->proxy->grpcClientEnable)
+    //while(!std->proxy->grpcClientEnable)
     {
-        sleep(1);
+     //   sleep(1);
     }
 
     // This is dummy data for initiating stream operation to use grpc tranortation
@@ -751,6 +727,8 @@ void ImpleGoStreamThread (SRxProxy* proxy, uint32_t proxyID)
     }
     printf("+ General Purpose Stream Thread created \n");
     pthread_join(tid3, NULL);
+    
+    printf("+ All Go Stream Threads Terminated \n");
 }
 
 
@@ -778,7 +756,7 @@ bool reconnectSRX(ClientConnectionHandler* self)
   bool retVal = false;
   SRxProxy* proxy = (SRxProxy*)self->srxProxy;
 
-  LOG (LEVEL_DEBUG, "([0x%08X]) > Client Connection Handler Thread started!",
+  LOG (LEVEL_INFO, "([0x%08X]) > Client Connection Handler Thread started!",
                      pthread_self());
   
   if (self->initialized && !self->stop)

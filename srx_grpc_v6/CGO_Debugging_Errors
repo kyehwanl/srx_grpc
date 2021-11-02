@@ -125,3 +125,25 @@ Debigging Errors
 
 
 
+
+4. Development with SyncRequest
+
+(1) Hello Response후에 SyncRequest를 server가 하게 되는데, 
+  이때 sync request를 서버에서 클라이언트에게 보내게 되는데,  
+  전제 조건중에 client에서 처음에 불려졌어야 될 RunProxyStream()이 불려지지 않았다
+  그래서 deadlock상태가 지속된다
+
+
+  grpc context는 goroutine이나 thread로 병렬로 호출할수 없는가?
+
+
+
+
+
+
+
+
+
+
+
+

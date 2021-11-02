@@ -103,6 +103,8 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
 
 
     /* Send Hello Response */
+    LOG (LEVEL_INFO, HDR " [SRx server] send Hello Response");
+
     bool retVal = true;
     uint32_t length = sizeof(SRXPROXY_HELLO_RESPONSE);
     SRXPROXY_HELLO_RESPONSE* pdu = malloc(length);
@@ -130,10 +132,10 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
     // mechanism to store 'sync request'
     //
     // NOTE : sendSynchRequest  (command_handler.c:307)
-    /*
+#if 1
     if (grpcServiceHandler.cmdHandler->sysConfig->syncAfterConnEstablished)
         sendSynchRequest_grpc();
-    */
+#endif
 
     
     // TODO: send goodbye in case there is error 
@@ -539,11 +541,8 @@ static void _processPeerChange_grpc(unsigned char *data, RET_DATA *rt, unsigned 
 RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
 {
     printf("response GRPC call\n");
-    printf(" ---- received data ----\n");
-    printHex(size, data);
-    printf(" -----------------------\n");
     setLogLevel(LEVEL_INFO);
-    LOG(LEVEL_INFO, HDR "[SRx server] [%s] calling - size: %d, grpcClient ID: %02x  \n", __FUNCTION__, size, grpcClientID);
+    LOG(LEVEL_INFO, HDR "[SRx server] [%s] calling - size: %d, grpcClient ID: %02x", __FUNCTION__, size, grpcClientID);
 
     /*
     bool ret = _isSet(0x03, 0x01);
@@ -551,10 +550,12 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
     */
 
     LogLevel lv = getLogLevel();
-    LOG(LEVEL_INFO, HDR "srx server log Level: %d\n", lv);
+    LOG(LEVEL_INFO, HDR "srx server log Level: %d", lv);
 
     if (lv >= LEVEL_INFO) {
+      printf(" ---- received data ----\n");
       printHex(size, data);
+      printf(" -----------------------\n");
     }
 
     RET_DATA rt;
@@ -578,7 +579,6 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
     uint8_t pdu[length];                            
     SRXPROXY_GOODBYE* hdr = (SRXPROXY_GOODBYE*)pdu; 
 
-    printf("======= [SRx server][responseGRPC] ---- in front of switch\n");
     switch (bhdr->type)
     {                   
       case PDU_SRXPROXY_HELLO:
@@ -645,7 +645,8 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
         LOG(LEVEL_INFO, HDR "GoodBye!", pthread_self());
     }
 
-    printf("======= [SRx server][responseGRPC] ---- final Return data \n");
+    printf("======= [SRx server][responseGRPC] ======= \n "
+        " final Return data which will be sent to the client\n");
     printHex(rt.size, rt.data);
     return rt;
 }
@@ -654,6 +655,7 @@ RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
 
 
 static bool sendSynchRequest_grpc()
+//static bool sendSynchRequest_grpc(proxy, grpc id ...etc)
 {
   bool retVal = true;
   uint32_t length = sizeof(SRXPROXY_SYNCH_REQUEST);

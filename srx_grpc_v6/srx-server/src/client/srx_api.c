@@ -188,15 +188,19 @@ SRxProxy* createSRxProxy(ValidationReady   validationReadyCallback,
   proxy->socketConfig.resetSendErrors = 1000;
   proxy->socketConfig.succsessSend = 0;
 
-  //setLogLevel(LEVEL_DEBUG);
+  setLogLevel(LEVEL_DEBUG);
   //setLogLevel(LEVEL_ERROR);
-  setLogLevel(LEVEL_INFO);
+  //setLogLevel(LEVEL_INFO);
 
   // By default the socket is controlled internally
   proxy->externalSocketControl = false;
 
   // initialize the connection handler
   proxy->connHandler = createClientConnectionHandler(proxy);
+
+  // grpc connections
+  proxy->grpcClientEnable = false;
+  proxy->grpcConnectionInit = false;
 
   return proxy;
 }
@@ -517,6 +521,9 @@ bool disconnectFromSRx(SRxProxy* proxy, uint16_t keepWindow)
       {
           sendGoodbye_grpc(connHandler, keepWindow);
           connHandler->grpcClientID = 0;
+          proxy->grpcClientEnable = false;
+          proxy->grpcConnectionInit = false;
+          
       }
       else
           sendGoodbye(connHandler, keepWindow);
@@ -580,11 +587,11 @@ bool reconnectWithSRx(SRxProxy* proxy)
 
   if(reConnected)
   {
-    LOG(LEVEL_DEBUG, HDR " %s: success", __FUNCTION__);
+    LOG(LEVEL_INFO, HDR " %s: success", __FUNCTION__);
   }
   else
   {
-    LOG(LEVEL_DEBUG, HDR " %s: failure", __FUNCTION__);
+    LOG(LEVEL_INFO, HDR " %s: failure", __FUNCTION__);
   }
 
   return reConnected;
@@ -1404,14 +1411,14 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
                   int handshakeTimeout, bool externalSocketControl)
 {
 
-  LOG(LEVEL_NOTICE, "[SRx Client] Establish connection with proxy [%u]...", proxy->proxyID);
+  LOG(LEVEL_INFO, "[SRx Client] Establish connection with proxyID [0x%x]...", proxy->proxyID);
   uint32_t noPeers    = 0; //proxy->peerAS.size;
   uint32_t length     = sizeof(SRXPROXY_HELLO) + (noPeers * 4);
   uint8_t  pdu[length];
   SRXPROXY_HELLO* hdr = (SRXPROXY_HELLO*)pdu;
   uint32_t peerASN    = 0;
   uint32_t* peerAS    = NULL;
-  printf("========= proxy hello size: %d leng: %d ====== \n", sizeof(SRXPROXY_HELLO), length );
+  printf("[SRx Client] ========= proxy hello size: %d leng: %d ====== \n", sizeof(SRXPROXY_HELLO), length );
 
   memset(pdu, 0, length);
 
@@ -1422,11 +1429,10 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
   hdr->asn             = htonl(proxy->proxyAS);
   hdr->noPeers         = htonl(noPeers);
 
-  LOG(LEVEL_NOTICE, HDR "\nRequest Proxy Hello:\n");
+  LOG(LEVEL_INFO, HDR "[SRx Client] Request Proxy Hello:");
 
   LogLevel lv = getLogLevel();
-  printf(" ######### Log level: %d\n", lv);
-  LOG(LEVEL_NOTICE, HDR "srx client log Level: %d\n", lv);
+  LOG(LEVEL_NOTICE, HDR "[SRx Client] srx client log Level : %d (set from createSRxProxy)\n", lv);
   if (lv >= LEVEL_NOTICE) {
     printHex(length, pdu);
   }
@@ -1440,16 +1446,17 @@ bool connectToSRx_grpc(SRxProxy* proxy, const char* host, int port,
 
   GoSlice gopdu = {(void*)buf_data, (GoInt)size, (GoInt)size};
   //result = Run(gopdu);
+  //printf(" ---- sleep 5 sec delaying hello request \n");
+  //sleep(5);
   struct RunProxyHello_return tResp = RunProxyHello(gopdu);
   unsigned char* pRes = tResp.r0;
   memcpy(result, pRes, sizeof(SRXPROXY_HELLO_RESPONSE));
 
-  LOG(LEVEL_NOTICE, HDR "\nResponse Proxy[ID:%d] Hello Response: \n", tResp.r1);
+  printf("------- [SRx Client](srx_api.c :: connectToSRx grpc) hello response ----------\n");
+  LOG(LEVEL_NOTICE, HDR "[SRx Client] Response Proxy[ID:%d] Hello Response: ", tResp.r1);
   if (lv >= LEVEL_NOTICE) {
     printHex(sizeof(SRXPROXY_HELLO_RESPONSE), result);
   }
-  printf("------- hello response ----------\n");
-  printHex(sizeof(SRXPROXY_HELLO_RESPONSE), result);
 
   ClientConnectionHandler* connHandler =
                                    (ClientConnectionHandler*)proxy->connHandler;
@@ -1556,8 +1563,8 @@ bool callSRxGRPC_Init(const char* addr)
     };
     gs_addr.n = strlen((const char*)addr);
 
-    bool res = InitSRxGrpc(gs_addr);
-    LOG(LEVEL_NOTICE, HDR  "Init SRx GRPC result: %d \n", res);
+    bool res = InitSRxGrpc(gs_addr); // res:0 failure to connect, res:1 success to connect
+    LOG(LEVEL_NOTICE, HDR  "Init SRx GRPC result: %d (0: fail, 1:sucess) \n", res);
 
     return res;
 }

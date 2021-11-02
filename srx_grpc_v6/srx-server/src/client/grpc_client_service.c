@@ -146,14 +146,14 @@ void processGoodbye_grpc(SRXPROXY_GOODBYE* hdr)
 
 void processSyncRequest_grpc(SRXPROXY_SYNCH_REQUEST* hdr)
 {
-    LOG(LEVEL_INFO, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
+    LOG(LEVEL_INFO, HDR "++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
     SRxProxy* proxy = g_proxy;
 
     if (proxy)
     {
         if (proxy->syncNotification != NULL)
         {
-            proxy->syncNotification(proxy->userPtr);
+            proxy->syncNotification(proxy->userPtr);  // call --> handleSRxSynchRequest()
         }
         else
         {

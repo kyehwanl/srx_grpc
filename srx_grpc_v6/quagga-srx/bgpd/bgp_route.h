@@ -254,6 +254,9 @@ extern void verify_update (struct bgp *bgp, struct bgp_info *info,
 extern int  srx_calc_validation_state(struct bgp *, struct bgp_info *);
 struct SRxThread* srx_thread_arg_new(void);
 int checkClientConnection(struct thread *t);
+#ifdef USE_GRPC
+int checkClientConnection_grpc(struct thread *t);
+#endif /* USE_GRPC */
 int initUnSocket(struct thread *t);
 int checkSendQueue(struct thread *t);
 void threadControlCall(int type);

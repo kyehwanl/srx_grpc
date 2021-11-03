@@ -254,26 +254,27 @@ int respawnReceivePacket(struct thread *t)
 #ifdef USE_GRPC
 int respawn_grpc_init(struct thread *t)
 {
-    zlog_debug("respawn_grpc_init called");
-    struct SRxThread *rq;
-    bool bRetVal = true;
-    rq = (struct SRxThread *)THREAD_ARG(t);
-    rq->t_read = NULL;
-    SRxProxy* srxProxy = rq->proxy;
+  //zlog_debug("respawn_grpc_init called");
 
+  struct SRxThread *rq;
+  struct thread *thr=NULL;
+  rq = (struct SRxThread *)THREAD_ARG(t);
+  rq->t_read = NULL;
+  SRxProxy* srxProxy = rq->proxy;
+
+  bool bRetVal = true;
+  struct bgp* bgp = bgp_get_default();
+  bool connected = false;
+
+  static int siMaxReconnect = 0;
+
+
+  if (!srxProxy->grpcConnectionInit)
+  {
+    // TODO: max number attempt variables are needed here
     bRetVal = grpc_init(srxProxy, ((SRxProxy*)(rq->proxy))->proxyID);
-
-    if (!bRetVal)
+    if (bRetVal)
     {
-      rq->t_read = thread_add_timer (bm->master, respawn_grpc_init, rq,
-          RETRY_TIMER_SEC/2); // every 10 sec, try again
-    }
-    else
-    {
-        
-      struct bgp* bgp = bgp_get_default();
-      bool connected = false;
-
       if (srxProxy->grpcConnectionInit && !srxProxy->grpcClientEnable)
       {
         connected = connectToSRx_grpc(srxProxy, bgp->srx_host, bgp->srx_port,
@@ -284,13 +285,54 @@ int respawn_grpc_init(struct thread *t)
           if ( CHECK_FLAG(bgp->srx_config, SRX_CONFIG_EVAL_PATH_DISTR))
             zlog_info ("\033[92m""Enabled Distributed Evaluation on SRx server <GRPC>""\033[0m" );
         }
+      } // end of if 'connected'
+    } 
+    else
+    {
+      if(siMaxReconnect >= NUM_MAX_RECONNECT )
+      {
+        if (bgp == NULL)
+        {
+          return 0;
+        }
+
+        zlog_debug (" srx unset() bgp info hash finish() and releaseSRxProxy()");
+        bgp_srx_unset(bgp);
+        siMaxReconnect =0;
+        //bgp_info_hash_finish (&bgp->info_hash);
+        if (bgp->srxProxy)
+        {
+          releaseSRxProxy (bgp->srxProxy);
+        }
+        if(thr)
+        {
+          thread_cancel(thr);
+        }
+
+        zlog_debug (" srx set default again");
+        srx_set_default(bgp);
       }
-      
-      // add timer queue for checking reconnect
-      // same as check Client connection
-      rq->t_read = thread_add_timer (bm->master, respawn_grpc_init, rq,
-          RETRY_TIMER_SEC/2); // every 10 sec, try again
-    }
+      siMaxReconnect++;
+    } // end of if (bRet Val)
+  } // end grpc_ConnectionInit
+
+  rq->t_read = thr =  thread_add_timer (bm->master, respawn_grpc_init, rq,
+      RETRY_TIMER_SEC/2); // every 10 sec, try again
+
+  return 0;
+}
+
+int checkClientConnection_grpc(struct thread *t)
+{
+    zlog_debug (" %s called", __FUNCTION__);
+    struct thread *thr=NULL;
+    struct SRxThread *rq;
+    
+    rq = (struct SRxThread *)THREAD_ARG(t);
+    rq->t_read = NULL;
+
+    struct bgp* bgp = bgp_get_default();
+
 
     return 0;
 }
@@ -3456,6 +3498,7 @@ void verify_update (struct bgp *bgp, struct bgp_info *info,
     bgp_info_register (bgp->info_lid_hash, info, info->localID);
   }
 
+  zlog_debug ("isConnected (bgp->srxProxy): %d \n", isConnected (bgp->srxProxy));
   // Now let proxy change it if necessary
   // Also check if connectionHanlder->established (connHandler[1])
   // bool type must not be zero
@@ -3527,7 +3570,8 @@ void verify_update (struct bgp *bgp, struct bgp_info *info,
         asPathList.segments = (ASSEGMENT*)calloc(asPathList.length, sizeof(ASSEGMENT));
             
         zlog_debug ("[ ASPA ] AS PathList Info - AS Length: %d  Type: %s  AS relationship: %s", 
-                asPathList.length, asPathList.asType==2 ? "AS_SEQUENCE": (asPathList.asType==1 ? "AS_SET": "ETC"), 
+                asPathList.length, 
+                asPathList.asType==2 ? "AS_SEQUENCE": (asPathList.asType==1 ? "AS_SET": "ETC"), 
                 asPathList.asRelationship == 2 ? "provider" : (asPathList.asRelationship == 1 ? "customer": \
                 (asPathList.asRelationship == 3 ? "sibling": (asPathList.asRelationship == 4 ? "lateral" : "unknown"))));
 

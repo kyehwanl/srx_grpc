@@ -646,8 +646,7 @@ int srx_connect_proxy(struct bgp *bgp)
       zlog_err ("Could not connect to SRx server at %s:%d, check if server(grpc) is "
                 "running", bgp->srx_host, bgp->srx_port);
 
-#if 1
-      // TODO: XXX GRPC XXX - consider the way of respawning like the one  below using tcp socket
+      // NOTE: GRPC XXX - consider the way of respawning like the one below using tcp socket
       //
       // thread add_read uses a socket file descriptor 
       // So, need to have another quagga timer such as thread_add_timer
@@ -660,10 +659,8 @@ int srx_connect_proxy(struct bgp *bgp)
       //
 
       // t_read is thread, who has event function and times etc (defined in lib/thread.h)
-       g_rq->t_read = thread_add_timer(bm->master, respawn_grpc_init, g_rq, 5); // retry timer 5 sec
-
-#endif
     }
+    g_rq->t_read = thread_add_timer(bm->master, respawn_grpc_init, g_rq, 10); // retry timer 10 sec
 
 #else
     // The last parameter (true) stands for external socket control
@@ -2711,6 +2708,7 @@ static void _handleSRxSynchRequest_processTable(struct bgp* bgp,
 {
   struct bgp_info *binfo;
   struct bgp_node *bnode;
+  zlog_info ("*** SRx Sync Request Process table(%p): bnode(%p) dump ***", table, bgp_table_top(table));
 
   SRxDefaultResult defResult;
 
@@ -2744,7 +2742,7 @@ static void _handleSRxSynchRequest_processTable(struct bgp* bgp,
  */
 void handleSRxSynchRequest(void* bgpRouter)
 {
-  zlog_info ("*** Received SRx Synchronization Request! ***\n");
+  zlog_info ("*** Received SRx Synchronization Request! ***");
 
   struct bgp* bgp = (struct bgp*)bgpRouter;
   if (bgp == NULL)
@@ -6737,7 +6735,7 @@ bool grpc_init (SRxProxy* proxy, uint32_t proxyID)
     // calling to initialize GRPC on libSRxProxy
     bool initResult = callSRxGRPC_Init("localhost:50000"); 
     zlog_debug ("[grpc_init ] proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%d]\n", proxy, proxyID, initResult);
-    printf ("[grpc_init ] proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%d]\n", proxy, proxyID, initResult);
+    printf     ("[grpc_init ] proxy: %p,  proxy ID [defaul]: %08x, grpcEnabled[%d]\n", proxy, proxyID, initResult);
 
     if (!initResult)
     {

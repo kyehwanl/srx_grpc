@@ -132,7 +132,7 @@ func InitSRxGrpc(addr string) bool {
 	//conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	conn, err := grpc.Dial(addr, grpc.WithInsecure(), grpc.WithBlock(), grpc.WithTimeout(5*time.Second))
 	//conn, err := grpc.Dial(addr, grpc.WithBlock())
-	fmt.Printf("[InitSRxGrpc] err: %#v\n", conn, err)
+	fmt.Printf("[InitSRxGrpc] err: %#v\n", err)
 	if err != nil {
 		log.Printf("[InitSRxGrpc] did not connect: %v", err)
 		return false
@@ -391,10 +391,12 @@ func RunProxyGoodByeStream(data []byte, grpcClientID uint32) uint32 {
 	log.Printf("+ [grpc client][GoodByeStream] Goodbye Stream Received from the server... \n")
 	if err == io.EOF {
 		log.Printf("+ [grpc client][GoodByeStream] EOF close \n")
+		C.processGoodbye_grpc(nil)
 		return 1
 	}
 	if err != nil {
 		log.Printf("+ [grpc client][GoodByeStream] ERROR (%v)\n", err)
+		C.processGoodbye_grpc(nil)
 		return 1
 	}
 
@@ -465,6 +467,12 @@ func RunProxyStream(data []byte, grpcClientID uint32) uint32 {
 		log.Printf("+ [grpc client][ProxyStream] data : %#v\n", resp.Data)
 		log.Printf("+ [grpc client][ProxyStream] size : %#v\n", resp.Length)
 		log.Println()
+
+		// NOTE: time delay for making sure to finish the code who called ProxyHello,
+		// which is conntectToSRx_grpc function to set the flags(connHandler->initilaized and established)
+		// before C.processSyncRequest entering to verify_update() to prevent from accessing
+		// initialized and established flgas in isConnected(bgp->proxy) routine
+		<-time.After(2 * time.Second)
 
 		if resp.Data == nil || resp.Length == 0 {
 			_, _, line, _ := runtime.Caller(0)

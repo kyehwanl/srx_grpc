@@ -86,9 +86,11 @@ void processVerifyNotify_grpc(SRXPROXY_VERIFY_NOTIFICATION* hdr)
 
 void processGoodbye_grpc(SRXPROXY_GOODBYE* hdr)
 {
-    LOG(LEVEL_INFO, HDR "+++ [%s] called in proxy: %p \n", __FUNCTION__, g_proxy);
+    LOG(LEVEL_INFO, HDR "+++ [%s] called in proxy: %p ", __FUNCTION__, g_proxy);
     SRxProxy* proxy = g_proxy;
 
+  
+    LOG(LEVEL_INFO, HDR "Release SRx Proxy flags and Connection Handler's flags");
     if (proxy)
     {
         // The client connection handler
@@ -98,6 +100,9 @@ void processGoodbye_grpc(SRXPROXY_GOODBYE* hdr)
         // SERVER CLOSES THE CONNECTION. END EVERYTHING.
         connHandler->established = false;
         connHandler->stop = true;
+
+        proxy->grpcClientEnable = false;  
+        proxy->grpcConnectionInit = false;
 
         //releaseClientConnectionHandler(connHandler);
 

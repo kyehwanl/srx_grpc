@@ -92,6 +92,7 @@ func cb_proxyGoodBye(in C.SRXPROXY_GOODBYE) {
 //export cb_proxyStream
 func cb_proxyStream(f C.int, v unsafe.Pointer) {
 
+	log.Println("++ [grpc server][cb_proxyStream] called from the nearly end of rocessHandshake_grpc function as callback")
 	b := C.GoBytes(unsafe.Pointer(v), f)
 
 	m := StreamData{
@@ -100,7 +101,10 @@ func cb_proxyStream(f C.int, v unsafe.Pointer) {
 	}
 	log.Printf("++ [grpc server][cb_proxyStream] channel callback message: %#v\n", m)
 	log.Printf("++ [grpc server][cb_proxyStream] Feeding Sync Request data \n")
+
 	chProxyStreamData <- m
+	log.Printf("++ [grpc server][cb_proxyStream] Sent StreamData to Channel \n")
+	log.Printf("++ [grpc server][cb_proxyStream] callback function, cb_proxyStream closed \n")
 
 }
 
@@ -172,7 +176,7 @@ func cbVerifyNotify(f int, b []byte) {
 		}
 
 		if err := gStream_verify.Send(&resp); err != nil {
-			log.Printf("[grpc server] grpc send error %v", err)
+			log.Printf("[grpc server] grpc send error %#v", err)
 		}
 		_, _, line, _ := runtime.Caller(0)
 		log.Printf("[server:%d] sending stream data", line+1)
@@ -205,6 +209,8 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 
 	gStream = stream
 	ctx := stream.Context()
+	ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
 	done := make(chan bool)
 	go func() {
 		<-ctx.Done()
@@ -259,15 +265,17 @@ func (s *Server) SendAndWaitProcess(pdu *pb.PduRequest, stream pb.SRxApi_SendAnd
 
 func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb.ProxyHelloResponse, error) {
 	defer func() {
+		log.Println("++ [grpc server][PorxyHello] before sending a data to channel- chDoneHello  ")
 		chDoneHello <- true
+		log.Println("++ [grpc server][PorxyHello] after sending a data to channel - chDoneHello ")
 	}()
 	//data := uint32(0x07)
 	//C.setLogLevel(0x07)
-	log.Printf("++ [grpc server] server: %#v\n", pdu)
-	log.Println("++ [grpc server] calling SRxServer server:ProxyHello()")
+	log.Printf("++ [grpc server][PorxyHello] server: %#v\n", pdu)
+	log.Println("++ [grpc server][PorxyHello] calling SRxServer server:ProxyHello()")
 
-	log.Printf("++ [grpc server] input type :  %#v\n", pdu.Type)
-	log.Printf("++ [grpc server] ProxyHelloRequest (size:%d): %#v \n", C.sizeof_SRXPROXY_HELLO, pdu)
+	log.Printf("++ [grpc server][PorxyHello] input type :  %#v\n", pdu.Type)
+	log.Printf("++ [grpc server][PorxyHello] received ProxyHelloRequest (size:%d): %#v \n", C.sizeof_SRXPROXY_HELLO, pdu)
 
 	/* serialize */
 	buf := make([]byte, C.sizeof_SRXPROXY_HELLO)
@@ -281,7 +289,7 @@ func (s *Server) ProxyHello(ctx context.Context, pdu *pb.ProxyHelloRequest) (*pb
 	grpcClientID := pdu.ProxyIdentifier
 
 	//retData := C.RET_DATA{}
-	log.Println("++ Trying to call C. resonse GRPC with CGO call ")
+	log.Println("++ [grpc server][ProxyHello] Trying to call C.resonse-GRPC with CGO call ")
 	retData := C.responseGRPC(C.int(C.sizeof_SRXPROXY_HELLO), (*C.uchar)(unsafe.Pointer(&buf[0])), C.uint(grpcClientID))
 
 	b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
@@ -332,7 +340,7 @@ func (s *Server) ProxyGoodByeStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyGo
 	go func() {
 		<-ctx.Done()
 		if err := ctx.Err(); err != nil {
-			log.Println(err)
+			log.Printf("++ [grpc server][ProxyGoodByeStream] error : %#v \n", err)
 		}
 
 		_, _, line, _ := runtime.Caller(0)
@@ -374,14 +382,16 @@ func (s *Server) ProxyStream(pdu *pb.PduRequest, stream pb.SRxApi_ProxyStreamSer
 	log.Printf("++ [grpc server][ProxyStream] received data: %#v\n", pdu)
 
 	ctx := stream.Context()
+	//ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	//defer cancel()
 	go func() {
 		<-ctx.Done()
 		if err := ctx.Err(); err != nil {
-			log.Println(err)
+			log.Printf("++ [grpc server][ProxyStream] context error: %#v \n", err)
 		}
 
 		_, _, line, _ := runtime.Caller(0)
-		log.Printf("+ [%d] server Proxy_Stream context done\n", line+1)
+		log.Printf("++ [grpc server][ProxyStream][:%d] server Proxy_Stream context done\n", line+1)
 		return
 	}()
 
@@ -469,17 +479,17 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 	go func() {
 		<-ctx.Done()
 		if err := ctx.Err(); err != nil {
-			log.Println(err)
+			log.Printf("++ [grpc server][ProxyVerifyStream] context error: %#v \n", err)
 		}
 		_, _, line, _ := runtime.Caller(0)
-		log.Printf("++ [grpc server][:%d] server Proxy_Verify_Stream context done\n", line+1)
+		log.Printf("++ [grpc server][ProxyVerifyStream][:%d]context done\n", line+1)
 		close(done)
 	}()
 
-	log.Printf("++ [grpc server] grpc Client ID: %02x, data length: %d, \n Data: %#v\n",
+	log.Printf("++ [grpc server][ProxyVerifyStream] grpc Client ID: %02x, data length: %d, \n Data: %#v\n",
 		pdu.GrpcClientID, pdu.Length, pdu)
 
-	log.Println("++ [grpc server] calling SRxServer responseGRPC()")
+	log.Println("++ [grpc server][ProxyVerifyStream] calling SRxServer responseGRPC()")
 
 	retData := C.RET_DATA{}
 	retData = C.responseGRPC(C.int(pdu.Length), (*C.uchar)(unsafe.Pointer(&pdu.Data[0])), C.uint(pdu.GrpcClientID))
@@ -504,12 +514,12 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 	}
 
 	if err := stream.Send(&resp); err != nil {
-		log.Printf("send error %v", err)
+		log.Printf("send error %#v", err)
 	}
-	log.Printf("++ [grpc server] sending stream data")
+	log.Printf("++ [grpc server][ProxyVerifyStream] sending stream data")
 
 	<-done
-	log.Printf("++ [grpc server] [ProxyVerifyStream] Finished with RPC send \n")
+	log.Printf("++ [grpc server][ProxyVerifyStream] Finished with RPC send \n")
 
 	return nil
 

@@ -540,8 +540,8 @@ static void _processPeerChange_grpc(unsigned char *data, RET_DATA *rt, unsigned 
 //int responseGRPC (int size, unsigned char* data)
 RET_DATA responseGRPC (int size, unsigned char* data, unsigned int grpcClientID)
 {
-    printf("response GRPC call\n");
     setLogLevel(LEVEL_INFO);
+    LOG(LEVEL_INFO, HDR "response GRPC call");
     LOG(LEVEL_INFO, HDR "[SRx server] [%s] calling - size: %d, grpcClient ID: %02x", __FUNCTION__, size, grpcClientID);
 
     /*

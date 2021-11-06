@@ -614,7 +614,7 @@ func NewServer(g *grpc.Server) *Server {
 }
 
 //export Serve
-func Serve() {
+func Serve(grpc_port C.int) {
 
 	// NOTE: here init handling
 	chGbsData = make(chan StreamData) // channel for Proxy GoodbyteStream
@@ -623,8 +623,10 @@ func Serve() {
 	// make a channel with a capacity of 100
 	jobChan = make(chan Job, NUM_JobChan)
 
+	log.Printf("++ [grpc server][Serve] received port number: %d \n", int32(grpc_port))
+
 	flag.Parse()
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", *port))
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:%d", int32(grpc_port)))
 	if err != nil {
 		log.Printf("failed to listen: %v", err)
 	}
@@ -643,6 +645,7 @@ func Serve() {
 }
 
 func main() {
-	log.Println("grpc server start ... ")
-	Serve()
+	flag.Parse()
+	log.Printf("grpc server start (port:%d) ... \n", *port)
+	Serve(C.int(*port))
 }

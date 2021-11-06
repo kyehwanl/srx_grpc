@@ -53,6 +53,7 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
   //cthread->clientFD = cliendFD;
   cthread->svrSock  = &grpcServiceHandler.svrConnHandler->svrSock;
   //cthread->caddr	  = caddr;
+  cthread->type_grpc_client = true;
 
 
   LOG(LEVEL_INFO, HDR "[SRx server][grpc service](Hello Resonse) Obtained cthread: %p \n", cthread);
@@ -89,8 +90,8 @@ static bool processHandshake_grpc(unsigned char *data, RET_DATA *rt)
           proxyID,  clientID, grpcServiceHandler.svrConnHandler->proxyMap[clientID].socket);
     }
 
-    LOG (LEVEL_INFO, "[SRx server][grpc service](Hello Resonse) Handshake: Connection to proxy[0x%08X] accepted."
-        " Proxy registered as internal client[0x%02X]", proxyID, clientID);
+    LOG (LEVEL_INFO, "\033[0;36m [SRx server][grpc service](Hello Resonse) Handshake: Connection to proxy[0x%08X] accepted."
+        "Proxy registered as internal client[0x%02X] \033[0m", proxyID, clientID);
 
     cthread->proxyID  = proxyID;
     cthread->routerID = clientID;

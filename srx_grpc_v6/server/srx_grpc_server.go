@@ -31,7 +31,7 @@ import (
 	//	"github.com/golang/protobuf/proto"
 	_ "bytes"
 	"encoding/binary"
-	_ "io"
+	"io"
 	_ "io/ioutil"
 	_ "os"
 	"runtime"
@@ -42,6 +42,7 @@ import (
 var port = flag.Int("port", 50000, "The server port")
 var gStream pb.SRxApi_SendAndWaitProcessServer
 var gStream_verify pb.SRxApi_ProxyVerifyStreamServer
+var gBiStream_verify pb.SRxApi_ProxyVerifyBiStreamServer
 
 //var gCancel context.CancelFunc
 
@@ -142,11 +143,10 @@ func cb_proxy(f C.int, v unsafe.Pointer) {
 
 	b := C.GoBytes(unsafe.Pointer(v), f)
 
-	// call my callback
-	//TODO: distinguish two callback function
+	//cbVerifyNotify(int(f), b)
 
-	//MyCallback(int(f), b)
-	cbVerifyNotify(int(f), b)
+	cbService_VerifyNotify(int(f), b)
+
 }
 
 //export cb_proxyGoodBye
@@ -264,6 +264,46 @@ func cbVerifyNotify(f int, b []byte) {
 		}
 
 		if err := gStream_verify.Send(&resp); err != nil {
+			log.Printf("[grpc server] grpc send error %#v", err)
+		}
+		_, _, line, _ := runtime.Caller(0)
+		log.Printf("[server:%d] sending stream data", line+1)
+
+	}
+
+}
+
+func cbService_VerifyNotify(f int, b []byte) {
+	/*
+		fmt.Printf("++ [grpc server] [cbVerifyNotify] function - received arg: %d, %#v \n", f, b)
+	*/
+	var resp pb.ProxyVerifyNotify
+
+	if gBiStream_verify != nil {
+
+		if f == 0 && len(b) == 0 {
+			_, _, line, _ := runtime.Caller(0)
+			log.Printf("[server:%d] End of Notify", line)
+			resp = pb.ProxyVerifyNotify{
+				Type:   0,
+				Length: 0,
+			}
+
+		} else {
+
+			resp = pb.ProxyVerifyNotify{
+				Type:         uint32(b[0]),
+				ResultType:   uint32(b[1]),
+				RoaResult:    uint32(b[2]),
+				BgpsecResult: uint32(b[3]),
+				AspaResult:   uint32(b[4]),
+				Length:       *((*uint32)(unsafe.Pointer(&b[8]))),
+				RequestToken: *((*uint32)(unsafe.Pointer(&b[12]))),
+				UpdateID:     *((*uint32)(unsafe.Pointer(&b[16]))),
+			}
+		}
+
+		if err := gBiStream_verify.Send(&resp); err != nil {
 			log.Printf("[grpc server] grpc send error %#v", err)
 		}
 		_, _, line, _ := runtime.Caller(0)
@@ -599,6 +639,76 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 
 	<-done
 	log.Printf("++ [grpc server][ProxyVerifyStream] Finished with RPC send \n")
+
+	return nil
+
+}
+
+func (s *Server) ProxyVerifyBiStream(stream pb.SRxApi_ProxyVerifyBiStreamServer) error {
+	log.Println("++ [grpc server] calling SRxServer server:ProxyVerifyStream()")
+
+	gBiStream_verify = stream // the function cbVerifyNotify() will this variable for callback
+	ctx := stream.Context()
+	//ctx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	//defer cancel()
+
+	for {
+
+		// exit if context is done
+		// or continue
+		select {
+		case <-ctx.Done():
+			if err := ctx.Err(); err != nil {
+				log.Printf("++ [grpc server][ProxyVerifyBiStream] context error: %#v \n", err)
+				_, _, line, _ := runtime.Caller(0)
+				log.Printf("++ [grpc server][ProxyVerifyBiStream][:%d]context done\n", line+1)
+				return ctx.Err()
+			}
+		default:
+		}
+
+		log.Printf("++ [grpc server][ProxyVerifyBiStream] Waiting for Receviing verify request...\n")
+		req, err := stream.Recv()
+
+		if err == io.EOF {
+			// return will close stream from server side
+			log.Println("exit")
+			return nil
+		}
+		if err != nil {
+			log.Printf("receive error %v", err)
+			continue
+		}
+
+		log.Printf("++ [grpc server][ProxyVerifyBiStream] grpc Client ID: %02x, data length: %d, \n Data: %v\n",
+			req.GrpcClientID, req.Length, req.Data)
+
+		retData := C.RET_DATA{}
+		retData = C.responseGRPC(C.int(req.Length), (*C.uchar)(unsafe.Pointer(&req.Data[0])), C.uint(req.GrpcClientID))
+
+		b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
+		log.Printf("++ [grpc server][ProxyVerifyBiStream] return size: %d \t data: %#v\n", retData.size, b)
+
+		if retData.size == 0 {
+			//return nil
+		}
+
+		resp := pb.ProxyVerifyNotify{
+			Type:         uint32(b[0]),
+			ResultType:   uint32(b[1]),
+			RoaResult:    uint32(b[2]),
+			BgpsecResult: uint32(b[3]),
+			AspaResult:   uint32(b[4]),
+			Length:       *((*uint32)(unsafe.Pointer(&b[8]))),
+			RequestToken: *((*uint32)(unsafe.Pointer(&b[12]))),
+			UpdateID:     *((*uint32)(unsafe.Pointer(&b[16]))),
+		}
+
+		if err := stream.Send(&resp); err != nil {
+			log.Printf("send error %#v", err)
+		}
+		log.Printf("++ [grpc server][ProxyVerifyBiStream] sending stream data: %#v\n", resp)
+	}
 
 	return nil
 

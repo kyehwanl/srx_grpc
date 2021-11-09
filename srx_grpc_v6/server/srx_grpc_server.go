@@ -166,14 +166,15 @@ func cb_proxyGoodBye(in C.SRXPROXY_GOODBYE) {
 //export cb_proxyStream
 func cb_proxyStream(f C.int, v unsafe.Pointer) {
 
-	log.Println("++ [grpc server][cb_proxyStream](sync request) called from command handler function as callback")
+	log.Println("\033[0;32m++ [grpc server][cb_proxyStream](sync request) called from commandHandler as callback\033[0m")
 	b := C.GoBytes(unsafe.Pointer(v), f)
 
 	m := StreamData{
 		data:   b,
 		length: uint8(f),
 	}
-	log.Printf("++ [grpc server][cb_proxyStream](sync request) sending Sync Request message to Channel: %#v\n", m)
+	log.Printf("\033[0;32m++ [grpc server][cb_proxyStream](sync request) sending Sync Request message to Channel: %#v\033[0m\n",
+		m)
 
 	/*
 			job := NewJob(m, 1)
@@ -192,7 +193,7 @@ func cb_proxyStream(f C.int, v unsafe.Pointer) {
 		chProxyStreamData <- m
 	}()
 	//log.Printf("++ [grpc server][cb_proxyStream] Sent StreamData to Channel and callback function(cb_proxyStream) closed \n")
-	log.Printf("++ [grpc server][cb_proxyStream](sync request) is OVER  \n")
+	log.Printf("\033[0;32m++ [grpc server][cb_proxyStream](sync request) is OVER  \033[0m \n")
 
 }
 
@@ -274,9 +275,9 @@ func cbVerifyNotify(f int, b []byte) {
 }
 
 func cbService_VerifyNotify(f int, b []byte) {
-	/*
-		fmt.Printf("++ [grpc server] [cbVerifyNotify] function - received arg: %d, %#v \n", f, b)
-	*/
+
+	log.Printf("\033[0;32m++ [grpc server][cbService_VerifyNotify] gBiStream: %v - received arg: %d, %#v \033[0m \n",
+		gBiStream_verify, f, b)
 	var resp pb.ProxyVerifyNotify
 
 	if gBiStream_verify != nil {
@@ -303,11 +304,13 @@ func cbService_VerifyNotify(f int, b []byte) {
 			}
 		}
 
+		<-chNotify
 		if err := gBiStream_verify.Send(&resp); err != nil {
-			log.Printf("[grpc server] grpc send error %#v", err)
+			log.Printf("\033[0;32m++ [grpc server][cbService_VerifyNotify] grpc send error %#v  \033[0m \n", err)
 		}
 		_, _, line, _ := runtime.Caller(0)
-		log.Printf("[server:%d] sending stream data", line+1)
+		log.Printf("\033[0;32m++ [grpc server][cbService_VerifyNotify][server:%d] sending stream resp: %#v \033[0m \n",
+			line+1, resp)
 
 	}
 
@@ -645,7 +648,7 @@ func (s *Server) ProxyVerifyStream(pdu *pb.ProxyVerifyRequest, stream pb.SRxApi_
 }
 
 func (s *Server) ProxyVerifyBiStream(stream pb.SRxApi_ProxyVerifyBiStreamServer) error {
-	log.Println("++ [grpc server] calling SRxServer server:ProxyVerifyStream()")
+	log.Printf("\033[1;33m++ [grpc server][ProxyVerifyBiStream] stream: %#v \033[0m \n", stream)
 
 	gBiStream_verify = stream // the function cbVerifyNotify() will this variable for callback
 	ctx := stream.Context()
@@ -659,38 +662,38 @@ func (s *Server) ProxyVerifyBiStream(stream pb.SRxApi_ProxyVerifyBiStreamServer)
 		select {
 		case <-ctx.Done():
 			if err := ctx.Err(); err != nil {
-				log.Printf("++ [grpc server][ProxyVerifyBiStream] context error: %#v \n", err)
+				log.Printf("\033[1;33m++ [grpc server][ProxyVerifyBiStream] context error: %#v \033[0m \n", err)
 				_, _, line, _ := runtime.Caller(0)
-				log.Printf("++ [grpc server][ProxyVerifyBiStream][:%d]context done\n", line+1)
+				log.Printf("\033[1;33m++ [grpc server][ProxyVerifyBiStream][:%d]context done \033[0m\n", line+1)
 				return ctx.Err()
 			}
 		default:
 		}
 
-		log.Printf("++ [grpc server][ProxyVerifyBiStream] Waiting for Receviing verify request...\n")
+		log.Printf("\033[1;33m++ [grpc server][ProxyVerifyBiStream] Waiting for Receviing verify request...\033[0m\n")
 		req, err := stream.Recv()
 
 		if err == io.EOF {
 			// return will close stream from server side
-			log.Println("exit")
+			log.Printf("\033[1;33m++ [grpc server][ProxyVerifyBiStream] exit (Error: %v) \033[0m \n", err)
 			return nil
 		}
 		if err != nil {
-			log.Printf("receive error %v", err)
+			log.Printf("\033[1;33m++ [grpc server][ProxyVerifyBiStream] receive error %v \033[0m \n", err)
 			continue
 		}
 
-		log.Printf("++ [grpc server][ProxyVerifyBiStream] grpc Client ID: %02x, data length: %d, \n Data: %v\n",
+		log.Printf("\033[1;33m++ [grpc server][ProxyVerifyBiStream](RECV) grpc ID: %02x, length: %d, \n Data: %v \033[0m\n",
 			req.GrpcClientID, req.Length, req.Data)
 
 		retData := C.RET_DATA{}
 		retData = C.responseGRPC(C.int(req.Length), (*C.uchar)(unsafe.Pointer(&req.Data[0])), C.uint(req.GrpcClientID))
 
 		b := C.GoBytes(unsafe.Pointer(retData.data), C.int(retData.size))
-		log.Printf("++ [grpc server][ProxyVerifyBiStream] return size: %d \t data: %#v\n", retData.size, b)
+		log.Printf("\033[1;33m++ [grpc server][ProxyVerifyBiStream](SEND) return size: %d \n data: %#v \033[0m\n", retData.size, b)
 
 		if retData.size == 0 {
-			//return nil
+			continue
 		}
 
 		resp := pb.ProxyVerifyNotify{
@@ -705,9 +708,10 @@ func (s *Server) ProxyVerifyBiStream(stream pb.SRxApi_ProxyVerifyBiStreamServer)
 		}
 
 		if err := stream.Send(&resp); err != nil {
-			log.Printf("send error %#v", err)
+			log.Printf("\033[1;33m++ [grpc server][ProxyVerifyBiStream](SEDN) send error %#v \033[0m \n", err)
 		}
-		log.Printf("++ [grpc server][ProxyVerifyBiStream] sending stream data: %#v\n", resp)
+		chNotify <- true
+		log.Printf("\033[1;33m++ [grpc server][ProxyVerifyBiStream](SEND) sending stream data: %#v \033[0m\n", resp)
 	}
 
 	return nil

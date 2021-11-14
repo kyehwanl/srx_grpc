@@ -1030,6 +1030,7 @@ int _deleteUpdateFromCache(UpdateCache* self, uint8_t clientID,
 bool deleteUpdateFromCache(UpdateCache* self, uint8_t clientID,
                            SRxUpdateID* updateID, uint16_t keepTime)
 {
+              printf("333333333333\n");
   CacheEntry* cEntry;
   bool retVal = false;
   // This seems to be silly at this point but it might be that the id will
@@ -1042,9 +1043,11 @@ bool deleteUpdateFromCache(UpdateCache* self, uint8_t clientID,
   }
   uint16_t timeToBeDeleted = getGCTime(keepTime);
 
+              printf("44444444444444\n");
   // Get the update cache entry from the update cache.
   if (tableFind(self, updID, &cEntry))
   {
+              printf("5555555555555\n");
     retVal = _deleteUpdateFromCache(self, clientID, cEntry, timeToBeDeleted);
     if (retVal && (cEntry->pathData.bgpsec_path != NULL))
     {

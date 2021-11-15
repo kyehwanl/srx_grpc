@@ -910,7 +910,6 @@ static void _processDeleteUpdate(CommandHandler* cmdHandler,
   ClientThread* clThread = (ClientThread*)item->client;
   SRXPROXY_DELETE_UPDATE* duHdr = (SRXPROXY_DELETE_UPDATE*)item->data;
 
-              printf("22222222222222\n");
   if (deleteUpdateFromCache(cmdHandler->updCache, clThread->routerID,
                             &updateID, htons(duHdr->keepWindow)))
   {
@@ -1028,7 +1027,7 @@ static void* handleCommands(void* arg)
               LOG(LEVEL_DEBUG, HDR "GoodBye!", pthread_self());
               break;
             case PDU_SRXPROXY_DELTE_UPDATE:
-              printf("11111111111111111\n");
+              //_processDeleteUpdate_grpc(cmdHandler, item);
               _processDeleteUpdate(cmdHandler, item);
               break;
             case PDU_SRXPROXY_PEER_CHANGE:

@@ -284,6 +284,7 @@ int respawn_grpc_init(struct thread *t)
         {
           if ( CHECK_FLAG(bgp->srx_config, SRX_CONFIG_EVAL_PATH_DISTR))
             zlog_info ("\033[92m""Enabled Distributed Evaluation on SRx server <GRPC>""\033[0m" );
+          siMaxReconnect = 0;
         }
       } // end of if 'connected'
     } 
@@ -311,6 +312,7 @@ int respawn_grpc_init(struct thread *t)
 
         zlog_debug (" srx set default again");
         srx_set_default(bgp);
+        return 0;
       }
       siMaxReconnect++;
     } // end of if (bRet Val)

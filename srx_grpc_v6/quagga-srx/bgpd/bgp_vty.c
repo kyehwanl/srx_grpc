@@ -11108,6 +11108,9 @@ bgp_vty_init (void)
   install_element (BGP_NODE, &no_srx_evaluation_cmd);
   install_element (BGP_NODE, &srx_evaluation_bgpsec_distribute_cmd);
 
+#ifdef USE_GRPC
+  install_element (BGP_NODE, &srx_grpc_connect_cmd);
+#endif // USE_GRPC
 
 // NOT IN THIS VERSION
 //  install_element (BGP_NODE, &srx_apply_policy_cmd);

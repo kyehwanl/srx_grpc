@@ -1102,7 +1102,8 @@ bool broadcastResult(CommandHandler* self, SRxValidationResult* valResult)
   bool retVal = true;
   // Prepare the array of clients.
   uint8_t clientSize = self->updCache->minNumberOfClients;
-  uint8_t clients[clientSize]={};
+  uint8_t clients[clientSize];
+  memset(clients, 0x0, sizeof(uint8_t) * clientSize);
   ServerClient* client = NULL;
 
   int clientCt = getClientIDsOfUpdate(self->updCache, &valResult->updateID,

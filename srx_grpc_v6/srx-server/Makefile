@@ -204,7 +204,7 @@ AUTOMAKE = ${SHELL} /opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/mi
 AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=none
-CFLAGS = -g -O0
+CFLAGS = -g -O2
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo

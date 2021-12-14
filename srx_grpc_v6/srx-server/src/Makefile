@@ -147,10 +147,10 @@ am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(pkglibdir)" \
 LTLIBRARIES = $(lib_LTLIBRARIES) $(noinst_LTLIBRARIES) \
 	$(pkglib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-#libSRxProxy_la_DEPENDENCIES =  \
-#	libsrx_shared.la libsrx_util.la
-libSRxProxy_la_DEPENDENCIES = libsrx_shared.la \
-	libsrx_util.la $(am__DEPENDENCIES_1)
+libSRxProxy_la_DEPENDENCIES =  \
+	libsrx_shared.la libsrx_util.la
+#libSRxProxy_la_DEPENDENCIES = libsrx_shared.la \
+#	libsrx_util.la $(am__DEPENDENCIES_1)
 am_libSRxProxy_la_OBJECTS = client_connection_handler.lo srx_api.lo
 libSRxProxy_la_OBJECTS = $(am_libSRxProxy_la_OBJECTS)
 AM_V_lt = $(am__v_lt_$(V))
@@ -164,18 +164,18 @@ libSRxProxy_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 libgrpc_client_service_la_LIBADD =
 am__libgrpc_client_service_la_SOURCES_DIST =  \
 	$(CLIENT_DIR)/grpc_client_service.c
-am_libgrpc_client_service_la_OBJECTS =  \
-	grpc_client_service.lo log.lo
+#am_libgrpc_client_service_la_OBJECTS =  \
+#	grpc_client_service.lo
 libgrpc_client_service_la_OBJECTS =  \
 	$(am_libgrpc_client_service_la_OBJECTS)
-am_libgrpc_client_service_la_rpath = -rpath \
-	$(libdir)
+#am_libgrpc_client_service_la_rpath = -rpath \
+#	$(libdir)
 libgrpc_service_la_LIBADD =
 am__libgrpc_service_la_SOURCES_DIST = $(SERVER_DIR)/grpc_service.c
-am_libgrpc_service_la_OBJECTS =  \
-	grpc_service.lo
+#am_libgrpc_service_la_OBJECTS =  \
+#	grpc_service.lo
 libgrpc_service_la_OBJECTS = $(am_libgrpc_service_la_OBJECTS)
-am_libgrpc_service_la_rpath = -rpath $(libdir)
+#am_libgrpc_service_la_rpath = -rpath $(libdir)
 libsrx_shared_la_LIBADD =
 am_libsrx_shared_la_OBJECTS = srx_packets.lo srx_identifier.lo \
 	crc32.lo
@@ -215,25 +215,25 @@ am_srx_server_OBJECTS = bgpsec_handler.$(OBJEXT) \
 	srx_packet_sender.$(OBJEXT) update_cache.$(OBJEXT) \
 	aspa_trie.$(OBJEXT) aspath_cache.$(OBJEXT)
 srx_server_OBJECTS = $(am_srx_server_OBJECTS)
-#srx_server_DEPENDENCIES =  \
-#	$(am__DEPENDENCIES_1) \
-#	$(am__DEPENDENCIES_1) libsrx_shared.la \
-#	libsrx_util.la
 srx_server_DEPENDENCIES =  \
 	$(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1) libsrx_shared.la \
-	libsrx_util.la libgrpc_service.la \
-	$(am__DEPENDENCIES_1)
+	libsrx_util.la
+#srx_server_DEPENDENCIES =  \
+#	$(am__DEPENDENCIES_1) \
+#	$(am__DEPENDENCIES_1) libsrx_shared.la \
+#	libsrx_util.la libgrpc_service.la \
+#	$(am__DEPENDENCIES_1)
 srx_server_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(srx_server_LDFLAGS) $(LDFLAGS) -o $@
 am_srxsvr_client_OBJECTS = srxsvr_client.$(OBJEXT)
 srxsvr_client_OBJECTS = $(am_srxsvr_client_OBJECTS)
-#srxsvr_client_DEPENDENCIES = libsrx_util.la \
-#	libsrx_shared.la libSRxProxy.la
 srxsvr_client_DEPENDENCIES = libsrx_util.la \
-	libsrx_shared.la libSRxProxy.la \
-	$(am__DEPENDENCIES_1)
+	libsrx_shared.la libSRxProxy.la
+#srxsvr_client_DEPENDENCIES = libsrx_util.la \
+#	libsrx_shared.la libSRxProxy.la \
+#	$(am__DEPENDENCIES_1)
 srxsvr_client_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
 	$(srxsvr_client_LDFLAGS) $(LDFLAGS) -o $@
@@ -361,7 +361,7 @@ CC = gcc
 CCDEPMODE = depmode=gcc3
 CFG_PREFIX = /opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/../_inst
 CFG_SYSCONFIG = /opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/../_inst/etc
-CFLAGS = -I/opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/src/../extras/local/include -g -O0 -DLCONFIG_INT=int
+CFLAGS = -I/opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/src/../extras/local/include -g -O2 -DLCONFIG_INT=int
 CPP = gcc -E
 CPPFLAGS = 
 CPU_ARCH = 64
@@ -457,7 +457,7 @@ datarootdir = ${prefix}/share
 docdir = ${datarootdir}/doc/${PACKAGE_TARNAME}
 dvidir = ${docdir}
 exec_prefix = ${prefix}
-grpc_dir = /opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/../
+grpc_dir = 
 host = x86_64-unknown-linux-gnu
 host_alias = 
 host_cpu = x86_64
@@ -498,23 +498,23 @@ SHARED_DIR = shared
 TOOLS_DIR = tools
 UTIL_DIR = util
 TEST_DIR = test
-GRPC_SERVER_LIBS = -lsrx_grpc_server 
-GRPC_CLIENT_LIBS = -lsrx_grpc_client
-GRPC_LIBS = $(GRPC_SERVER_LIBS) $(GRPC_CLIENT_LIBS)
+#GRPC_SERVER_LIBS = -lsrx_grpc_server 
+#GRPC_CLIENT_LIBS = -lsrx_grpc_client
+#GRPC_LIBS = $(GRPC_SERVER_LIBS) $(GRPC_CLIENT_LIBS)
 
 #GRPC_DIR = /opt/project/gobgp_test/gowork/src/srx_grpc
-GRPC_DIR = $(grpc_dir)
-GRPC_SERVER_PATH = $(GRPC_DIR)/server
-GRPC_CLIENT_PATH = $(GRPC_DIR)/client
-GRPC_SERVER_LDFLAG = -L$(GRPC_SERVER_PATH) #-rpath '$(GRPC_SERVER_PATH)'
-GRPC_CLIENT_LDFLAG = -L$(GRPC_CLIENT_PATH) #-rpath '$(GRPC_CLIENT_PATH)'
-GRPC_SERVER_RPATH = -rpath '$(GRPC_SERVER_PATH)'
-GRPC_CLIENT_RPATH = -Wl,-rpath -Wl,$(GRPC_CLIENT_PATH)
+#GRPC_DIR = $(grpc_dir)
+#GRPC_SERVER_PATH = $(GRPC_DIR)/server
+#GRPC_CLIENT_PATH = $(GRPC_DIR)/client
+#GRPC_SERVER_LDFLAG = -L$(GRPC_SERVER_PATH) #-rpath '$(GRPC_SERVER_PATH)'
+#GRPC_CLIENT_LDFLAG = -L$(GRPC_CLIENT_PATH) #-rpath '$(GRPC_CLIENT_PATH)'
+#GRPC_SERVER_RPATH = -rpath '$(GRPC_SERVER_PATH)'
+#GRPC_CLIENT_RPATH = -Wl,-rpath -Wl,$(GRPC_CLIENT_PATH)
 #GRPC_CLIENT_RPATH = -rpath '$(GRPC_CLIENT_PATH)'
-GRPC_CFLAGS = -I$(GRPC_DIR)
-#AM_CFLAGS = -DSRX_SERVER_PACKAGE=$(PACKAGE_VERSION) $(SCA_CFLAGS) -std=gnu99
-AM_CFLAGS = -DSRX_SERVER_PACKAGE=$(PACKAGE_VERSION) \
-			$(SCA_CFLAGS) $(GRPC_CFLAGS) -std=gnu99
+#GRPC_CFLAGS = -I$(GRPC_DIR)
+AM_CFLAGS = -DSRX_SERVER_PACKAGE=$(PACKAGE_VERSION) $(SCA_CFLAGS) -std=gnu99
+#AM_CFLAGS = -DSRX_SERVER_PACKAGE=$(PACKAGE_VERSION) \
+#			$(SCA_CFLAGS) $(GRPC_CFLAGS) -std=gnu99
 
 
 # Read the revision number of the revision file
@@ -558,15 +558,15 @@ libsrx_util_la_SOURCES = \
 		     $(UTIL_DIR)/timer.c \
 		     $(UTIL_DIR)/xml_out.c
 
-libsrx_util_la_LIBADD = #$(GRPC_CLIENT_LIBS)
-libsrx_util_la_LDFLAGS = # $(GRPC_CLIENT_LDFLAG)
+#libsrx_util_la_LIBADD = #$(GRPC_CLIENT_LIBS)
+#libsrx_util_la_LDFLAGS = # $(GRPC_CLIENT_LDFLAG)
 
 # srx grpc library
-lib_LTLIBRARIES = libgrpc_service.la libgrpc_client_service.la
-libgrpc_service_la_SOURCES = $(SERVER_DIR)/grpc_service.c 
+#lib_LTLIBRARIES = libgrpc_service.la libgrpc_client_service.la
+#libgrpc_service_la_SOURCES = $(SERVER_DIR)/grpc_service.c 
 #libgrpc_service_la_LIBADD = 
 #libgrpc_service_la_LDFLAGS = 
-libgrpc_client_service_la_SOURCES = $(CLIENT_DIR)/grpc_client_service.c 
+#libgrpc_client_service_la_SOURCES = $(CLIENT_DIR)/grpc_client_service.c 
 #LIB_VER = 0:0:0
 ################################################################################
 ################################################################################
@@ -575,12 +575,12 @@ pkglib_LTLIBRARIES = libSRxProxy.la
 libSRxProxy_la_SOURCES = $(CLIENT_DIR)/client_connection_handler.c \
 		    $(CLIENT_DIR)/srx_api.c
 
-#libSRxProxy_la_LIBADD = libsrx_shared.la libsrx_util.la 
+libSRxProxy_la_LIBADD = libsrx_shared.la libsrx_util.la 
 
 # General linker flags
-libSRxProxy_la_LIBADD = libsrx_shared.la libsrx_util.la $(GRPC_CLIENT_LIBS)
-#libSRxProxy_la_LDFLAGS = -version-info $(LIB_VER) 
-libSRxProxy_la_LDFLAGS = -version-info $(LIB_VER) $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
+#libSRxProxy_la_LIBADD = libsrx_shared.la libsrx_util.la $(GRPC_CLIENT_LIBS)
+libSRxProxy_la_LDFLAGS = -version-info $(LIB_VER) 
+#libSRxProxy_la_LDFLAGS = -version-info $(LIB_VER) $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 libSRxProxy_libconfigdir = $(sysconfdir)/ld.so.conf.d
 dist_libSRxProxy_libconfig_DATA = $(CLIENT_DIR)/srxproxy$(CPU_ARCH).conf
 
@@ -615,22 +615,22 @@ srx_server_SOURCES = $(SERVER_DIR)/bgpsec_handler.c \
 		     $(SERVER_DIR)/aspa_trie.c \
 		     $(SERVER_DIR)/aspath_cache.c 
 
-#srx_server_LDADD = $(LIB_PATRICIA) $(SCA_LIBS) \
-#		   libsrx_shared.la \
-#		   libsrx_util.la
-
 srx_server_LDADD = $(LIB_PATRICIA) $(SCA_LIBS) \
 		   libsrx_shared.la \
-		   libsrx_util.la \
-		   libgrpc_service.la \
-		   $(GRPC_SERVER_LIBS)
+		   libsrx_util.la
 
-#srx_server_LDFLAGS = $(SCA_LDFLAGS)
-srx_server_LDFLAGS = $(SCA_LDFLAGS) \
-					 $(GRPC_SERVER_LDFLAG) \
-					 $(GRPC_SERVER_RPATH) \
-					 $(GRPC_CLIENT_LDFLAG) \
-					 $(GRPC_CLIENT_RPATH)
+#srx_server_LDADD = $(LIB_PATRICIA) $(SCA_LIBS) \
+#		   libsrx_shared.la \
+#		   libsrx_util.la \
+#		   libgrpc_service.la \
+#		   $(GRPC_SERVER_LIBS)
+
+srx_server_LDFLAGS = $(SCA_LDFLAGS)
+#srx_server_LDFLAGS = $(SCA_LDFLAGS) \
+#					 $(GRPC_SERVER_LDFLAG) \
+#					 $(GRPC_SERVER_RPATH) \
+#					 $(GRPC_CLIENT_LDFLAG) \
+#					 $(GRPC_CLIENT_RPATH)
 
 
 ################################################################################
@@ -646,20 +646,20 @@ rpkirtr_client_SOURCES = $(TOOLS_DIR)/rpkirtr_client.c \
 		         $(SERVER_DIR)/rpki_router_client.c
 
 rpkirtr_client_LDADD = libsrx_util.la
-rpkirtr_client_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
+#rpkirtr_client_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 
 # Will be bundled with srx
 rpkirtr_svr_SOURCES = $(TOOLS_DIR)/rpkirtr_svr.c \
                       $(SERVER_DIR)/rpki_packet_printer.h
 
 rpkirtr_svr_LDADD = libsrx_util.la
-rpkirtr_svr_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
+#rpkirtr_svr_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 
 # Will be bundled with srx-proxy
 srxsvr_client_SOURCES = $(TOOLS_DIR)/srxsvr_client.c 
-#srxsvr_client_LDADD = libsrx_util.la libsrx_shared.la libSRxProxy.la 
-srxsvr_client_LDADD = libsrx_util.la libsrx_shared.la libSRxProxy.la $(GRPC_CLIENT_LIBS) 
-srxsvr_client_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
+srxsvr_client_LDADD = libsrx_util.la libsrx_shared.la libSRxProxy.la 
+#srxsvr_client_LDADD = libsrx_util.la libsrx_shared.la libSRxProxy.la $(GRPC_CLIENT_LIBS) 
+#srxsvr_client_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 
 ################################################################################
 ################################################################################
@@ -2135,15 +2135,6 @@ proxyrpm: rpmcheck $(rpm_proxy_spec)
 rpms: develrpm proxyrpm rpmcheck $(rpm_spec)
 	$(RPMBUILD) $(RPMFLAGS) -bb $(rpmmacros) $(rpm_spec)
 
-service:
-	/usr/bin/libtool --tag=CC   --mode=compile gcc -DHAVE_CONFIG_H  -c -o grpc_service.lo server/grpc_service.c \
-		-I/opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/src \
-        -I/opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/src/../extras/local/include \
-        -I/opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/../_inst/include
-	/usr/bin/libtool --tag=CC   --mode=link   gcc -DHAVE_CONFIG_H  -o libgrpc_service.la grpc_service.lo -rpath `pwd`/.libs \
-        -L/opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/src/.libs/ -lsrx_util
-	/usr/bin/libtool --tag=CC   --mode=install cp libgrpc_service.la ${GOPATH}/src/srx_grpc_v6/_inst/lib64
-	/usr/bin/libtool --tag=CC   --finish ${GOPATH}/src/srx_grpc_v6/_inst/lib64
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

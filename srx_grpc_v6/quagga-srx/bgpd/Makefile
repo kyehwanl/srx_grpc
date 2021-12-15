@@ -125,10 +125,10 @@ PROGRAMS = $(sbin_PROGRAMS)
 am_bgpd_OBJECTS = bgp_main.$(OBJEXT)
 bgpd_OBJECTS = $(am_bgpd_OBJECTS)
 am__DEPENDENCIES_1 =
-bgpd_DEPENDENCIES = libbgp.a \
-	../lib/libzebra.la
-#bgpd_DEPENDENCIES = libbgp.a ../lib/libzebra.la \
-#	$(am__DEPENDENCIES_1)
+#bgpd_DEPENDENCIES = libbgp.a \
+#	../lib/libzebra.la
+bgpd_DEPENDENCIES = libbgp.a ../lib/libzebra.la \
+	$(am__DEPENDENCIES_1)
 AM_V_lt = $(am__v_lt_$(V))
 am__v_lt_ = $(am__v_lt_$(AM_DEFAULT_VERBOSITY))
 am__v_lt_0 = --silent
@@ -240,7 +240,7 @@ BUILD_TESTS =
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -I/opt/project/gobgp_test/gowork/src/srx_grpc_v6/quagga-srx/../_inst/include -Os -fno-omit-frame-pointer -g -Wall -Wsign-compare -Wpointer-arith -Wbad-function-cast -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wchar-subscripts -Wcast-qual
-CONFDATE = 20211213
+CONFDATE = 20211214
 CPP = gcc -E
 CPPFLAGS = 
 CURSES = 
@@ -371,7 +371,7 @@ enable_user = root
 enable_vty_group = 
 exampledir = ${prefix}/etc
 exec_prefix = ${prefix}
-grpc_dir = 
+grpc_dir = /opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/..
 host = x86_64-unknown-linux-gnu
 host_alias = 
 host_cpu = x86_64
@@ -410,18 +410,18 @@ top_build_prefix = ../
 top_builddir = ..
 top_srcdir = ..
 INSTALL_SDATA = /bin//install -c -m 600
-#GRPC_SERVER_LIBS = -lsrx_grpc_server
-#GRPC_CLIENT_LIBS = -lsrx_grpc_client
-#GRPC_LIBS = $(GRPC_SERVER_LIBS) $(GRPC_CLIENT_LIBS)
-#GRPC_DIR = $(grpc_dir)
-#GRPC_SERVER_PATH = $(GRPC_DIR)/server
-#GRPC_CLIENT_PATH = $(GRPC_DIR)/client
-#GRPC_SERVER_LDFLAG = -L$(GRPC_SERVER_PATH) #-rpath '$(GRPC_SERVER_PATH)'
-#GRPC_CLIENT_LDFLAG = -L$(GRPC_CLIENT_PATH) #-rpath '$(GRPC_CLIENT_PATH)'
-#GRPC_SERVER_RPATH = -rpath '$(GRPC_SERVER_PATH)'
-#GRPC_CLIENT_RPATH = -Wl,-rpath -Wl,$(GRPC_CLIENT_PATH)
+GRPC_SERVER_LIBS = -lsrx_grpc_server
+GRPC_CLIENT_LIBS = -lsrx_grpc_client
+GRPC_LIBS = $(GRPC_SERVER_LIBS) $(GRPC_CLIENT_LIBS)
+GRPC_DIR = $(grpc_dir)
+GRPC_SERVER_PATH = $(GRPC_DIR)/server
+GRPC_CLIENT_PATH = $(GRPC_DIR)/client
+GRPC_SERVER_LDFLAG = -L$(GRPC_SERVER_PATH) #-rpath '$(GRPC_SERVER_PATH)'
+GRPC_CLIENT_LDFLAG = -L$(GRPC_CLIENT_PATH) #-rpath '$(GRPC_CLIENT_PATH)'
+GRPC_SERVER_RPATH = -rpath '$(GRPC_SERVER_PATH)'
+GRPC_CLIENT_RPATH = -Wl,-rpath -Wl,$(GRPC_CLIENT_PATH)
 #GRPC_CLIENT_RPATH = -rpath '$(GRPC_CLIENT_PATH)'
-#GRPC_CFLAGS = -I$(GRPC_DIR)
+GRPC_CFLAGS = -I$(GRPC_DIR)
 AM_CFLAGS = $(PICFLAGS)
 AM_LDFLAGS = $(PILDFLAGS) -ldl
 noinst_LIBRARIES = libbgp.a
@@ -442,9 +442,9 @@ noinst_HEADERS = \
 	bgp_validate.h
 
 bgpd_SOURCES = bgp_main.c
-bgpd_LDADD = libbgp.a ../lib/libzebra.la  -lm
-#bgpd_LDADD = libbgp.a ../lib/libzebra.la $(GRPC_CLIENT_LIBS)  -lm
-#bgpd_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
+#bgpd_LDADD = libbgp.a ../lib/libzebra.la  -lm
+bgpd_LDADD = libbgp.a ../lib/libzebra.la $(GRPC_CLIENT_LIBS)  -lm
+bgpd_LDFLAGS = $(GRPC_CLIENT_LDFLAG) $(GRPC_CLIENT_RPATH)
 examplesdir = $(exampledir)
 dist_examples_DATA = bgpd.conf.sample bgpd.conf.sample2 bgpd.conf.sampleSRx
 EXTRA_DIST = BGP4-MIB.txt

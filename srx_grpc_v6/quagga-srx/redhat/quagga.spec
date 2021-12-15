@@ -104,7 +104,7 @@ Summary:  Routing daemon
 Name:		  %{name}
 Version:	%{version}
 Release:  22%{?dist}
-#Release: 20211213%{release_rev}
+#Release: 20211214%{release_rev}
 License:  GPL
 Group:    System Environment/Daemons
 Source0:  %{name}-%{version}.tar.gz

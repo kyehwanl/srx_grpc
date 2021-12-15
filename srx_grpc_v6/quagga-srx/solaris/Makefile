@@ -133,7 +133,7 @@ BUILD_TESTS =
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -I/opt/project/gobgp_test/gowork/src/srx_grpc_v6/quagga-srx/../_inst/include -Os -fno-omit-frame-pointer -g -Wall -Wsign-compare -Wpointer-arith -Wbad-function-cast -Wwrite-strings -Wmissing-prototypes -Wmissing-declarations -Wchar-subscripts -Wcast-qual
-CONFDATE = 20211213
+CONFDATE = 20211214
 CPP = gcc -E
 CPPFLAGS = 
 CURSES = 
@@ -264,7 +264,7 @@ enable_user = root
 enable_vty_group = 
 exampledir = ${prefix}/etc
 exec_prefix = ${prefix}
-grpc_dir = 
+grpc_dir = /opt/project/gobgp_test/gowork/src/srx_grpc_v6/srx-server/..
 host = x86_64-unknown-linux-gnu
 host_alias = 
 host_cpu = x86_64
@@ -307,7 +307,7 @@ top_srcdir = ..
 # derived variables.
 pkg_names = daemons dev doc libs smf
 pkg_quagga_daemons = zebra bgpd ospfd ospf6d ripd ripngd
-pkg_name_rev = 0.6.0.0-20211213-linux-gnu-x86_64
+pkg_name_rev = 0.6.0.0-20211214-linux-gnu-x86_64
 pkg_depends = $(pkg_names:%=depend.%)
 pkg_packages = $(pkg_names:%=quaggasrx-%-$(pkg_name_rev).pkg)
 pkg_pkginfos = $(pkg_names:%=pkginfo.%.full)
@@ -339,7 +339,7 @@ edit = $(SED) \
  	-e 's,[@]PACKAGE_TARNAME[@],quaggasrx,g' \
  	-e 's,[@]PACKAGE_VERSION[@],0.6.0.0,g' \
  	-e 's,[@]PACKAGE_BUGREPORT[@],https://www.nist.gov/services-resources/software/bgp-secure-routing-extension-bgp-srx-prototype,g' \
-  	-e 's,[@]CONFDATE[@],20211213,g' \
+  	-e 's,[@]CONFDATE[@],20211214,g' \
  	-e 's,[@]target_cpu[@],$(target_cpu),g' \
  	-e 's,[@]target_host[@],$(target_host),g' \
  	-e 's,[@]target_os[@],$(target_os),g'
